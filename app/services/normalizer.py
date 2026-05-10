@@ -79,7 +79,46 @@ class ProductTextNormalizer:
         text = re.sub(r"[|_]+", " ", text)
         text = re.sub(r"[ \t]+", " ", text)
         text = re.sub(r"\n{2,}", "\n", text)
-        return text.strip()
+        return self._remove_warning_label_text(text.strip())
+
+    def _remove_warning_label_text(self, text: str) -> str:
+        lines = [line.strip() for line in text.splitlines()]
+        cleaned: list[str] = []
+        skip_warning_parts = 0
+        for line in lines:
+            if not line:
+                continue
+
+            folded_line = self._fold(line)
+            if self._is_warning_label_line(folded_line):
+                skip_warning_parts = 2 if re.search(r"\balto\s+en\b", folded_line) else skip_warning_parts
+                continue
+
+            if skip_warning_parts > 0 and self._is_warning_label_fragment(folded_line):
+                skip_warning_parts -= 1
+                continue
+
+            skip_warning_parts = 0
+            cleaned.append(line)
+        return "\n".join(cleaned).strip()
+
+    def _is_warning_label_line(self, folded_line: str) -> bool:
+        return bool(
+            re.search(r"\balto\s+en\b", folded_line)
+            or "evitar su consumo" in folded_line
+            or "evitar consumo" in folded_line
+        )
+
+    def _is_warning_label_fragment(self, folded_line: str) -> bool:
+        return folded_line in {
+            "azucar",
+            "sodio",
+            "grasas",
+            "grasas saturadas",
+            "saturadas",
+            "alto",
+            "en",
+        }
 
     def _clean_source_name(self, source_name: str | None) -> str:
         if not source_name:

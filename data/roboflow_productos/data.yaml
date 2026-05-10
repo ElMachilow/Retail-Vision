@@ -1,0 +1,13 @@
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 4
+names: ['brand', 'extra_detail', 'net_weight', 'product_name']
+
+roboflow:
+  workspace: creawork
+  project: my-first-project-a8zur
+  version: 3
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/creawork/my-first-project-a8zur/dataset/3

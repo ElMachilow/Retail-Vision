@@ -7,8 +7,9 @@ services:
       - .env
     environment:
       APP_ENV: docker
-      YOLO_MODEL_PATH: ${YOLO_MODEL_PATH:-yolov8n.pt}
+      YOLO_MODEL_PATH: ${YOLO_MODEL_PATH:-models/roboflow_productos.pt}
       YOLO_DEVICE: ${YOLO_DEVICE:-cpu}
+      YOLO_CONFIDENCE_THRESHOLD: ${YOLO_CONFIDENCE_THRESHOLD:-0.001}
       OCR_ENGINE: ${OCR_ENGINE:-paddle}
     volumes:
       - ./runtime:/app/runtime

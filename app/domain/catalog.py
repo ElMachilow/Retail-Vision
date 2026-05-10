@@ -14,6 +14,7 @@ BRAND_ALIASES: tuple[BrandAlias, ...] = (
     BrandAlias("Don Vittorio", ("don vittorio", "vittorio"), "abarrotes"),
     BrandAlias("Primor", ("primor",), "abarrotes"),
     BrandAlias("Florida", ("florida",), "abarrotes"),
+    BrandAlias("Bell's", ("bell's", "bells", "bell s"), "abarrotes"),
     BrandAlias("3 Ositos", ("3 ositos", "tres ositos"), "abarrotes"),
     BrandAlias("Cocinero", ("cocinero",), "abarrotes"),
     BrandAlias("Capri", ("capri",), "abarrotes"),
@@ -404,6 +405,7 @@ VARIANT_ALIASES: dict[str, tuple[str, ...]] = {
     "Leche Entera": ("leche entera", "entera"),
     "Sin Azúcar": ("sin azucar", "sin azúcar", "zero"),
     "Light": ("light", "lite"),
+    "Blanca": ("blanca", "blanco"),
 }
 
 
@@ -523,6 +525,7 @@ BRAND_DEFAULT_PRODUCT_TYPES: dict[str, str] = {
     "Quaker": "Avena",
     "Ángel": "Avena",
     "Maizena": "Fideos",
+    "Bell's": "Azúcar",
     # Cuidado personal
     "Head & Shoulders": "Shampoo",
     "Pantene": "Shampoo",

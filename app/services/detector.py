@@ -75,11 +75,14 @@ class YoloRegionDetector:
             return self._fallback_or_fail(image)
 
         names = getattr(result, "names", {}) or {}
-        best = self._select_best_box(boxes)
-        xyxy = best.xyxy[0].detach().cpu().numpy().astype(int).tolist()
-        confidence = float(best.conf[0].detach().cpu().item()) if best.conf is not None else None
-        class_id = int(best.cls[0].detach().cpu().item()) if best.cls is not None else None
-        class_name = names.get(class_id) if class_id is not None else None
+        if self._is_roboflow_label_model(names):
+            xyxy, confidence, class_id, class_name = self._select_roboflow_roi(boxes, names)
+        else:
+            best = self._select_best_box(boxes)
+            xyxy = best.xyxy[0].detach().cpu().numpy().astype(int).tolist()
+            confidence = float(best.conf[0].detach().cpu().item()) if best.conf is not None else None
+            class_id = int(best.cls[0].detach().cpu().item()) if best.cls is not None else None
+            class_name = names.get(class_id) if class_id is not None else None
 
         return RegionDetection(
             bbox=(xyxy[0], xyxy[1], xyxy[2], xyxy[3]),
@@ -88,6 +91,31 @@ class YoloRegionDetector:
             class_id=class_id,
             class_name=class_name,
         )
+
+    def _is_roboflow_label_model(self, names: dict) -> bool:
+        class_names = {str(name) for name in names.values()}
+        return {"brand", "product_name", "net_weight"}.issubset(class_names)
+
+    def _select_roboflow_roi(self, boxes, names: dict):
+        selected = []
+        class_ids: set[int] = set()
+        confidences: list[float] = []
+        for box in boxes:
+            xyxy = box.xyxy[0].detach().cpu().numpy().astype(int).tolist()
+            selected.append(xyxy)
+            if box.conf is not None:
+                confidences.append(float(box.conf[0].detach().cpu().item()))
+            if box.cls is not None:
+                class_ids.add(int(box.cls[0].detach().cpu().item()))
+
+        x_min = min(item[0] for item in selected)
+        y_min = min(item[1] for item in selected)
+        x_max = max(item[2] for item in selected)
+        y_max = max(item[3] for item in selected)
+        class_name = "+".join(
+            str(names[class_id]) for class_id in sorted(class_ids) if class_id in names
+        )
+        return [x_min, y_min, x_max, y_max], max(confidences) if confidences else None, None, class_name or None
 
     def _select_best_box(self, boxes):
         scored = []

@@ -56,3 +56,17 @@ def test_normalizer_identifies_mantequilla_as_product_type() -> None:
     assert result.nombre_producto == "Mantequilla Gloria"
     assert result.marca == "Gloria"
     assert result.tipo_producto == "Mantequilla"
+
+
+def test_normalizer_detects_bells_sugar_from_ocr_text() -> None:
+    text = "Bell's\nAZUCAR\nBLANCA\nPESO NETO 5Kg"
+
+    result = ProductTextNormalizer().normalize(text)
+
+    assert result.nombre_producto == "Azúcar Bell's Blanca"
+    assert result.marca == "Bell's"
+    assert result.tipo_producto == "Azúcar"
+    assert result.contenido_neto == "5 kg"
+    assert result.unidad_medida == "kg"
+    assert result.categoria_sugerida == "abarrotes"
+    assert "No se identificó marca" not in " ".join(result.warnings)

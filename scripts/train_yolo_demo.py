@@ -35,7 +35,7 @@ def train(args: argparse.Namespace) -> Path:
     shutil.copy2(best, args.export_path)
     print(f"Mejor modelo YOLO: {best}")
     print(f"Modelo copiado para la API: {args.export_path}")
-    print("Configura YOLO_MODEL_PATH=models/product_label_demo.pt para usarlo en FastAPI.")
+    print(f"Configura YOLO_MODEL_PATH={args.export_path.as_posix()} para usarlo en FastAPI.")
     return args.export_path
 
 
