@@ -309,4 +309,45 @@ def test_normalizer_detects_bolivar_cuidado_total_variant() -> None:
     assert result.marca == "Bolívar"
     assert result.tipo_producto == "Jabón"
     assert result.contenido_neto == "4 kg"
- 
+
+
+def test_normalizer_prioritizes_large_pharmacy_name_over_label_details() -> None:
+    text = (
+        "Dextrometorfano\n"
+        "15 mg/5 mL\n"
+        "Jarabe-Via oral\n"
+        "Supresor de la tos\n"
+        "120mL\n"
+        "Medifarma"
+    )
+
+    result = ProductTextNormalizer().normalize(text)
+
+    assert result.nombre_producto == "Dextrometorfano Jarabe Medifarma"
+    assert result.marca == "Medifarma"
+    assert result.tipo_producto == "Jarabe"
+    assert result.contenido_neto == "120 ml"
+
+
+def test_normalizer_ignores_side_panel_fragments_for_pharmacy_name() -> None:
+    text = (
+        "COMPI\n"
+        "Dextrometorfano\n"
+        "Dextron\n"
+        "Bromn\n"
+        "Excipi\n"
+        "15mg/5mL\n"
+        "'NOS\n"
+        "NINO:\n"
+        "Vent\n"
+        "Jarabe-Via oral\n"
+        "Ma\n"
+        "Supresor de la tos\n"
+        "120ml\n"
+        "Medifarma"
+    )
+
+    result = ProductTextNormalizer().normalize(text, source_name="dextri.jpeg")
+
+    assert result.nombre_producto == "Dextrometorfano Jarabe Medifarma"
+    assert result.contenido_neto == "120 ml"

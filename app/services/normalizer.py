@@ -49,6 +49,37 @@ class ProductTextNormalizer:
         flags=re.IGNORECASE,
     )
 
+    pharmacy_detail_words = {
+        "administracion",
+        "bpm",
+        "bromn",
+        "compi",
+        "composicion",
+        "contiene",
+        "dosis",
+        "dextron",
+        "excipi",
+        "excipientes",
+        "formula",
+        "iso",
+        "laboratorio",
+        "laboratorios",
+        "ma",
+        "mane",
+        "nino",
+        "nos",
+        "oral",
+        "para",
+        "proley",
+        "registro",
+        "supresor",
+        "suspension",
+        "tos",
+        "vent",
+        "ventas",
+        "via",
+    }
+
     def normalize(self, text: str, source_name: str | None = None) -> NormalizedProduct:
         clean_text = self._clean_text(text)
         clean_source_name = self._clean_source_name(source_name)
@@ -218,16 +249,37 @@ class ProductTextNormalizer:
         if not matches:
             return None, None
 
-        def score(match: re.Match) -> tuple[int, int]:
+        def score(match: re.Match) -> tuple[int, int, int]:
             raw_unit = match.group("unit").lower().replace(".", "")
             normalized_unit = UNIT_ALIASES.get(raw_unit, raw_unit)
+            dosage_penalty = 1 if self._looks_like_dosage_content(clean_text, match) else 0
             priority = 0 if normalized_unit in {"g", "kg", "ml", "L"} else 1
-            return (priority, match.start())
+            return (dosage_penalty, priority, match.start())
 
         selected = sorted(matches, key=score)[0]
         amount = selected.group("amount").replace(",", ".")
         unit_key = selected.group("unit").lower().replace(".", "")
         return amount, UNIT_ALIASES.get(unit_key, unit_key)
+
+    def _looks_like_dosage_content(self, clean_text: str, match: re.Match) -> bool:
+        start, end = match.span()
+        before = clean_text[max(0, start - 2) : start]
+        after = clean_text[end : end + 2]
+        if "/" in before or "/" in after:
+            return True
+
+        line_start = clean_text.rfind("\n", 0, start) + 1
+        line_end = clean_text.find("\n", end)
+        if line_end == -1:
+            line_end = len(clean_text)
+        folded_line = self._fold(clean_text[line_start:line_end])
+        return bool(
+            "/" in folded_line
+            or (
+                re.search(r"\b(dosis|mcg|mg|ui|iu)\b", folded_line)
+                and re.search(r"\b(mcg|mg|ui|iu)\b", folded_line)
+            )
+        )
 
     def _detect_loose_multipack_content(self, clean_text: str) -> tuple[str, str] | None:
         folded_text = self._fold(clean_text)
@@ -347,6 +399,11 @@ class ProductTextNormalizer:
     ) -> str | None:
         lines = [line.strip() for line in clean_text.splitlines() if line.strip()]
         meaningful = [line for line in lines if self._is_meaningful_line(line)]
+        if category == "farmacia/otc":
+            primary_line = self._find_primary_pharmacy_line(meaningful, brand, product_type)
+            if primary_line:
+                return self._compose_pharmacy_name(primary_line, brand, product_type)
+
         if brand:
             brand_name = self._compose_brand_name(brand, variant)
             if brand_name:
@@ -376,6 +433,69 @@ class ProductTextNormalizer:
         if selected:
             return selected[:120]
         return brand or (f"Producto {amount} {unit}" if amount and unit else None)
+
+    def _find_primary_pharmacy_line(
+        self,
+        meaningful: list[str],
+        brand: str | None,
+        product_type: str | None,
+    ) -> str | None:
+        folded_brand = self._fold(brand or "")
+        folded_type = self._fold(product_type or "")
+        candidates: list[tuple[int, int, str]] = []
+        for index, line in enumerate(meaningful):
+            cleaned = self.content_regex.sub("", line).strip(" -.,")
+            folded_line = self._fold(cleaned)
+            if not folded_line:
+                continue
+            if folded_brand and folded_brand in folded_line:
+                continue
+            if folded_type and folded_type in folded_line:
+                continue
+            if self._is_pharmacy_detail_line(folded_line):
+                continue
+            candidates.append((self._score_primary_pharmacy_line(folded_line, index), -index, cleaned))
+        if not candidates:
+            return None
+        return max(candidates)[2]
+
+    def _is_pharmacy_detail_line(self, folded_line: str) -> bool:
+        tokens = set(re.findall(r"[a-z0-9]+", folded_line))
+        if not tokens:
+            return True
+        if tokens & self.pharmacy_detail_words:
+            return True
+        if re.search(r"\b\d+\s*(mg|mcg|g|ml|dosis|%)\b", folded_line):
+            return True
+        if re.fullmatch(r"[a-z]{1,3}\d*", folded_line):
+            return True
+        return False
+
+    def _score_primary_pharmacy_line(self, folded_line: str, index: int) -> int:
+        tokens = re.findall(r"[a-z0-9]+", folded_line)
+        alpha_len = sum(len(token) for token in tokens if re.search(r"[a-z]", token))
+        score = min(alpha_len, 24)
+        if len(tokens) <= 2 and alpha_len >= 8:
+            score += 18
+        if alpha_len < 7:
+            score -= 18
+        if re.search(r"\b(clorhidrato|furoato|policresuleno|excipiente|excipientes)\b", folded_line):
+            score -= 10
+        score -= min(index, 8)
+        return score
+
+    def _compose_pharmacy_name(
+        self,
+        primary_line: str,
+        brand: str | None,
+        product_type: str | None,
+    ) -> str:
+        parts = [self._title_product_phrase(primary_line)]
+        if product_type and self._fold(product_type) not in self._fold(" ".join(parts)):
+            parts.append(product_type)
+        if brand and self._fold(brand) not in self._fold(" ".join(parts)):
+            parts.append(brand)
+        return " ".join(parts)[:120]
 
     def _compose_product_name(
         self,

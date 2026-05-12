@@ -1,7 +1,0 @@
-INFO:     Will watch for changes in these directories: ['D:\\UPC\\2026\\Servicio IA\\Tesis-Vision']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [1412] using WatchFiles
-INFO:     Started server process [27880]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app\domain\catalog.py'. Reloading...

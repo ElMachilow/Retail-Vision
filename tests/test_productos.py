@@ -179,6 +179,30 @@ def test_suggestions_creates_creative_bolivar_options_from_context() -> None:
     assert items[2]["nombre_producto"] == "Jabón Bolívar Cuidado Total 4 kg"
 
 
+def test_suggestions_prioritize_prominent_pharmacy_name_from_context() -> None:
+    client = _client()
+    context = (
+        "Dextrometorfano\n"
+        "15mg/5mL\n"
+        "Jarabe-Viaoral\n"
+        "Ventas\n"
+        "Mane\n"
+        "Supresor de la tos\n"
+        "120ml\n"
+        "Proley\n"
+        "Medifarma"
+    )
+
+    response = client.get(
+        "/api/v1/productos/suggestions",
+        params={"q": "Jarabe Viaoral Medifarma", "context": context, "source_name": "dextri.jpeg"},
+    )
+
+    assert response.status_code == 200
+    items = response.json()["items"]
+    assert items[0]["nombre_producto"] == "Dextrometorfano Jarabe Medifarma"
+
+
 def test_suggestions_capped_to_three() -> None:
     client = _client()
     response = client.get(

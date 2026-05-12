@@ -1425,3 +1425,23 @@ INFO:     127.0.0.1:57988 - "GET / HTTP/1.1" 200 OK
 [2026/05/11 20:30:49] ppocr DEBUG: rec_res num  : 4, elapsed : 0.34064435958862305
 INFO:     127.0.0.1:57987 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
 INFO:     127.0.0.1:57987 - "GET /api/v1/productos/suggestions?q=Bebida+rehidratante+Sporade&limit=3&context=Contenido+neto%0A500ml%0ASPORADE%0ATropical&source_name=sporade.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58020 - "GET / HTTP/1.1" 200 OK
+[2026/05/11 20:31:38] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/05/11 20:31:38] ppocr DEBUG: dt_boxes num : 5, elapsed : 0.7399725914001465
+[2026/05/11 20:31:39] ppocr DEBUG: rec_res num  : 5, elapsed : 0.9136536121368408
+INFO:     127.0.0.1:58021 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58021 - "GET /api/v1/productos/suggestions?q=Az%C3%BAcar+Bell%27s+Blanca&limit=3&context=Bell%27s%0AAZUCAR%0ABLANCA%0ARES5Kg%0AAZUCAR+BLANCODIRECTO&source_name=azucar+bells.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58081 - "GET /api/v1/productos/suggestions?q=Az%C3%BAcar+Bell%27s+Blanca+5+kg&limit=3&context=Bell%27s%0AAZUCAR%0ABLANCA%0ARES5Kg%0AAZUCAR+BLANCODIRECTO&source_name=azucar+bells.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61623 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61623 - "GET / HTTP/1.1" 200 OK
+[2026/05/11 22:22:20] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/05/11 22:22:22] ppocr DEBUG: dt_boxes num : 12, elapsed : 1.7052931785583496
+[2026/05/11 22:22:25] ppocr DEBUG: rec_res num  : 12, elapsed : 2.5157992839813232
+INFO:     127.0.0.1:61624 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61624 - "GET /api/v1/productos/suggestions?q=Jarabe+Viaoral+Medifarma&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor+de+la+tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61647 - "GET /api/v1/productos/suggestions?q=Jarabe+Viaoral+Medifarma&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor+de+la+tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61647 - "GET /api/v1/productos/suggestions?q=Jarabe+Viaoral+Medifarma&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor+de+la+tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61665 - "GET /api/v1/productos/suggestions?q=Jarabe+Viaoral+Medifarma&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor+de+la+tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62277 - "GET /api/v1/productos/suggestions?q=Jarabe+Viaoral+Medifarma&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor+de+la+tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62406 - "GET /api/v1/productos/suggestions?q=Jarabe%20Viaoral%20Medifarma&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor%20de%20la%20tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62433 - "GET /api/v1/productos/suggestions?q=Jarabe%20Viaoral%20Medifarma&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor%20de%20la%20tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
