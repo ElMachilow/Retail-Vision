@@ -1,0 +1,3 @@
+INFO:     192.168.101.2:57026 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     192.168.101.4:54870 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     192.168.101.4:54870 - "GET /favicon.ico HTTP/1.1" 404 Not Found

@@ -403,6 +403,7 @@ VARIANT_ALIASES: dict[str, tuple[str, ...]] = {
     "Piña": ("pina", "piña", "pineapple"),
     "Mango": ("mango",),
     "Durazno": ("durazno", "peach"),
+    "Tropical": ("tropical",),
     "Cola": ("cola",),
     "Mentol": ("mentol", "menthol"),
     "Eucalipto": ("eucalipto",),

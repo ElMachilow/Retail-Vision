@@ -68,6 +68,18 @@ def test_normalizer_handles_common_beverage_units() -> None:
     assert result.categoria_sugerida == "bebidas"
 
 
+def test_normalizer_puts_sports_drink_brand_first() -> None:
+    text = "Contenido neto\n500ml\nSPORADE\nTropical"
+
+    result = ProductTextNormalizer().normalize(text, source_name="sporade.jpeg")
+
+    assert result.nombre_producto == "Sporade Tropical 500 ml"
+    assert result.marca == "Sporade"
+    assert result.tipo_producto == "Bebida rehidratante"
+    assert result.contenido_neto == "500 ml"
+    assert result.categoria_sugerida == "bebidas"
+
+
 def test_normalizer_prioritizes_fanta_over_packaging_noise() -> None:
     text = "CAFFEINE\n100%\nFREE\nfanta\nORANGE"
 

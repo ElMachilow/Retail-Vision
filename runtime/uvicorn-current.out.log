@@ -1404,3 +1404,24 @@ INFO:     127.0.0.1:52096 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
 INFO:     127.0.0.1:52096 - "GET /api/v1/productos/suggestions?q=Jab%C3%B3n+Bol%C3%ADvar+Cuidado+y+Suavidad&limit=3&context=Bolivar%0ACuidadoy%0ASuavidad%0ASUAVIDAD+Y%0Acontogue%0AFRAGANCIA%0Ade+suavizante%0AYcapsulas%0APROLONGADA%0Adearoma&source_name=bol-morado_png.rf.8deff10bb587d9bb8525ae403509c340.jpg HTTP/1.1" 200 OK
 INFO:     127.0.0.1:54110 - "GET /api/v1/productos/suggestions?q=Jab%C3%B3n+Bol%C3%ADvar+Cuidado+y+Suavidad&limit=3&context=Bolivar%0ACuidadoy%0ASuavidad%0ASUAVIDAD+Y%0Acontogue%0AFRAGANCIA%0Ade+suavizante%0AYcapsulas%0APROLONGADA%0Adearoma&source_name=bol-morado_png.rf.8deff10bb587d9bb8525ae403509c340.jpg HTTP/1.1" 200 OK
 INFO:     127.0.0.1:54177 - "GET /api/v1/productos/suggestions?q=Jab%C3%B3n+Bol%C3%ADvar+Cuidado+y+Suavidad&limit=3&context=Bolivar%0ACuidadoy%0ASuavidad%0ASUAVIDAD+Y%0Acontogue%0AFRAGANCIA%0Ade+suavizante%0AYcapsulas%0APROLONGADA%0Adearoma&source_name=bol-morado_png.rf.8deff10bb587d9bb8525ae403509c340.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57000 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57632 - "GET /api/v1/productos/suggestions?q=Jab%C3%B3n+Bol%C3%ADvar+Cuidado+y+Suavidad&limit=3&context=Bolivar%0ACuidadoy%0ASuavidad%0ASUAVIDAD+Y%0Acontogue%0AFRAGANCIA%0Ade+suavizante%0AYcapsulas%0APROLONGADA%0Adearoma&source_name=bol-morado_png.rf.8deff10bb587d9bb8525ae403509c340.jpg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57632 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57632 - "GET /static/app.js?v=3 HTTP/1.1" 304 Not Modified
+[2026/05/11 20:12:02] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/05/11 20:12:03] ppocr DEBUG: dt_boxes num : 4, elapsed : 1.7163140773773193
+[2026/05/11 20:12:04] ppocr DEBUG: rec_res num  : 4, elapsed : 1.087764024734497
+INFO:     127.0.0.1:57633 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57633 - "GET /api/v1/productos/suggestions?q=Bebida+rehidratante+Sporade&limit=3&context=Contenido+neto%0A500ml%0ASPORADE%0ATropical&source_name=sporade.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57643 - "GET /api/v1/productos/suggestions?q=Bebida+rehidratante+Sporade+500+ml&limit=3&context=Contenido+neto%0A500ml%0ASPORADE%0ATropical&source_name=sporade.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57785 - "GET /api/v1/productos/suggestions?q=Bebida+rehidratante+Sporade+500+ml&limit=3&context=Contenido+neto%0A500ml%0ASPORADE%0ATropical&source_name=sporade.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57793 - "GET /api/v1/productos/suggestions?q=Bebida+rehidratante+Sporade+500+ml&limit=3&context=Contenido+neto%0A500ml%0ASPORADE%0ATropical&source_name=sporade.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57821 - "GET /api/v1/productos/suggestions?q=Bebida+rehidratante+Sporade+500+ml&limit=3&context=Contenido+neto%0A500ml%0ASPORADE%0ATropical&source_name=sporade.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57838 - "GET /api/v1/productos/suggestions?q=Bebida+rehidratante+Sporade+500+ml&limit=3&context=Contenido+neto%0A500ml%0ASPORADE%0ATropical&source_name=sporade.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57977 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57988 - "GET / HTTP/1.1" 200 OK
+[2026/05/11 20:30:48] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/05/11 20:30:49] ppocr DEBUG: dt_boxes num : 4, elapsed : 0.23642396926879883
+[2026/05/11 20:30:49] ppocr DEBUG: rec_res num  : 4, elapsed : 0.34064435958862305
+INFO:     127.0.0.1:57987 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57987 - "GET /api/v1/productos/suggestions?q=Bebida+rehidratante+Sporade&limit=3&context=Contenido+neto%0A500ml%0ASPORADE%0ATropical&source_name=sporade.jpeg HTTP/1.1" 200 OK

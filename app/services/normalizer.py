@@ -64,7 +64,8 @@ class ProductTextNormalizer:
         category = self._category_from_context(product_type, brand, folded_context) or self._category_from_product_type(product_type) or detected_category or category_hint
         presentation = self._detect_presentation(clean_text, amount, unit)
         variant = self._detect_variant(folded_context, category)
-        name = self._build_product_name(clean_text, brand, amount, unit, variant, category, product_type)
+        content = f"{amount} {unit}" if amount and unit else None
+        name = self._build_product_name(clean_text, brand, amount, unit, variant, category, product_type, content)
 
         if not text.strip():
             warnings.append("OCR no devolvió texto; se requiere revisión manual.")
@@ -77,7 +78,6 @@ class ProductTextNormalizer:
         if category is None:
             warnings.append("No se pudo sugerir categoría con reglas de dominio.")
 
-        content = f"{amount} {unit}" if amount and unit else None
         return NormalizedProduct(
             nombre_producto=name,
             marca=brand,
@@ -343,6 +343,7 @@ class ProductTextNormalizer:
         variant: str | None,
         category: str | None,
         product_type: str | None,
+        content: str | None,
     ) -> str | None:
         lines = [line.strip() for line in clean_text.splitlines() if line.strip()]
         meaningful = [line for line in lines if self._is_meaningful_line(line)]
@@ -360,6 +361,7 @@ class ProductTextNormalizer:
                 self._display_product_type(product_type, clean_text),
                 brand,
                 variant,
+                content,
             )
 
         if not meaningful:
@@ -380,7 +382,17 @@ class ProductTextNormalizer:
         product_type: str,
         brand: str | None,
         variant: str | None,
+        content: str | None = None,
     ) -> str:
+        if brand and product_type in {"Bebida rehidratante", "Energizante"}:
+            parts = [brand]
+            variant_suffix = self._variant_suffix(product_type, brand, variant)
+            if variant_suffix:
+                parts.append(variant_suffix)
+            if content:
+                parts.append(content)
+            return " ".join(parts)[:120]
+
         parts = [product_type]
         if brand and self._fold(brand) not in self._fold(product_type):
             parts.append(brand)
