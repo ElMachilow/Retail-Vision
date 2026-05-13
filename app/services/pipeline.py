@@ -13,7 +13,13 @@ from app.schemas.product import (
     ProductSuggestion,
 )
 from app.services.detector import FieldDetection, ProductRegionDetector, RegionDetection, YoloRegionDetector
-from app.services.image_utils import crop_image, decode_image, prepare_for_ocr, save_debug_image
+from app.services.image_utils import (
+    crop_image,
+    decode_image,
+    prepare_for_ocr,
+    save_debug_image,
+    validate_image_quality,
+)
 from app.services.normalizer import ProductTextNormalizer
 from app.services.ocr import OcrResult, OcrTextLine, PaddleOcrTextExtractor, TextExtractor
 
@@ -37,6 +43,15 @@ class ProductRecognitionPipeline:
 
         image = decode_image(image_bytes)
         logger.info("imagen decodificada")
+        quality = validate_image_quality(image)
+        logger.info(
+            "calidad imagen laplacian=%s edge_density=%s contrast=%s detail_score=%s blur_percentage=%s",
+            round(quality.laplacian_variance, 2),
+            round(quality.edge_density, 4),
+            round(quality.contrast, 2),
+            round(quality.detail_score, 2),
+            round(quality.blur_percentage, 1),
+        )
 
         detection = self.detector.detect(image)
         logger.info(

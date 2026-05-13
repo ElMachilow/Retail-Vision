@@ -38,8 +38,21 @@ class FakeOcr:
 
 
 def _jpeg_bytes() -> bytes:
-    image = np.full((80, 120, 3), 255, dtype=np.uint8)
+    image = np.full((240, 360, 3), 255, dtype=np.uint8)
+    cv2.rectangle(image, (35, 35), (325, 205), (20, 120, 20), -1)
+    cv2.putText(image, "Inca Kola", (58, 95), cv2.FONT_HERSHEY_SIMPLEX, 1.15, (255, 255, 255), 3)
+    cv2.putText(image, "Botella 500 ml", (58, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
     ok, encoded = cv2.imencode(".jpg", image)
+    assert ok
+    return encoded.tobytes()
+
+
+def _blurry_jpeg_bytes() -> bytes:
+    image = cv2.imdecode(np.frombuffer(_jpeg_bytes(), dtype=np.uint8), cv2.IMREAD_COLOR)
+    small = cv2.resize(image, (12, 8), interpolation=cv2.INTER_AREA)
+    blurred = cv2.resize(small, (image.shape[1], image.shape[0]), interpolation=cv2.INTER_LINEAR)
+    blurred = cv2.GaussianBlur(blurred, (121, 121), 0)
+    ok, encoded = cv2.imencode(".jpg", blurred)
     assert ok
     return encoded.tobytes()
 
@@ -142,3 +155,26 @@ def test_recognize_product_rejects_non_image_upload() -> None:
 
     assert response.status_code == 400
     assert response.json()["error_code"] == "INVALID_IMAGE"
+
+
+def test_recognize_product_rejects_blurry_image_before_ocr() -> None:
+    app = create_app()
+    fake_pipeline = ProductRecognitionPipeline(
+        settings=Settings(),
+        detector=FakeDetector(),
+        ocr=FakeOcr(),
+        normalizer=ProductTextNormalizer(),
+    )
+    app.dependency_overrides[get_product_pipeline] = lambda: fake_pipeline
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/v1/products/recognize",
+        files={"image": ("borrosa.jpg", _blurry_jpeg_bytes(), "image/jpeg")},
+        headers={"X-Trace-ID": "test-blurry-1"},
+    )
+
+    assert response.status_code == 400
+    body = response.json()
+    assert body["error_code"] == "BLURRY_IMAGE"
+    assert "borrosa" in body["message"].lower()

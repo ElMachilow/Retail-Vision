@@ -1,0 +1,79 @@
+INFO:     127.0.0.1:59521 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59527 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59527 - "GET /static/styles.css?v=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59526 - "GET /static/app.js?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:59526 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59526 - "GET /admin HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59526 - "GET /static/styles.css?v=4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59527 - "GET /static/admin.js?v=4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59526 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59526 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+2026-05-13T15:06:49-0500 INFO app.services.pipeline trace_id=ui-1778702809583 inicio procesamiento producto
+2026-05-13T15:06:49-0500 INFO app.services.pipeline trace_id=ui-1778702809583 imagen decodificada
+2026-05-13T15:07:03-0500 INFO app.services.pipeline trace_id=ui-1778702809583 deteccion yolo completada bbox=(4, 0, 1506, 3708) confidence=0.0034283509012311697 fallback=False
+[2026/05/13 15:07:14] ppocr DEBUG: Namespace(help='==SUPPRESS==', use_gpu=False, use_xpu=False, use_npu=False, use_mlu=False, use_gcu=False, ir_optim=True, use_tensorrt=False, min_subgraph_size=15, precision='fp32', gpu_mem=500, gpu_id=0, image_dir=None, page_num=0, det_algorithm='DB', det_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\det\\en\\en_PP-OCRv3_det_infer', det_limit_side_len=960, det_limit_type='max', det_box_type='quad', det_db_thresh=0.3, det_db_box_thresh=0.6, det_db_unclip_ratio=1.5, max_batch_size=10, use_dilation=False, det_db_score_mode='fast', det_east_score_thresh=0.8, det_east_cover_thresh=0.1, det_east_nms_thresh=0.2, det_sast_score_thresh=0.5, det_sast_nms_thresh=0.2, det_pse_thresh=0, det_pse_box_thresh=0.85, det_pse_min_area=16, det_pse_scale=1, scales=[8, 16, 32], alpha=1.0, beta=1.0, fourier_degree=5, rec_algorithm='SVTR_LCNet', rec_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\rec\\latin\\latin_PP-OCRv3_rec_infer', rec_image_inverse=True, rec_image_shape='3, 48, 320', rec_batch_num=6, max_text_length=25, rec_char_dict_path='C:\\Users\\marcelo\\AppData\\Roaming\\Python\\Python311\\site-packages\\paddleocr\\ppocr\\utils\\dict\\latin_dict.txt', use_space_char=True, vis_font_path='./doc/fonts/simfang.ttf', drop_score=0.5, e2e_algorithm='PGNet', e2e_model_dir=None, e2e_limit_side_len=768, e2e_limit_type='max', e2e_pgnet_score_thresh=0.5, e2e_char_dict_path='./ppocr/utils/ic15_dict.txt', e2e_pgnet_valid_set='totaltext', e2e_pgnet_mode='fast', use_angle_cls=False, cls_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\cls\\ch_ppocr_mobile_v2.0_cls_infer', cls_image_shape='3, 48, 192', label_list=['0', '180'], cls_batch_num=6, cls_thresh=0.9, enable_mkldnn=False, cpu_threads=10, use_pdserving=False, warmup=False, sr_model_dir=None, sr_image_shape='3, 32, 128', sr_batch_num=1, draw_img_save_dir='./inference_results', save_crop_res=False, crop_res_save_dir='./output', use_mp=False, total_process_num=1, process_id=0, benchmark=False, save_log_path='./log_output/', show_log=True, use_onnx=False, onnx_providers=False, onnx_sess_options=False, return_word_box=False, output='./output', table_max_len=488, table_algorithm='TableAttn', table_model_dir=None, merge_no_span_structure=True, table_char_dict_path=None, formula_algorithm='LaTeXOCR', formula_model_dir=None, formula_char_dict_path=None, formula_batch_num=1, layout_model_dir=None, layout_dict_path=None, layout_score_threshold=0.5, layout_nms_threshold=0.5, kie_algorithm='LayoutXLM', ser_model_dir=None, re_model_dir=None, use_visual_backbone=True, ser_dict_path='../train_data/XFUND/class_list_xfun.txt', ocr_order_method=None, mode='structure', image_orientation=False, layout=True, table=True, formula=False, ocr=True, recovery=False, recovery_to_markdown=False, use_pdf2docx_api=False, invert=False, binarize=False, alphacolor=(255, 255, 255), lang='es', det=True, rec=True, type='ocr', savefile=False, ocr_version='PP-OCRv4', structure_version='PP-StructureV2', use_textline_orientation=True)
+[2026/05/13 15:07:15] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/05/13 15:07:16] ppocr DEBUG: dt_boxes num : 12, elapsed : 0.8087337017059326
+[2026/05/13 15:07:17] ppocr DEBUG: rec_res num  : 12, elapsed : 1.2578239440917969
+INFO:     127.0.0.1:59536 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59536 - "GET /api/v1/productos/suggestions?q=Dextrometorfano+Jarabe+Medifarma&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor+de+la+tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59535 - "GET /admin HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59535 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59535 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59535 - "GET /api/v1/admin/reconocimientos/1/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59544 - "GET /admin HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59544 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59544 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59544 - "GET /api/v1/admin/reconocimientos/1/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59545 - "GET /productos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59545 - "GET /static/styles.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59547 - "GET /static/productos.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59547 - "GET /api/v1/productos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59547 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59547 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60491 - "GET /admin HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60491 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60491 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60491 - "GET /api/v1/admin/reconocimientos/1/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60544 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60748 - "GET /admin HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60748 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60748 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60748 - "GET /api/v1/admin/reconocimientos/2/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60747 - "GET /api/v1/admin/reconocimientos/1/image HTTP/1.1" 200 OK
+     INFO:     127.0.0.1:61448 - "GET /admin HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:61450 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61450 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61457 - "GET /api/v1/admin/reconocimientos/4/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61459 - "GET /api/v1/admin/reconocimientos/2/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61450 - "GET /api/v1/admin/reconocimientos/5/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61460 - "GET /api/v1/admin/reconocimientos/1/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61458 - "GET /api/v1/admin/reconocimientos/3/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61463 - "PUT /api/v1/admin/reconocimientos/4/review HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61463 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53558 - "GET /admin HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53558 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53558 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53558 - "GET /api/v1/admin/reconocimientos/5/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53559 - "GET /api/v1/admin/reconocimientos/4/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53562 - "GET /api/v1/admin/reconocimientos/1/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53560 - "GET /api/v1/admin/reconocimientos/3/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53561 - "GET /api/v1/admin/reconocimientos/2/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53561 - "GET /api/v1/productos/suggestions?q=Dextrometorfano+Jarabe+Medifarma+120+ml&limit=3&context=Dextrometorfano%0A15mg%2F5mL%0AJarabe-Viaoral%0AVentas%0AMane%0ASupresor+de+la+tos%0A120ml%0AProley%0AMedifarma&source_name=dextri.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53561 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53561 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53561 - "GET /openapi.json HTTP/1.1" 200 OK
+2026-05-13T17:26:03-0500 INFO app.services.pipeline trace_id=ui-1778711163430 inicio procesamiento producto
+2026-05-13T17:26:03-0500 INFO app.services.pipeline trace_id=ui-1778711163430 imagen decodificada
+2026-05-13T17:26:03-0500 INFO app.services.pipeline trace_id=ui-1778711163430 calidad imagen laplacian=27.34 edge_density=0.0187 contrast=62.25 detail_score=93.96 blur_percentage=41.3
+2026-05-13T17:26:09-0500 INFO app.services.pipeline trace_id=ui-1778711163430 deteccion yolo completada bbox=(0, 391, 1193, 1600) confidence=0.004047837108373642 fallback=False
+[2026/05/13 17:26:13] ppocr DEBUG: Namespace(help='==SUPPRESS==', use_gpu=False, use_xpu=False, use_npu=False, use_mlu=False, use_gcu=False, ir_optim=True, use_tensorrt=False, min_subgraph_size=15, precision='fp32', gpu_mem=500, gpu_id=0, image_dir=None, page_num=0, det_algorithm='DB', det_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\det\\en\\en_PP-OCRv3_det_infer', det_limit_side_len=960, det_limit_type='max', det_box_type='quad', det_db_thresh=0.3, det_db_box_thresh=0.6, det_db_unclip_ratio=1.5, max_batch_size=10, use_dilation=False, det_db_score_mode='fast', det_east_score_thresh=0.8, det_east_cover_thresh=0.1, det_east_nms_thresh=0.2, det_sast_score_thresh=0.5, det_sast_nms_thresh=0.2, det_pse_thresh=0, det_pse_box_thresh=0.85, det_pse_min_area=16, det_pse_scale=1, scales=[8, 16, 32], alpha=1.0, beta=1.0, fourier_degree=5, rec_algorithm='SVTR_LCNet', rec_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\rec\\latin\\latin_PP-OCRv3_rec_infer', rec_image_inverse=True, rec_image_shape='3, 48, 320', rec_batch_num=6, max_text_length=25, rec_char_dict_path='C:\\Users\\marcelo\\AppData\\Roaming\\Python\\Python311\\site-packages\\paddleocr\\ppocr\\utils\\dict\\latin_dict.txt', use_space_char=True, vis_font_path='./doc/fonts/simfang.ttf', drop_score=0.5, e2e_algorithm='PGNet', e2e_model_dir=None, e2e_limit_side_len=768, e2e_limit_type='max', e2e_pgnet_score_thresh=0.5, e2e_char_dict_path='./ppocr/utils/ic15_dict.txt', e2e_pgnet_valid_set='totaltext', e2e_pgnet_mode='fast', use_angle_cls=False, cls_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\cls\\ch_ppocr_mobile_v2.0_cls_infer', cls_image_shape='3, 48, 192', label_list=['0', '180'], cls_batch_num=6, cls_thresh=0.9, enable_mkldnn=False, cpu_threads=10, use_pdserving=False, warmup=False, sr_model_dir=None, sr_image_shape='3, 32, 128', sr_batch_num=1, draw_img_save_dir='./inference_results', save_crop_res=False, crop_res_save_dir='./output', use_mp=False, total_process_num=1, process_id=0, benchmark=False, save_log_path='./log_output/', show_log=True, use_onnx=False, onnx_providers=False, onnx_sess_options=False, return_word_box=False, output='./output', table_max_len=488, table_algorithm='TableAttn', table_model_dir=None, merge_no_span_structure=True, table_char_dict_path=None, formula_algorithm='LaTeXOCR', formula_model_dir=None, formula_char_dict_path=None, formula_batch_num=1, layout_model_dir=None, layout_dict_path=None, layout_score_threshold=0.5, layout_nms_threshold=0.5, kie_algorithm='LayoutXLM', ser_model_dir=None, re_model_dir=None, use_visual_backbone=True, ser_dict_path='../train_data/XFUND/class_list_xfun.txt', ocr_order_method=None, mode='structure', image_orientation=False, layout=True, table=True, formula=False, ocr=True, recovery=False, recovery_to_markdown=False, use_pdf2docx_api=False, invert=False, binarize=False, alphacolor=(255, 255, 255), lang='es', det=True, rec=True, type='ocr', savefile=False, ocr_version='PP-OCRv4', structure_version='PP-StructureV2', use_textline_orientation=True)
+[2026/05/13 17:26:14] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/05/13 17:26:15] ppocr DEBUG: dt_boxes num : 6, elapsed : 0.9918925762176514
+[2026/05/13 17:26:16] ppocr DEBUG: rec_res num  : 6, elapsed : 1.2039952278137207
+[2026/05/13 17:26:16] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/05/13 17:26:17] ppocr DEBUG: dt_boxes num : 6, elapsed : 0.755720853805542
+[2026/05/13 17:26:18] ppocr DEBUG: rec_res num  : 6, elapsed : 1.002838373184204
+INFO:     127.0.0.1:53599 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53599 - "GET /api/v1/productos/suggestions?q=BETAMETASONA&limit=3&context=AC%0ABETAMETASONA%0A0%2C05%25%0ALinea%28DCI%0ACREMA%0ALABORATORIOSACFARMA+S.A.%0ALABORATORIOSAC+FARMA+S.A&source_name=betametasona.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53599 - "GET /api/v1/productos/suggestions?q=BETAMETASONA&limit=3&context=AC%0ABETAMETASONA%0A0%2C05%25%0ALinea%28DCI%0ACREMA%0ALABORATORIOSACFARMA+S.A.%0ALABORATORIOSAC+FARMA+S.A&source_name=betametasona.jpeg HTTP/1.1" 200 OK

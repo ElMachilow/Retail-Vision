@@ -15,6 +15,10 @@ class InvalidImageError(AppError):
     error_code = "INVALID_IMAGE"
 
 
+class BlurryImageError(InvalidImageError):
+    error_code = "BLURRY_IMAGE"
+
+
 class ModelUnavailableError(AppError):
     status_code = 503
     error_code = "MODEL_UNAVAILABLE"

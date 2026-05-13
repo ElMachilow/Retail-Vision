@@ -1,9 +1,20 @@
 from pathlib import Path
+from dataclasses import dataclass
 
 import cv2
 import numpy as np
 
-from app.core.exceptions import InvalidImageError
+from app.core.exceptions import BlurryImageError, InvalidImageError
+
+
+@dataclass(frozen=True)
+class ImageQualityReport:
+    is_blurry: bool
+    laplacian_variance: float
+    edge_density: float
+    contrast: float
+    detail_score: float
+    blur_percentage: float
 
 
 def decode_image(image_bytes: bytes) -> np.ndarray:
@@ -15,6 +26,68 @@ def decode_image(image_bytes: bytes) -> np.ndarray:
     if image is None:
         raise InvalidImageError("No se pudo decodificar la imagen. Usa JPG, PNG o WEBP válido.")
     return image
+
+
+def validate_image_quality(image: np.ndarray) -> ImageQualityReport:
+    report = assess_image_quality(image)
+    if report.is_blurry:
+        raise BlurryImageError(
+            "La foto se ve borrosa o desenfocada. Toma la foto nuevamente enfocando bien el producto.",
+            detail=(
+                "BLURRY_IMAGE "
+                f"laplacian_variance={report.laplacian_variance:.2f} "
+                f"edge_density={report.edge_density:.4f} "
+                f"contrast={report.contrast:.2f} "
+                f"detail_score={report.detail_score:.2f} "
+                f"blur_percentage={report.blur_percentage:.1f}"
+            ),
+        )
+    return report
+
+
+def assess_image_quality(image: np.ndarray) -> ImageQualityReport:
+    height, width = image.shape[:2]
+    if height < 40 or width < 40:
+        return ImageQualityReport(True, 0.0, 0.0, 0.0, 0.0, 100.0)
+
+    # The product is normally centered in the mobile capture. Measuring the
+    # central area avoids accepting a blurred product just because the
+    # background monitor or desk has sharp edges.
+    x_margin = int(width * 0.15)
+    y_margin = int(height * 0.15)
+    center = image[y_margin : height - y_margin, x_margin : width - x_margin]
+    if center.size == 0:
+        center = image
+
+    max_side = max(center.shape[:2])
+    if max_side > 900:
+        scale = 900 / max_side
+        center = cv2.resize(center, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+
+    gray = cv2.cvtColor(center, cv2.COLOR_BGR2GRAY)
+    gray = cv2.GaussianBlur(gray, (3, 3), 0)
+
+    laplacian_variance = float(cv2.Laplacian(gray, cv2.CV_64F).var())
+    edges = cv2.Canny(gray, 60, 160)
+    edge_density = float(np.count_nonzero(edges) / edges.size)
+    contrast = float(gray.std())
+
+    # Weighted score tuned for mobile product photos: strong blur produces low
+    # Laplacian and very low edge density in the label area, even when the
+    # background contains some sharp structures.
+    detail_score = laplacian_variance + (edge_density * 900.0) + (contrast * 0.8)
+    sharpness_percentage = min(100.0, max(0.0, (detail_score / 160.0) * 100.0))
+    blur_percentage = 100.0 - sharpness_percentage
+    is_blurry = blur_percentage >= 90.0
+
+    return ImageQualityReport(
+        is_blurry=is_blurry,
+        laplacian_variance=laplacian_variance,
+        edge_density=edge_density,
+        contrast=contrast,
+        detail_score=detail_score,
+        blur_percentage=blur_percentage,
+    )
 
 
 def crop_image(image: np.ndarray, bbox: tuple[int, int, int, int]) -> np.ndarray:
