@@ -1,7 +1,9 @@
 import json
 import sqlite3
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from app.core.config import Settings
 from app.core.exceptions import AppError
@@ -12,6 +14,11 @@ from app.schemas.product import ProductRecognitionResponse
 class RecognitionEventNotFoundError(AppError):
     status_code = 404
     error_code = "RECOGNITION_EVENT_NOT_FOUND"
+
+
+class InvalidReviewStatusError(AppError):
+    status_code = 400
+    error_code = "INVALID_REVIEW_STATUS"
 
 
 VALID_REVIEW_STATUSES = {
@@ -132,52 +139,73 @@ class RecognitionRepository:
         detection = response.deteccion
         ocr = response.ocr
         bbox = detection.bbox.model_dump()
+        image_path = self._store_image_file(image_bytes, content_type)
         with self._connect() as conn:
-            cursor = conn.execute(
-                """
-                INSERT INTO recognition_events (
-                    trace_id, source_name, image_content_type, image_blob,
-                    predicted_nombre_producto, predicted_marca, predicted_tipo_producto,
-                    predicted_presentacion, predicted_contenido_neto, predicted_unidad_medida,
-                    predicted_categoria_sugerida, final_nombre_producto, final_marca,
-                    final_tipo_producto, final_presentacion, final_contenido_neto,
-                    final_unidad_medida, final_categoria_sugerida, yolo_confidence,
-                    yolo_class_name, ocr_confidence, ocr_text, warnings_json,
-                    bbox_json, recognition_json
+            try:
+                cursor = conn.execute(
+                    """
+                    INSERT INTO recognition_events (
+                        trace_id, source_name, image_content_type, image_path,
+                        predicted_nombre_producto, predicted_marca, predicted_tipo_producto,
+                        predicted_presentacion, predicted_contenido_neto, predicted_unidad_medida,
+                        predicted_categoria_sugerida, final_nombre_producto, final_marca,
+                        final_tipo_producto, final_presentacion, final_contenido_neto,
+                        final_unidad_medida, final_categoria_sugerida, yolo_confidence,
+                        yolo_class_name, ocr_confidence, ocr_text, warnings_json,
+                        bbox_json, recognition_json
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        response.trace_id,
+                        source_name,
+                        content_type,
+                        str(image_path),
+                        product.nombre_producto,
+                        product.marca,
+                        product.tipo_producto,
+                        product.presentacion,
+                        product.contenido_neto,
+                        product.unidad_medida,
+                        product.categoria_sugerida,
+                        product.nombre_producto,
+                        product.marca,
+                        product.tipo_producto,
+                        product.presentacion,
+                        product.contenido_neto,
+                        product.unidad_medida,
+                        product.categoria_sugerida,
+                        detection.confidence,
+                        detection.class_name,
+                        ocr.average_confidence,
+                        ocr.text,
+                        json.dumps(response.warnings, ensure_ascii=False),
+                        json.dumps(bbox, ensure_ascii=False),
+                        json.dumps(payload, ensure_ascii=False),
+                    ),
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    response.trace_id,
-                    source_name,
-                    content_type,
-                    image_bytes,
-                    product.nombre_producto,
-                    product.marca,
-                    product.tipo_producto,
-                    product.presentacion,
-                    product.contenido_neto,
-                    product.unidad_medida,
-                    product.categoria_sugerida,
-                    product.nombre_producto,
-                    product.marca,
-                    product.tipo_producto,
-                    product.presentacion,
-                    product.contenido_neto,
-                    product.unidad_medida,
-                    product.categoria_sugerida,
-                    detection.confidence,
-                    detection.class_name,
-                    ocr.average_confidence,
-                    ocr.text,
-                    json.dumps(response.warnings, ensure_ascii=False),
-                    json.dumps(bbox, ensure_ascii=False),
-                    json.dumps(payload, ensure_ascii=False),
-                ),
-            )
-            conn.commit()
-            event_id = cursor.lastrowid
+                conn.commit()
+                event_id = cursor.lastrowid
+            except Exception:
+                image_path.unlink(missing_ok=True)
+                raise
         return self.get(event_id)
+
+    def _store_image_file(self, image_bytes: bytes, content_type: str | None) -> Path:
+        image_dir = Path(self.settings.recognition_image_dir)
+        image_dir.mkdir(parents=True, exist_ok=True)
+        extension = self._extension_for_content_type(content_type)
+        path = image_dir / f"{uuid4().hex}{extension}"
+        path.write_bytes(image_bytes)
+        return path
+
+    def _extension_for_content_type(self, content_type: str | None) -> str:
+        return {
+            "image/jpeg": ".jpg",
+            "image/jpg": ".jpg",
+            "image/png": ".png",
+            "image/webp": ".webp",
+        }.get((content_type or "").lower(), ".img")
 
     def list(
         self,
@@ -233,24 +261,48 @@ class RecognitionRepository:
     def get_image(self, event_id: int) -> tuple[bytes, str | None]:
         with self._connect() as conn:
             row = conn.execute(
-                "SELECT image_blob, image_content_type FROM recognition_events WHERE id = ?",
+                "SELECT image_blob, image_path, image_content_type FROM recognition_events WHERE id = ?",
                 (event_id,),
             ).fetchone()
-        if row is None or row["image_blob"] is None:
+        if row is None:
+            raise RecognitionEventNotFoundError(f"No existe imagen para reconocimiento {event_id}.")
+        if row["image_path"]:
+            path = Path(row["image_path"])
+            if path.exists():
+                return path.read_bytes(), row["image_content_type"]
+        if row["image_blob"] is None:
             raise RecognitionEventNotFoundError(f"No existe imagen para reconocimiento {event_id}.")
         return bytes(row["image_blob"]), row["image_content_type"]
 
     def delete(self, event_id: int) -> None:
+        image_path = self._image_path_for_delete(event_id)
         with self._connect() as conn:
             cursor = conn.execute("DELETE FROM recognition_events WHERE id = ?", (event_id,))
             conn.commit()
         if cursor.rowcount == 0:
             raise RecognitionEventNotFoundError(f"No existe reconocimiento con id {event_id}.")
+        if image_path:
+            image_path.unlink(missing_ok=True)
+
+    def _image_path_for_delete(self, event_id: int) -> Path | None:
+        with self._connect() as conn:
+            row = conn.execute("SELECT image_path FROM recognition_events WHERE id = ?", (event_id,)).fetchone()
+        if row is None or not row["image_path"]:
+            return None
+        path = Path(row["image_path"])
+        image_dir = Path(self.settings.recognition_image_dir).resolve()
+        try:
+            resolved = path.resolve()
+        except OSError:
+            return None
+        if image_dir == resolved.parent or image_dir in resolved.parents:
+            return resolved
+        return None
 
     def review(self, event_id: int, payload: dict[str, Any]) -> RecognitionEventRecord:
         status = payload.get("status")
         if status not in VALID_REVIEW_STATUSES:
-            raise ValueError(f"Estado inválido: {status}")
+            raise InvalidReviewStatusError(f"Estado inválido: {status}")
 
         fields = (
             "status",

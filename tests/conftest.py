@@ -9,6 +9,7 @@ def isolated_sqlite(monkeypatch):
     tmp_dir = tempfile.mkdtemp(prefix="tesis-test-")
     db_path = os.path.join(tmp_dir, "test.db")
     monkeypatch.setenv("SQLITE_PATH", db_path)
+    monkeypatch.setenv("RECOGNITION_IMAGE_DIR", os.path.join(tmp_dir, "recognition-images"))
     from app.core import config as config_module
     from app.api import dependencies as dependencies_module
     from app.db import connection as connection_module

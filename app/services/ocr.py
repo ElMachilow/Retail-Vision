@@ -11,6 +11,7 @@ from app.core.exceptions import ModelUnavailableError, ProcessingError
 class OcrTextLine:
     text: str
     confidence: float | None
+    bbox_area: float | None = None
 
 
 @dataclass(frozen=True)
@@ -121,7 +122,13 @@ class PaddleOcrTextExtractor:
                     confidence = float(payload[1])
                 except (TypeError, ValueError):
                     confidence = None
-            lines.append(OcrTextLine(text=text, confidence=confidence))
+            lines.append(
+                OcrTextLine(
+                    text=text,
+                    confidence=confidence,
+                    bbox_area=self._box_area(item[0] if item else None),
+                )
+            )
         return lines
 
     def _parse_dict_lines(self, raw_result) -> list[OcrTextLine]:
@@ -139,6 +146,13 @@ class PaddleOcrTextExtractor:
             payload = item.get("res") if isinstance(item.get("res"), dict) else item
             texts = payload.get("rec_texts") or payload.get("texts") or []
             scores = payload.get("rec_scores") or payload.get("scores") or []
+            boxes = self._first_present(
+                payload.get("rec_boxes"),
+                payload.get("dt_boxes"),
+                payload.get("rec_polys"),
+                payload.get("dt_polys"),
+                payload.get("boxes"),
+            )
             for index, text in enumerate(texts):
                 clean_text = str(text).strip()
                 if not clean_text:
@@ -149,5 +163,37 @@ class PaddleOcrTextExtractor:
                         confidence = float(scores[index])
                     except (TypeError, ValueError):
                         confidence = None
-                lines.append(OcrTextLine(text=clean_text, confidence=confidence))
+                box = boxes[index] if index < len(boxes) else None
+                lines.append(OcrTextLine(text=clean_text, confidence=confidence, bbox_area=self._box_area(box)))
         return lines
+
+    def _first_present(self, *values):
+        for value in values:
+            if value is None:
+                continue
+            try:
+                if len(value) == 0:
+                    continue
+            except TypeError:
+                pass
+            return value
+        return []
+
+    def _box_area(self, box) -> float | None:
+        if box is None:
+            return None
+        try:
+            array = np.asarray(box, dtype=float)
+        except (TypeError, ValueError):
+            return None
+        if array.size < 4:
+            return None
+        if array.ndim == 1 and array.size >= 4:
+            x_min, y_min, x_max, y_max = array[:4]
+            return max(0.0, float(x_max - x_min)) * max(0.0, float(y_max - y_min))
+        points = array.reshape(-1, 2)
+        x_min = float(points[:, 0].min())
+        x_max = float(points[:, 0].max())
+        y_min = float(points[:, 1].min())
+        y_max = float(points[:, 1].max())
+        return max(0.0, x_max - x_min) * max(0.0, y_max - y_min)

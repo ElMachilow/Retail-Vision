@@ -27,11 +27,13 @@ class DetectionMetadata(BaseModel):
 class OcrLine(BaseModel):
     text: str
     confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    bbox_area: float | None = Field(default=None, ge=0.0)
 
 
 class OcrMetadata(BaseModel):
     engine: str
     text: str
+    prominent_text: str | None = None
     average_confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     lines: list[OcrLine] = Field(default_factory=list)
 

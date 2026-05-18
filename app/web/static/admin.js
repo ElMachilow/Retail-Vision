@@ -12,6 +12,9 @@ const confidenceFilter = document.querySelector("#confidence-filter");
 const confidenceLabel = document.querySelector("#confidence-label");
 const applyFilters = document.querySelector("#apply-filters");
 const reviewStatus = document.querySelector("#review-status");
+const selectAllRecords = document.querySelector("#select-all-records");
+const selectedCount = document.querySelector("#selected-count");
+const bulkDeleteButton = document.querySelector("#bulk-delete");
 
 const metrics = {
   pending: document.querySelector("#metric-pending"),
@@ -48,6 +51,7 @@ const fields = {
 let records = [];
 let selectedId = null;
 let searchDebounce = null;
+let selectedRecordIds = new Set();
 
 function escapeHtml(value) {
   if (value === null || value === undefined) return "";
@@ -117,10 +121,11 @@ function buildListUrl() {
 }
 
 async function loadRecords() {
-  tableBody.innerHTML = `<tr><td colspan="6" class="table-loading">Cargando reconocimientos...</td></tr>`;
+  tableBody.innerHTML = `<tr><td colspan="7" class="table-loading">Cargando reconocimientos...</td></tr>`;
   try {
     const data = await fetchJson(buildListUrl());
     records = data.items || [];
+    selectedRecordIds = new Set([...selectedRecordIds].filter((id) => records.some((item) => item.id === id)));
     renderCategoryOptions(records);
     renderTable(records);
     if (records.length && !selectedId) selectRecord(records[0].id);
@@ -130,7 +135,7 @@ async function loadRecords() {
       else clearDetail();
     }
   } catch (error) {
-    tableBody.innerHTML = `<tr><td colspan="6" class="table-loading is-error">${escapeHtml(error.message)}</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="7" class="table-loading is-error">${escapeHtml(error.message)}</td></tr>`;
   }
 }
 
@@ -150,12 +155,16 @@ function renderTable(items) {
   emptyState.hidden = items.length > 0;
   if (!items.length) {
     tableBody.innerHTML = "";
+    updateBulkControls();
     return;
   }
   tableBody.innerHTML = items
     .map((item) => {
       const selected = item.id === selectedId ? " is-selected" : "";
       return `<tr class="${selected}" data-id="${item.id}">
+        <td>
+          <input class="row-check" type="checkbox" data-select-id="${item.id}" aria-label="Seleccionar reconocimiento ${item.id}" ${selectedRecordIds.has(item.id) ? "checked" : ""}>
+        </td>
         <td>#${item.id}</td>
         <td><img class="review-thumb" src="${item.image_url}" alt=""></td>
         <td>
@@ -179,12 +188,35 @@ function renderTable(items) {
   tableBody.querySelectorAll("tr").forEach((row) => {
     row.addEventListener("click", () => selectRecord(Number(row.dataset.id)));
   });
+  tableBody.querySelectorAll("[data-select-id]").forEach((checkbox) => {
+    checkbox.addEventListener("click", (event) => event.stopPropagation());
+    checkbox.addEventListener("change", () => {
+      toggleRecordSelection(Number(checkbox.dataset.selectId), checkbox.checked);
+    });
+  });
   tableBody.querySelectorAll("[data-delete-id]").forEach((button) => {
     button.addEventListener("click", (event) => {
       event.stopPropagation();
       deleteRecord(Number(button.dataset.deleteId));
     });
   });
+  updateBulkControls();
+}
+
+function toggleRecordSelection(id, isSelected) {
+  if (isSelected) selectedRecordIds.add(id);
+  else selectedRecordIds.delete(id);
+  updateBulkControls();
+}
+
+function updateBulkControls() {
+  const visibleIds = records.map((item) => item.id);
+  const selectedVisible = visibleIds.filter((id) => selectedRecordIds.has(id));
+  selectedCount.textContent = `${selectedRecordIds.size} seleccionados`;
+  bulkDeleteButton.disabled = selectedRecordIds.size === 0;
+  if (!selectAllRecords) return;
+  selectAllRecords.checked = visibleIds.length > 0 && selectedVisible.length === visibleIds.length;
+  selectAllRecords.indeterminate = selectedVisible.length > 0 && selectedVisible.length < visibleIds.length;
 }
 
 function clearDetail() {
@@ -287,6 +319,7 @@ async function deleteRecord(id) {
       throw new Error(data.message || "No se pudo eliminar el reconocimiento.");
     }
     if (selectedId === id) clearDetail();
+    selectedRecordIds.delete(id);
     records = records.filter((record) => record.id !== id);
     await loadStats();
     renderTable(records);
@@ -298,9 +331,55 @@ async function deleteRecord(id) {
   }
 }
 
+async function deleteSelectedRecords() {
+  const ids = [...selectedRecordIds];
+  if (!ids.length) return;
+  const confirmed = window.confirm(`Eliminar ${ids.length} reconocimiento(s)? Esta accion no se puede deshacer.`);
+  if (!confirmed) return;
+
+  reviewStatus.classList.remove("is-error");
+  reviewStatus.textContent = "Eliminando reconocimientos seleccionados...";
+  bulkDeleteButton.disabled = true;
+  try {
+    const failed = [];
+    for (const id of ids) {
+      const response = await fetch(`${apiBaseUrl}/api/v1/admin/reconocimientos/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) failed.push(id);
+    }
+    selectedRecordIds.clear();
+    if (selectedId && ids.includes(selectedId)) clearDetail();
+    records = records.filter((record) => !ids.includes(record.id));
+    await loadStats();
+    renderTable(records);
+    if (!selectedId && records.length) selectRecord(records[0].id);
+    reviewStatus.textContent = failed.length
+      ? `No se pudieron eliminar ${failed.length} reconocimiento(s).`
+      : "Reconocimientos seleccionados eliminados.";
+    reviewStatus.classList.toggle("is-error", failed.length > 0);
+  } catch (error) {
+    reviewStatus.classList.add("is-error");
+    reviewStatus.textContent = error.message;
+  } finally {
+    updateBulkControls();
+  }
+}
+
 document.querySelectorAll("[data-action]").forEach((button) => {
   button.addEventListener("click", () => submitReview(button.dataset.action));
 });
+
+selectAllRecords.addEventListener("change", () => {
+  if (selectAllRecords.checked) {
+    records.forEach((item) => selectedRecordIds.add(item.id));
+  } else {
+    records.forEach((item) => selectedRecordIds.delete(item.id));
+  }
+  renderTable(records);
+});
+
+bulkDeleteButton.addEventListener("click", deleteSelectedRecords);
 
 confidenceFilter.addEventListener("input", () => {
   confidenceLabel.textContent = `${confidenceFilter.value}%`;

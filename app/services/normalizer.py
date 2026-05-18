@@ -91,8 +91,14 @@ class ProductTextNormalizer:
         "mupirocina",
     }
 
-    def normalize(self, text: str, source_name: str | None = None) -> NormalizedProduct:
+    def normalize(
+        self,
+        text: str,
+        source_name: str | None = None,
+        prominent_text: str | None = None,
+    ) -> NormalizedProduct:
         clean_text = self._clean_text(text)
+        clean_prominent_text = self._clean_text(prominent_text or "")
         clean_source_name = self._clean_source_name(source_name)
         clean_context = "\n".join(part for part in (clean_text, clean_source_name) if part)
         folded_text = self._fold(clean_text)
@@ -107,7 +113,17 @@ class ProductTextNormalizer:
         presentation = self._detect_presentation(clean_text, amount, unit)
         variant = self._detect_variant(folded_context, category)
         content = f"{amount} {unit}" if amount and unit else None
-        name = self._build_product_name(clean_text, brand, amount, unit, variant, category, product_type, content)
+        name = self._build_product_name(
+            clean_text,
+            brand,
+            amount,
+            unit,
+            variant,
+            category,
+            product_type,
+            content,
+            prominent_text=clean_prominent_text,
+        )
 
         if not text.strip():
             warnings.append("OCR no devolvió texto; se requiere revisión manual.")
@@ -420,9 +436,14 @@ class ProductTextNormalizer:
         category: str | None,
         product_type: str | None,
         content: str | None,
+        prominent_text: str | None = None,
     ) -> str | None:
         lines = [line.strip() for line in clean_text.splitlines() if line.strip()]
         meaningful = [line for line in lines if self._is_meaningful_line(line)]
+        prominent_line = self._clean_prominent_product_line(prominent_text, brand, product_type)
+        if prominent_line and self._should_prefer_prominent_line(prominent_line, brand, product_type, category):
+            return self._compose_name_from_prominent_line(prominent_line, brand, product_type, content)[:120]
+
         if category == "farmacia/otc":
             primary_line = self._find_primary_pharmacy_line(meaningful, brand, product_type)
             if primary_line:
@@ -457,6 +478,78 @@ class ProductTextNormalizer:
         if selected:
             return selected[:120]
         return brand or (f"Producto {amount} {unit}" if amount and unit else None)
+
+    def _clean_prominent_product_line(
+        self,
+        prominent_text: str | None,
+        brand: str | None,
+        product_type: str | None,
+    ) -> str | None:
+        if not prominent_text:
+            return None
+        line = self.content_regex.sub("", prominent_text)
+        line = self.concentration_regex.sub("", line)
+        line = re.sub(r"[®™©]+", "", line)
+        line = re.sub(r"\b\d{5,}\b", "", line)
+        line = re.sub(r"\s{2,}", " ", line).strip(" -.,:;")
+        if not line or not self._is_meaningful_line(line):
+            return None
+        folded_line = self._fold(line)
+        if self._is_pharmacy_detail_line(folded_line):
+            return None
+        if self._fold(line) in {self._fold(brand or ""), self._fold(product_type or "")}:
+            return None
+        return line
+
+    def _should_prefer_prominent_line(
+        self,
+        prominent_line: str,
+        brand: str | None,
+        product_type: str | None,
+        category: str | None,
+    ) -> bool:
+        folded_line = self._fold(prominent_line)
+        if category == "farmacia/otc":
+            return True
+        if len(re.findall(r"[a-z0-9]+", folded_line)) >= 2:
+            return True
+        if not brand and not product_type:
+            return True
+        return False
+
+    def _compose_name_from_prominent_line(
+        self,
+        prominent_line: str,
+        brand: str | None,
+        product_type: str | None,
+        content: str | None = None,
+    ) -> str:
+        parts = [self._title_product_phrase(prominent_line)]
+        folded_parts = self._fold(" ".join(parts))
+        drug_ingredient_types = {
+            "Sulfato Ferroso",
+            "Simeticona",
+            "Clopidogrel",
+            "Loratadina",
+            "Omeprazol",
+            "Metformina",
+            "Antiácido",
+        }
+        prominent_token_count = len(re.findall(r"[a-z0-9]+", self._fold(prominent_line)))
+        if (
+            product_type
+            and prominent_token_count < 2
+            and product_type not in drug_ingredient_types
+            and self._fold(product_type) not in folded_parts
+        ):
+            parts.append(product_type)
+        folded_parts = self._fold(" ".join(parts))
+        if brand and self._fold(brand) not in folded_parts:
+            parts.append(brand)
+        folded_parts = self._fold(" ".join(parts))
+        if content and self._fold(content) not in folded_parts:
+            parts.append(content)
+        return " ".join(parts)
 
     def _find_primary_pharmacy_line(
         self,

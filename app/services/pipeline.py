@@ -1,3 +1,4 @@
+import re
 import time
 from dataclasses import dataclass
 
@@ -64,11 +65,21 @@ class ProductRecognitionPipeline:
         ocr_result = self._extract_ocr(image, detection, trace_id)
         logger.info("ocr completado lineas=%s", len(ocr_result.lines))
 
-        normalized = self.normalizer.normalize(ocr_result.text, source_name=source_name)
+        prominent_text = self._prominent_ocr_text(ocr_result)
+        normalized = self.normalizer.normalize(
+            ocr_result.text,
+            source_name=source_name,
+            prominent_text=prominent_text,
+        )
         if detection.fields and self._needs_full_image_ocr(normalized):
             full_ocr_result = self._extract_full_image_ocr(image, trace_id)
             ocr_result = self._merge_ocr_results(ocr_result, full_ocr_result)
-            normalized = self.normalizer.normalize(ocr_result.text, source_name=source_name)
+            prominent_text = self._prominent_ocr_text(ocr_result)
+            normalized = self.normalizer.normalize(
+                ocr_result.text,
+                source_name=source_name,
+                prominent_text=prominent_text,
+            )
             logger.info("ocr imagen completa fusionado lineas=%s", len(ocr_result.lines))
 
         warnings = list(normalized.warnings)
@@ -108,9 +119,10 @@ class ProductRecognitionPipeline:
             ocr=OcrMetadata(
                 engine=ocr_result.engine,
                 text=ocr_result.text,
+                prominent_text=prominent_text,
                 average_confidence=ocr_result.average_confidence,
                 lines=[
-                    OcrLine(text=line.text, confidence=line.confidence)
+                    OcrLine(text=line.text, confidence=line.confidence, bbox_area=line.bbox_area)
                     for line in ocr_result.lines
                 ],
             ),
@@ -125,7 +137,7 @@ class ProductRecognitionPipeline:
         trace_id: str,
     ) -> OcrResult:
         if detection.fields:
-            return self._extract_roi_ocr(image, detection, trace_id)
+            return self._extract_field_aware_ocr(image, detection, trace_id)
 
         cropped = crop_image(image, detection.bbox)
         ocr_image = prepare_for_ocr(cropped)
@@ -219,6 +231,33 @@ class ProductRecognitionPipeline:
             average_confidence=average,
             lines=lines,
         )
+
+    def _prominent_ocr_text(self, ocr_result: OcrResult) -> str | None:
+        candidates: list[tuple[float, int, str]] = []
+        for index, line in enumerate(ocr_result.lines):
+            text = " ".join(line.text.split())
+            if not self._looks_like_product_name_candidate(text):
+                continue
+            area = line.bbox_area or 0.0
+            alpha_chars = len([char for char in text if char.isalpha()])
+            if area <= 0:
+                area = float(alpha_chars)
+            candidates.append((area, -index, text))
+        if not candidates:
+            return None
+        return max(candidates)[2]
+
+    def _looks_like_product_name_candidate(self, text: str) -> bool:
+        if len(text) < 3:
+            return False
+        folded = self.normalizer._fold(text)
+        if re.fullmatch(r"[\d\s.,/%+-]+", folded):
+            return False
+        if re.search(r"\b\d+(?:[.,]\d+)?\s*(mg|mcg|g|kg|ml|l|%)\b", folded):
+            return False
+        if re.search(r"\b(via|oral|laboratorio|laboratorios|contenido|neto)\b", folded):
+            return False
+        return bool(re.search(r"[a-z]", folded))
 
     def _expand_bbox(
         self,

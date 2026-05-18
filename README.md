@@ -154,6 +154,9 @@ Esta estrategia sirve como afinamiento inicial del MVP. Para la evaluación de t
 | `PADDLE_OCR_LANG` | Idioma de PaddleOCR. Por defecto `es`. |
 | `ALLOW_FULL_IMAGE_FALLBACK` | Procesa imagen completa si YOLO no detecta caja. |
 | `PERSIST_DEBUG_IMAGES` | Guarda recortes procesados en `runtime/debug`. |
+| `CORS_ALLOW_ORIGINS` | Orígenes permitidos para CORS, separados por coma. Por defecto `*` para desarrollo local. |
+| `EXPOSE_INTERNAL_ERRORS` | Si es `true`, expone detalles internos en errores 500. Por defecto `false`. |
+| `RECOGNITION_IMAGE_DIR` | Carpeta donde se guardan las imágenes de reconocimientos. Por defecto `runtime/recognition-images`. |
 
 ## Pendientes técnicos
 

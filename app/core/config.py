@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     app_env: str = "local"
     api_v1_prefix: str = "/api/v1"
     log_level: str = "INFO"
+    cors_allow_origins: str = "*"
+    expose_internal_errors: bool = False
     max_image_mb: int = Field(default=10, ge=1, le=50)
 
     yolo_model_path: str = "yolov8n.pt"
@@ -30,6 +32,7 @@ class Settings(BaseSettings):
     debug_image_dir: Path = Path("runtime/debug")
 
     sqlite_path: Path = Path("runtime/products.db")
+    recognition_image_dir: Path = Path("runtime/recognition-images")
 
 
 @lru_cache

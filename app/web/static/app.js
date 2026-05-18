@@ -46,6 +46,7 @@ let suggestionAbortController = null;
 let suggestionDebounce = null;
 let latestOcrText = "";
 let latestSourceName = "";
+let latestProminentText = "";
 
 function percent(value) {
   if (value === null || value === undefined) return "-";
@@ -71,6 +72,9 @@ function clearTrace() {
   traceFields.ocrText.textContent = "-";
   warningsBox.hidden = true;
   warningsBox.textContent = "";
+  latestOcrText = "";
+  latestSourceName = "";
+  latestProminentText = "";
 }
 
 function clearFieldErrors() {
@@ -109,6 +113,8 @@ function updatePreview(file) {
   selectedFile = file;
   fileName.textContent = file ? file.name : "JPG, PNG o WEBP";
   submitButton.disabled = !file;
+  clearTrace();
+  hideSuggestions();
 
   if (file && webcamStream) {
     stopWebcam();
@@ -147,6 +153,7 @@ function renderResult(data) {
   traceFields.time.textContent = data.processing_ms ? `${data.processing_ms} ms` : "-";
   traceFields.ocrText.textContent = ocr.text || "-";
   latestOcrText = ocr.text || "";
+  latestProminentText = ocr.prominent_text || "";
   latestSourceName = selectedFile?.name || "";
 
   if (Array.isArray(data.warnings) && data.warnings.length > 0) {
@@ -248,6 +255,7 @@ async function fetchSuggestions(query) {
     const params = new URLSearchParams({ q: query, limit: "3" });
     if (latestOcrText) params.set("context", latestOcrText.slice(0, 2000));
     if (latestSourceName) params.set("source_name", latestSourceName.slice(0, 200));
+    if (latestProminentText) params.set("prominent_text", latestProminentText.slice(0, 200));
     const response = await fetch(`${apiBaseUrl}/api/v1/productos/suggestions?${params}`, {
       signal: suggestionAbortController.signal,
     });

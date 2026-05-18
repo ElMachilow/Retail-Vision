@@ -373,3 +373,21 @@ def test_normalizer_detects_pharmacy_cream_with_percentage_concentration() -> No
     assert result.contenido_neto == "0.05 %"
     assert result.unidad_medida == "%"
     assert result.categoria_sugerida == "farmacia/otc"
+
+
+def test_normalizer_prefers_prominent_ocr_line_as_general_product_name_rule() -> None:
+    text = (
+        "ANTIACIDO\n"
+        "GASEOVET MS\n"
+        "Magaldrato + Simeticona\n"
+        "(800 mg + 60 mg)/10 mL\n"
+        "Suspensión Oral\n"
+        "Vía oral\n"
+        "220 mL"
+    )
+
+    result = ProductTextNormalizer().normalize(text, prominent_text="GASEOVET MS")
+
+    assert result.nombre_producto == "Gaseovet Ms 220 ml"
+    assert result.categoria_sugerida == "farmacia/otc"
+    assert result.contenido_neto == "220 ml"

@@ -203,6 +203,66 @@ def test_suggestions_prioritize_prominent_pharmacy_name_from_context() -> None:
     assert items[0]["nombre_producto"] == "Dextrometorfano Jarabe Medifarma"
 
 
+def test_suggestions_always_builds_three_options_from_ocr_text_when_possible() -> None:
+    client = _client()
+    context = (
+        "Rinoval\n"
+        "MOMETASONA FUROATO\n"
+        "50 mcg/dosis\n"
+        "120 dosis\n"
+        "Suspensión Nasal para Nebulización\n"
+        "SAVAL"
+    )
+
+    response = client.get(
+        "/api/v1/productos/suggestions",
+        params={
+            "q": "Rinoval",
+            "limit": 3,
+            "context": context,
+            "prominent_text": "Rinoval",
+        },
+    )
+
+    assert response.status_code == 200
+    items = response.json()["items"]
+    assert len(items) == 3
+    assert items[0]["nombre_producto"] == "Rinoval"
+    assert any("MOMETASONA FUROATO" in item["nombre_producto"] for item in items[1:])
+    assert any("Suspensión Nasal" in item["nombre_producto"] for item in items[1:])
+
+
+def test_suggestions_infers_prominent_name_when_client_does_not_send_it() -> None:
+    client = _client()
+    context = (
+        "220mL\n"
+        "ANTIACIDO\n"
+        "GASEOVET\"MS\n"
+        "Magaldrato+Simeticona\n"
+        "800mg+60 mg/10 mL\n"
+        "Suspensión Oral\n"
+        "Viaoral\n"
+        "GASEOVET'MS\n"
+        "800mg+60mg/10 ml"
+    )
+
+    response = client.get(
+        "/api/v1/productos/suggestions",
+        params={
+            "q": "Gaseovet Ms",
+            "limit": 3,
+            "context": context,
+            "source_name": "gaseovet.jpeg",
+        },
+    )
+
+    assert response.status_code == 200
+    items = response.json()["items"]
+    assert len(items) == 3
+    assert items[0]["nombre_producto"] == "Gaseovet Ms 220 ml"
+    assert all(item["nombre_producto"].startswith("Gaseovet Ms") for item in items)
+
+
 def test_suggestions_capped_to_three() -> None:
     client = _client()
     response = client.get(

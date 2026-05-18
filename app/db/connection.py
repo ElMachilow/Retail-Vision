@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS recognition_events (
     source_name TEXT,
     image_content_type TEXT,
     image_blob BLOB,
+    image_path TEXT,
     status TEXT NOT NULL DEFAULT 'pending_review',
     predicted_nombre_producto TEXT,
     predicted_marca TEXT,
@@ -85,9 +86,19 @@ def init_db(settings: Settings | None = None) -> Path:
             return path
         with sqlite3.connect(path) as conn:
             conn.executescript(SCHEMA)
+            _apply_lightweight_migrations(conn)
             conn.commit()
         _initialized.add(key)
     return path
+
+
+def _apply_lightweight_migrations(conn: sqlite3.Connection) -> None:
+    columns = {
+        row[1]
+        for row in conn.execute("PRAGMA table_info(recognition_events)").fetchall()
+    }
+    if "image_path" not in columns:
+        conn.execute("ALTER TABLE recognition_events ADD COLUMN image_path TEXT")
 
 
 def get_connection(settings: Settings | None = None) -> sqlite3.Connection:

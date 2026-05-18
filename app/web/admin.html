@@ -93,12 +93,21 @@
         <section class="review-list" aria-label="Listado de reconocimientos">
           <div class="admin-panel-heading">
             <h2>Listado de reconocimientos</h2>
-            <span id="list-count">0 registros</span>
+            <div class="bulk-actions">
+              <span id="selected-count">0 seleccionados</span>
+              <button id="bulk-delete" class="admin-button admin-button--danger" type="button" disabled>
+                Eliminar seleccionados
+              </button>
+              <span id="list-count">0 registros</span>
+            </div>
           </div>
           <div class="review-table-wrap">
             <table class="review-table">
               <thead>
                 <tr>
+                  <th>
+                    <input id="select-all-records" class="row-check" type="checkbox" aria-label="Seleccionar todos" />
+                  </th>
                   <th>ID</th>
                   <th>Miniatura</th>
                   <th>Producto / Marca</th>

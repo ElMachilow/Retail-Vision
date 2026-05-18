@@ -22,6 +22,11 @@ def create_app() -> FastAPI:
     settings = get_settings()
     configure_logging(settings.log_level)
     init_db(settings)
+    cors_origins = [
+        origin.strip()
+        for origin in settings.cors_allow_origins.split(",")
+        if origin.strip()
+    ] or ["*"]
 
     app = FastAPI(
         title=settings.app_name,
@@ -33,7 +38,7 @@ def create_app() -> FastAPI:
     )
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
+        allow_origins=cors_origins,
         allow_methods=["*"],
         allow_headers=["*"],
     )
@@ -87,7 +92,7 @@ def register_exception_handlers(app: FastAPI) -> None:
             trace_id=trace_id,
             error_code="UNHANDLED_ERROR",
             message="Ocurrió un error no controlado durante el procesamiento.",
-            detail=str(exc),
+            detail=str(exc) if get_settings().expose_internal_errors else None,
         )
         return JSONResponse(status_code=500, content=payload.model_dump())
 

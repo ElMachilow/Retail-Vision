@@ -189,7 +189,7 @@ def get_recognition(
     "/admin/reconocimientos/{event_id}",
     status_code=204,
     tags=["admin"],
-    summary="Elimina un reconocimiento capturado del panel de administraciÃ³n.",
+    summary="Elimina un reconocimiento capturado del panel de administración.",
 )
 def delete_recognition(
     event_id: int,
@@ -239,9 +239,16 @@ def suggest_products(
     limit: int = Query(default=3, ge=1, le=10),
     context: str | None = Query(default=None, max_length=2000),
     source_name: str | None = Query(default=None, max_length=200),
+    prominent_text: str | None = Query(default=None, max_length=200),
     service: ProductSuggestionService = Depends(get_suggestion_service),
 ) -> ProductSuggestionsResponse:
-    items = service.suggest(q, limit=limit, context_text=context, source_name=source_name)
+    items = service.suggest(
+        q,
+        limit=limit,
+        context_text=context,
+        source_name=source_name,
+        prominent_text=prominent_text,
+    )
     return ProductSuggestionsResponse(
         items=[
             ProductSuggestionItemSchema(
