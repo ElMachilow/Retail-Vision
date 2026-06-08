@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inventario por foto</title>
+    <link rel="stylesheet" href="static/styles.css?v=6" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Sprint 4</p>
+          <h1>Inventario por foto</h1>
+        </div>
+        <nav class="topnav">
+          <a href="/">Registro</a>
+          <a href="/inventario">Inventario</a>
+          <a href="/productos">Productos</a>
+          <a href="/admin">Admin</a>
+          <a class="docs-link" href="/docs">API docs</a>
+        </nav>
+      </header>
+
+      <section class="inventory-layout">
+        <section class="inventory-panel">
+          <div class="result-heading">
+            <p class="eyebrow">Sesion de conteo</p>
+            <h2>Control de stock</h2>
+          </div>
+
+          <form id="session-form" class="inventory-session-form">
+            <label class="field">
+              <span>Nombre de la sesion</span>
+              <input id="session-name" type="text" maxlength="120" required />
+            </label>
+            <button id="session-button" class="primary-button" type="submit">Crear sesion</button>
+          </form>
+
+          <div class="inventory-session-row">
+            <label class="field">
+              <span>Sesion activa</span>
+              <select id="session-select"></select>
+            </label>
+            <button id="close-session-button" class="secondary-button" type="button">Cerrar</button>
+          </div>
+
+          <p id="session-status" class="status-text" role="status"></p>
+        </section>
+
+        <form id="inventory-recognition-form" class="upload-panel">
+          <div class="upload-actions">
+            <label class="capture-button" for="inventory-camera-input">
+              <span aria-hidden="true">📷</span>
+              <span>Tomar foto</span>
+              <input id="inventory-camera-input" type="file" accept="image/*" capture="environment" hidden />
+            </label>
+            <label id="inventory-drop-zone" class="drop-zone" for="inventory-image-input">
+              <input id="inventory-image-input" name="image" type="file" accept="image/*" />
+              <span class="drop-title">Elegir de galeria</span>
+              <span id="inventory-file-name" class="drop-subtitle">JPG, PNG o WEBP</span>
+            </label>
+          </div>
+
+          <div class="preview-frame">
+            <img id="inventory-preview-image" alt="Vista previa del producto" hidden />
+            <div id="inventory-preview-empty" class="preview-empty">Sin imagen</div>
+          </div>
+
+          <button id="inventory-analyze-button" class="primary-button" type="submit" disabled>
+            Reconocer para inventario
+          </button>
+          <p id="inventory-status" class="status-text" role="status">Esperando foto</p>
+        </form>
+
+        <section class="result-panel">
+          <div class="result-heading">
+            <p class="eyebrow">Producto contado</p>
+            <h2>Confirmar cantidad</h2>
+          </div>
+
+          <form id="inventory-item-form" class="product-form" novalidate>
+            <input id="recognition-event-id" type="hidden" />
+            <input id="matching-product-id" type="hidden" />
+            <div class="field field--name">
+              <label for="inventory-name">Nombre del producto *</label>
+              <input id="inventory-name" type="text" maxlength="200" required />
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="inventory-brand">Marca</label>
+                <input id="inventory-brand" type="text" maxlength="120" />
+              </div>
+              <div class="field">
+                <label for="inventory-type">Tipo</label>
+                <input id="inventory-type" type="text" maxlength="120" />
+              </div>
+              <div class="field">
+                <label for="inventory-category">Categoria</label>
+                <input id="inventory-category" type="text" maxlength="120" />
+              </div>
+              <div class="field">
+                <label for="inventory-content">Contenido neto</label>
+                <input id="inventory-content" type="text" maxlength="60" />
+              </div>
+              <div class="field">
+                <label for="inventory-unit">Unidad</label>
+                <input id="inventory-unit" type="text" maxlength="20" />
+              </div>
+              <div class="field">
+                <label for="inventory-location">Ubicacion</label>
+                <input id="inventory-location" type="text" maxlength="120" placeholder="Estante, vitrina o almacen" />
+              </div>
+              <div class="field">
+                <label for="inventory-quantity">Cantidad *</label>
+                <input id="inventory-quantity" type="number" inputmode="numeric" min="1" step="1" value="1" required />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button id="save-inventory-item" class="primary-button" type="submit">Guardar conteo</button>
+              <p id="inventory-save-status" class="status-text" role="status"></p>
+            </div>
+          </form>
+
+          <div id="inventory-warnings" class="warnings" hidden></div>
+        </section>
+      </section>
+
+      <section class="inventory-dashboard">
+        <section class="inventory-panel">
+          <div class="admin-panel-heading">
+            <h2>Resumen por categoria</h2>
+            <span id="inventory-total-label">0 unidades</span>
+          </div>
+          <div id="inventory-summary" class="inventory-summary"></div>
+        </section>
+
+        <section class="inventory-panel">
+          <div class="admin-panel-heading">
+            <h2>Productos contados</h2>
+            <span id="inventory-count-label">0 items</span>
+          </div>
+          <div class="review-table-wrap inventory-table-wrap">
+            <table class="products-table" id="inventory-items-table" hidden>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Categoria</th>
+                  <th>Cantidad</th>
+                  <th>Ubicacion</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-items-body"></tbody>
+            </table>
+            <div id="inventory-empty" class="products-empty">Aun no hay conteos en esta sesion.</div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="static/inventario.js?v=1" defer></script>
+  </body>
+</html>

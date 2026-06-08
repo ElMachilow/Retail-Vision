@@ -337,3 +337,56 @@ def test_list_products_returns_recent_first() -> None:
     ids = [item["id"] for item in response.json()["items"]]
     assert ids[0] == second["id"]
     assert first["id"] in ids
+
+
+def test_inventory_session_item_and_summary() -> None:
+    client = _client()
+    session_response = client.post(
+        "/api/v1/inventory/sessions",
+        json={"nombre": "Inventario piloto"},
+    )
+    assert session_response.status_code == 201, session_response.text
+    session = session_response.json()
+
+    item_response = client.post(
+        f"/api/v1/inventory/sessions/{session['id']}/items",
+        json={
+            "nombre_producto": "Detergente Ariel 1 kg",
+            "marca": "Ariel",
+            "tipo_producto": "Detergente",
+            "categoria": "limpieza",
+            "contenido_neto": "1 kg",
+            "unidad_medida": "kg",
+            "cantidad": 6,
+            "ubicacion": "Estante 1",
+        },
+    )
+    assert item_response.status_code == 201, item_response.text
+    item = item_response.json()
+    assert item["cantidad"] == 6
+    assert item["categoria"] == "limpieza"
+
+    summary = client.get(f"/api/v1/inventory/sessions/{session['id']}/summary")
+    assert summary.status_code == 200
+    body = summary.json()
+    assert body["total_productos"] == 1
+    assert body["total_unidades"] == 6
+    assert body["categorias"][0]["categoria"] == "limpieza"
+
+
+def test_inventory_item_infers_category_when_missing() -> None:
+    client = _client()
+    session = client.post(
+        "/api/v1/inventory/sessions",
+        json={"nombre": "Inventario categorias"},
+    ).json()
+
+    response = client.post(
+        f"/api/v1/inventory/sessions/{session['id']}/items",
+        json={"nombre_producto": "Aftatopic 10 ml", "cantidad": 2},
+    )
+
+    assert response.status_code == 201, response.text
+    body = response.json()
+    assert body["cantidad"] == 2
+    assert body["contenido_neto"] == "10 ml"

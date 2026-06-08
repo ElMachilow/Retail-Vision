@@ -68,6 +68,37 @@ CREATE TABLE IF NOT EXISTS recognition_events (
 
 CREATE INDEX IF NOT EXISTS idx_recognition_events_status ON recognition_events(status);
 CREATE INDEX IF NOT EXISTS idx_recognition_events_created_at ON recognition_events(created_at);
+
+CREATE TABLE IF NOT EXISTS inventory_sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    estado TEXT NOT NULL DEFAULT 'open',
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    closed_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS inventory_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id INTEGER NOT NULL,
+    product_id INTEGER,
+    recognition_event_id INTEGER,
+    nombre_producto TEXT NOT NULL,
+    marca TEXT,
+    tipo_producto TEXT,
+    categoria TEXT,
+    contenido_neto TEXT,
+    unidad_medida TEXT,
+    cantidad INTEGER NOT NULL DEFAULT 1,
+    ubicacion TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY(session_id) REFERENCES inventory_sessions(id),
+    FOREIGN KEY(product_id) REFERENCES productos(id),
+    FOREIGN KEY(recognition_event_id) REFERENCES recognition_events(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_inventory_items_session ON inventory_items(session_id);
+CREATE INDEX IF NOT EXISTS idx_inventory_items_category ON inventory_items(categoria);
 """
 
 

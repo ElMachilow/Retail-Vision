@@ -162,6 +162,17 @@ def test_productos_screen_is_served() -> None:
     assert "static/productos.js" in response.text
 
 
+def test_inventory_screen_is_served() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    response = client.get("/inventario")
+
+    assert response.status_code == 200
+    assert "Inventario por foto" in response.text
+    assert "static/inventario.js" in response.text
+
+
 def test_admin_screen_is_served() -> None:
     app = create_app()
     client = TestClient(app)
@@ -207,6 +218,35 @@ def test_recognize_product_creates_pending_review_event() -> None:
     image_response = client.get(f"/api/v1/admin/reconocimientos/{events[0]['id']}/image")
     assert image_response.status_code == 200
     assert image_response.content.startswith(b"\xff\xd8")
+
+
+def test_inventory_recognize_photo_returns_inventory_payload() -> None:
+    app = create_app()
+    fake_pipeline = ProductRecognitionPipeline(
+        settings=Settings(),
+        detector=FakeDetector(),
+        ocr=FakeOcr(),
+        normalizer=ProductTextNormalizer(),
+    )
+    app.dependency_overrides[get_product_pipeline] = lambda: fake_pipeline
+    client = TestClient(app)
+    session = client.post(
+        "/api/v1/inventory/sessions",
+        json={"nombre": "Inventario con foto"},
+    ).json()
+
+    response = client.post(
+        f"/api/v1/inventory/sessions/{session['id']}/items/recognize",
+        files={"image": ("inca-kola.jpg", _jpeg_bytes(), "image/jpeg")},
+        headers={"X-Trace-ID": "inventory-test-1"},
+    )
+
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["trace_id"] == "inventory-test-1"
+    assert body["recognition_event_id"]
+    assert body["producto"]["categoria_sugerida"] == "bebidas"
+    assert body["image_url"].endswith(f"/{body['recognition_event_id']}/image")
 
 
 def test_pipeline_uses_field_aware_ocr_when_yolo_returns_fields() -> None:

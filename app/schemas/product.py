@@ -212,3 +212,107 @@ class RecognitionStatsResponse(BaseModel):
     training_candidates: int
     total: int
     precision: float
+
+
+class InventorySessionCreateRequest(BaseModel):
+    nombre: str = Field(..., min_length=1, max_length=120)
+
+    @field_validator("nombre")
+    @classmethod
+    def _strip_name(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("Campo obligatorio.")
+        return cleaned
+
+
+class InventorySessionResponse(BaseModel):
+    id: int
+    nombre: str
+    estado: str
+    created_at: str
+    closed_at: str | None = None
+
+
+class InventorySessionsResponse(BaseModel):
+    items: list[InventorySessionResponse] = Field(default_factory=list)
+
+
+class InventoryItemCreateRequest(BaseModel):
+    product_id: int | None = None
+    recognition_event_id: int | None = None
+    nombre_producto: str = Field(..., min_length=1, max_length=200)
+    marca: str | None = Field(default=None, max_length=120)
+    tipo_producto: str | None = Field(default=None, max_length=120)
+    categoria: str | None = Field(default=None, max_length=120)
+    contenido_neto: str | None = Field(default=None, max_length=60)
+    unidad_medida: str | None = Field(default=None, max_length=20)
+    cantidad: int = Field(..., ge=1, le=100000)
+    ubicacion: str | None = Field(default=None, max_length=120)
+
+    @field_validator("nombre_producto")
+    @classmethod
+    def _strip_required_name(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("Campo obligatorio.")
+        return cleaned
+
+    @field_validator(
+        "marca",
+        "tipo_producto",
+        "categoria",
+        "contenido_neto",
+        "unidad_medida",
+        "ubicacion",
+    )
+    @classmethod
+    def _strip_optional_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        cleaned = value.strip()
+        return cleaned or None
+
+
+class InventoryItemResponse(BaseModel):
+    id: int
+    session_id: int
+    product_id: int | None = None
+    recognition_event_id: int | None = None
+    nombre_producto: str
+    marca: str | None = None
+    tipo_producto: str | None = None
+    categoria: str | None = None
+    contenido_neto: str | None = None
+    unidad_medida: str | None = None
+    cantidad: int
+    ubicacion: str | None = None
+    created_at: str
+    updated_at: str
+
+
+class InventoryItemsResponse(BaseModel):
+    items: list[InventoryItemResponse] = Field(default_factory=list)
+
+
+class InventoryCategorySummary(BaseModel):
+    categoria: str
+    productos: int
+    unidades: int
+
+
+class InventorySummaryResponse(BaseModel):
+    session_id: int
+    total_productos: int
+    total_unidades: int
+    categorias: list[InventoryCategorySummary] = Field(default_factory=list)
+
+
+class InventoryRecognizeResponse(BaseModel):
+    trace_id: str
+    producto: ProductSuggestion
+    recognition_event_id: int
+    image_url: str
+    matching_product_id: int | None = None
+    warnings: list[str] = Field(default_factory=list)
+    processing_ms: int

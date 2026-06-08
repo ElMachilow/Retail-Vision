@@ -3,6 +3,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, File, Header, Query, Response, UploadFile
 
 from app.api.dependencies import (
+    get_inventory_repository,
     get_product_pipeline,
     get_product_repository,
     get_product_categorizer,
@@ -11,10 +12,23 @@ from app.api.dependencies import (
 )
 from app.core.config import Settings, get_settings
 from app.core.exceptions import InvalidImageError
+from app.repositories.inventory import (
+    InventoryItemRecord,
+    InventoryRepository,
+    InventorySessionRecord,
+)
 from app.repositories.products import ProductRecord, ProductRepository
 from app.repositories.recognitions import RecognitionEventRecord, RecognitionRepository
 from app.schemas.product import (
     ErrorResponse,
+    InventoryItemCreateRequest,
+    InventoryItemResponse,
+    InventoryItemsResponse,
+    InventoryRecognizeResponse,
+    InventorySessionCreateRequest,
+    InventorySessionResponse,
+    InventorySessionsResponse,
+    InventorySummaryResponse,
     ProductCategorizeRequest,
     ProductCategorizeResponse,
     ProductCreateRequest,
@@ -48,6 +62,35 @@ def _to_response(record: ProductRecord) -> ProductResponse:
         categoria_sugerida=record.categoria_sugerida,
         codigo_barras=record.codigo_barras,
         precio_venta=record.precio_venta,
+        created_at=record.created_at,
+        updated_at=record.updated_at,
+    )
+
+
+def _inventory_session_to_response(record: InventorySessionRecord) -> InventorySessionResponse:
+    return InventorySessionResponse(
+        id=record.id,
+        nombre=record.nombre,
+        estado=record.estado,
+        created_at=record.created_at,
+        closed_at=record.closed_at,
+    )
+
+
+def _inventory_item_to_response(record: InventoryItemRecord) -> InventoryItemResponse:
+    return InventoryItemResponse(
+        id=record.id,
+        session_id=record.session_id,
+        product_id=record.product_id,
+        recognition_event_id=record.recognition_event_id,
+        nombre_producto=record.nombre_producto,
+        marca=record.marca,
+        tipo_producto=record.tipo_producto,
+        categoria=record.categoria,
+        contenido_neto=record.contenido_neto,
+        unidad_medida=record.unidad_medida,
+        cantidad=record.cantidad,
+        ubicacion=record.ubicacion,
         created_at=record.created_at,
         updated_at=record.updated_at,
     )
@@ -119,6 +162,149 @@ def health(settings: Settings = Depends(get_settings)) -> dict[str, str]:
         "app": settings.app_name,
         "environment": settings.app_env,
     }
+
+
+@router.post(
+    "/inventory/sessions",
+    response_model=InventorySessionResponse,
+    status_code=201,
+    tags=["inventory"],
+    summary="Crea una sesion de inventario por foto.",
+)
+def create_inventory_session(
+    payload: InventorySessionCreateRequest,
+    repository: InventoryRepository = Depends(get_inventory_repository),
+) -> InventorySessionResponse:
+    return _inventory_session_to_response(repository.create_session(payload.nombre))
+
+
+@router.get(
+    "/inventory/sessions",
+    response_model=InventorySessionsResponse,
+    tags=["inventory"],
+    summary="Lista sesiones de inventario.",
+)
+def list_inventory_sessions(
+    limit: int = Query(default=100, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+    repository: InventoryRepository = Depends(get_inventory_repository),
+) -> InventorySessionsResponse:
+    return InventorySessionsResponse(
+        items=[_inventory_session_to_response(item) for item in repository.list_sessions(limit, offset)]
+    )
+
+
+@router.put(
+    "/inventory/sessions/{session_id}/close",
+    response_model=InventorySessionResponse,
+    tags=["inventory"],
+    summary="Cierra una sesion de inventario.",
+)
+def close_inventory_session(
+    session_id: int,
+    repository: InventoryRepository = Depends(get_inventory_repository),
+) -> InventorySessionResponse:
+    return _inventory_session_to_response(repository.close_session(session_id))
+
+
+@router.post(
+    "/inventory/sessions/{session_id}/items/recognize",
+    response_model=InventoryRecognizeResponse,
+    tags=["inventory"],
+    summary="Reconoce un producto desde foto para agregarlo al inventario.",
+)
+async def recognize_inventory_item(
+    session_id: int,
+    image: UploadFile = File(..., description="Imagen JPG, PNG o WEBP del producto a contar."),
+    x_trace_id: str | None = Header(default=None, alias="X-Trace-ID"),
+    settings: Settings = Depends(get_settings),
+    inventory: InventoryRepository = Depends(get_inventory_repository),
+    products: ProductRepository = Depends(get_product_repository),
+    pipeline: ProductRecognitionPipeline = Depends(get_product_pipeline),
+    recognitions: RecognitionRepository = Depends(get_recognition_repository),
+) -> InventoryRecognizeResponse:
+    inventory.get_session(session_id)
+    trace_id = x_trace_id or str(uuid4())
+    content_type = (image.content_type or "").lower()
+    if content_type and not content_type.startswith("image/"):
+        raise InvalidImageError("El archivo enviado debe ser una imagen.")
+
+    image_bytes = await image.read()
+    max_bytes = settings.max_image_mb * 1024 * 1024
+    if len(image_bytes) > max_bytes:
+        raise InvalidImageError(f"La imagen supera el limite de {settings.max_image_mb} MB.")
+
+    result = pipeline.process(image_bytes=image_bytes, trace_id=trace_id, source_name=image.filename)
+    event = recognitions.create_from_response(
+        image_bytes=image_bytes,
+        content_type=image.content_type,
+        source_name=image.filename,
+        response=result,
+    )
+    matches = products.search_by_name(result.producto.nombre_producto or "", limit=1) if result.producto.nombre_producto else []
+    return InventoryRecognizeResponse(
+        trace_id=result.trace_id,
+        producto=result.producto,
+        recognition_event_id=event.id,
+        image_url=f"/api/v1/admin/reconocimientos/{event.id}/image",
+        matching_product_id=matches[0].id if matches else None,
+        warnings=result.warnings,
+        processing_ms=result.processing_ms,
+    )
+
+
+@router.post(
+    "/inventory/sessions/{session_id}/items",
+    response_model=InventoryItemResponse,
+    status_code=201,
+    tags=["inventory"],
+    summary="Guarda una linea de conteo en una sesion de inventario.",
+)
+def create_inventory_item(
+    session_id: int,
+    payload: InventoryItemCreateRequest,
+    repository: InventoryRepository = Depends(get_inventory_repository),
+    categorizer: ProductCategorizer = Depends(get_product_categorizer),
+) -> InventoryItemResponse:
+    data = payload.model_dump()
+    if not data.get("categoria"):
+        categorized = categorizer.categorize(data["nombre_producto"])
+        data["categoria"] = categorized.categoria_sugerida
+        data["marca"] = data.get("marca") or categorized.marca
+        data["tipo_producto"] = data.get("tipo_producto") or categorized.tipo_producto
+        data["contenido_neto"] = data.get("contenido_neto") or categorized.contenido_neto
+        data["unidad_medida"] = data.get("unidad_medida") or categorized.unidad_medida
+    return _inventory_item_to_response(repository.create_item(session_id, data))
+
+
+@router.get(
+    "/inventory/sessions/{session_id}/items",
+    response_model=InventoryItemsResponse,
+    tags=["inventory"],
+    summary="Lista productos contados en una sesion de inventario.",
+)
+def list_inventory_items(
+    session_id: int,
+    limit: int = Query(default=200, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+    repository: InventoryRepository = Depends(get_inventory_repository),
+) -> InventoryItemsResponse:
+    return InventoryItemsResponse(
+        items=[_inventory_item_to_response(item) for item in repository.list_items(session_id, limit, offset)]
+    )
+
+
+@router.get(
+    "/inventory/sessions/{session_id}/summary",
+    response_model=InventorySummaryResponse,
+    tags=["inventory"],
+    summary="Resumen por categoria de una sesion de inventario.",
+)
+def inventory_summary(
+    session_id: int,
+    repository: InventoryRepository = Depends(get_inventory_repository),
+) -> InventorySummaryResponse:
+    return InventorySummaryResponse(**repository.summary(session_id))
 
 
 @router.post(
