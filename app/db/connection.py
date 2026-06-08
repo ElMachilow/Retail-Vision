@@ -99,6 +99,36 @@ CREATE TABLE IF NOT EXISTS inventory_items (
 
 CREATE INDEX IF NOT EXISTS idx_inventory_items_session ON inventory_items(session_id);
 CREATE INDEX IF NOT EXISTS idx_inventory_items_category ON inventory_items(categoria);
+
+CREATE TABLE IF NOT EXISTS product_stock_counts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    mobile_product_id TEXT,
+    nombre_producto TEXT NOT NULL,
+    cantidad_final INTEGER NOT NULL,
+    confianza REAL NOT NULL DEFAULT 0,
+    total_fotos INTEGER NOT NULL DEFAULT 0,
+    valid_fotos INTEGER NOT NULL DEFAULT 0,
+    source TEXT NOT NULL DEFAULT 'mobile',
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS product_stock_count_photos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    count_id INTEGER NOT NULL,
+    recognition_event_id INTEGER,
+    source_name TEXT,
+    detected_name TEXT,
+    matched INTEGER NOT NULL DEFAULT 0,
+    accepted INTEGER NOT NULL DEFAULT 0,
+    confidence REAL NOT NULL DEFAULT 0,
+    warnings_json TEXT NOT NULL DEFAULT '[]',
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY(count_id) REFERENCES product_stock_counts(id),
+    FOREIGN KEY(recognition_event_id) REFERENCES recognition_events(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_product_stock_counts_mobile_product ON product_stock_counts(mobile_product_id);
+CREATE INDEX IF NOT EXISTS idx_product_stock_count_photos_count ON product_stock_count_photos(count_id);
 """
 
 

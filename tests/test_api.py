@@ -249,6 +249,66 @@ def test_inventory_recognize_photo_returns_inventory_payload() -> None:
     assert body["image_url"].endswith(f"/{body['recognition_event_id']}/image")
 
 
+def test_product_stock_count_confirmation_persists_photo_evidence() -> None:
+    app = create_app()
+    fake_pipeline = ProductRecognitionPipeline(
+        settings=Settings(),
+        detector=FakeDetector(),
+        ocr=FakeOcr(),
+        normalizer=ProductTextNormalizer(),
+    )
+    app.dependency_overrides[get_product_pipeline] = lambda: fake_pipeline
+    client = TestClient(app)
+
+    recognition_ids = []
+    for index in range(2):
+        response = client.post(
+            "/api/v1/products/recognize",
+            files={"image": (f"inca-kola-{index}.jpg", _jpeg_bytes(), "image/jpeg")},
+            headers={"X-Trace-ID": f"stock-count-{index}"},
+        )
+        assert response.status_code == 200, response.text
+        recognition_ids.append(response.json()["recognition_event_id"])
+
+    response = client.post(
+        "/api/v1/inventory/product-stock-counts",
+        json={
+            "mobile_product_id": "42",
+            "nombre_producto": "Inca Kola 500 ml",
+            "cantidad_final": 2,
+            "confianza": 0.93,
+            "photos": [
+                {
+                    "recognition_event_id": recognition_ids[0],
+                    "source_name": "inca-kola-0.jpg",
+                    "detected_name": "Inca Kola 500 ml",
+                    "matched": True,
+                    "accepted": True,
+                    "confidence": 0.95,
+                    "warnings": [],
+                },
+                {
+                    "recognition_event_id": recognition_ids[1],
+                    "source_name": "inca-kola-1.jpg",
+                    "detected_name": "Inca Kola 500 ml",
+                    "matched": True,
+                    "accepted": True,
+                    "confidence": 0.91,
+                    "warnings": [],
+                },
+            ],
+        },
+    )
+
+    assert response.status_code == 201, response.text
+    body = response.json()
+    assert body["mobile_product_id"] == "42"
+    assert body["cantidad_final"] == 2
+    assert body["total_fotos"] == 2
+    assert body["valid_fotos"] == 2
+    assert [photo["recognition_event_id"] for photo in body["photos"]] == recognition_ids
+
+
 def test_pipeline_uses_field_aware_ocr_when_yolo_returns_fields() -> None:
     ocr = FakeFieldAwareOcr()
     pipeline = ProductRecognitionPipeline(

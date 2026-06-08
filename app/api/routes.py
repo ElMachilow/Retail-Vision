@@ -16,6 +16,7 @@ from app.repositories.inventory import (
     InventoryItemRecord,
     InventoryRepository,
     InventorySessionRecord,
+    ProductStockCountRecord,
 )
 from app.repositories.products import ProductRecord, ProductRepository
 from app.repositories.recognitions import RecognitionEventRecord, RecognitionRepository
@@ -37,6 +38,8 @@ from app.schemas.product import (
     ProductResponse,
     ProductSuggestionItemSchema,
     ProductSuggestionsResponse,
+    ProductStockCountCreateRequest,
+    ProductStockCountResponse,
     ProductUpdateRequest,
     RecognitionEventResponse,
     RecognitionEventsResponse,
@@ -93,6 +96,34 @@ def _inventory_item_to_response(record: InventoryItemRecord) -> InventoryItemRes
         ubicacion=record.ubicacion,
         created_at=record.created_at,
         updated_at=record.updated_at,
+    )
+
+
+def _product_stock_count_to_response(record: ProductStockCountRecord) -> ProductStockCountResponse:
+    return ProductStockCountResponse(
+        id=record.id,
+        mobile_product_id=record.mobile_product_id,
+        nombre_producto=record.nombre_producto,
+        cantidad_final=record.cantidad_final,
+        confianza=record.confianza,
+        total_fotos=record.total_fotos,
+        valid_fotos=record.valid_fotos,
+        source=record.source,
+        created_at=record.created_at,
+        photos=[
+            {
+                "id": photo.id,
+                "recognition_event_id": photo.recognition_event_id,
+                "source_name": photo.source_name,
+                "detected_name": photo.detected_name,
+                "matched": photo.matched,
+                "accepted": photo.accepted,
+                "confidence": photo.confidence,
+                "warnings": photo.warnings,
+                "created_at": photo.created_at,
+            }
+            for photo in record.photos
+        ],
     )
 
 
@@ -308,6 +339,26 @@ def inventory_summary(
 
 
 @router.post(
+    "/inventory/product-stock-counts",
+    response_model=ProductStockCountResponse,
+    status_code=201,
+    tags=["inventory"],
+    summary="Confirma un conteo de stock de producto con evidencia de varias fotos.",
+)
+def create_product_stock_count(
+    payload: ProductStockCountCreateRequest,
+    repository: InventoryRepository = Depends(get_inventory_repository),
+) -> ProductStockCountResponse:
+    accepted_count = sum(1 for photo in payload.photos if photo.accepted)
+    if accepted_count < 1:
+        raise InvalidImageError("Debes confirmar al menos una foto valida para el conteo.")
+    if payload.cantidad_final != accepted_count:
+        raise InvalidImageError("La cantidad final debe coincidir con las fotos aceptadas.")
+    record = repository.create_product_stock_count(payload.model_dump())
+    return _product_stock_count_to_response(record)
+
+
+@router.post(
     "/products/recognize",
     response_model=ProductRecognitionResponse,
     responses={
@@ -336,13 +387,22 @@ async def recognize_product(
         raise InvalidImageError(f"La imagen supera el límite de {settings.max_image_mb} MB.")
 
     result = pipeline.process(image_bytes=image_bytes, trace_id=trace_id, source_name=image.filename)
-    recognitions.create_from_response(
+    event = recognitions.create_from_response(
         image_bytes=image_bytes,
         content_type=image.content_type,
         source_name=image.filename,
         response=result,
     )
-    return result
+    return ProductRecognitionResponse(
+        trace_id=result.trace_id,
+        producto=result.producto,
+        deteccion=result.deteccion,
+        ocr=result.ocr,
+        warnings=result.warnings,
+        processing_ms=result.processing_ms,
+        recognition_event_id=event.id,
+        image_url=f"/api/v1/admin/reconocimientos/{event.id}/image",
+    )
 
 
 @router.get(

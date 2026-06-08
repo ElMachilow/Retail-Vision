@@ -55,6 +55,8 @@ class ProductRecognitionResponse(BaseModel):
     ocr: OcrMetadata
     warnings: list[str] = Field(default_factory=list)
     processing_ms: int
+    recognition_event_id: int | None = None
+    image_url: str | None = None
 
 
 class ProductSuggestionItemSchema(BaseModel):
@@ -316,3 +318,62 @@ class InventoryRecognizeResponse(BaseModel):
     matching_product_id: int | None = None
     warnings: list[str] = Field(default_factory=list)
     processing_ms: int
+
+
+class ProductStockCountPhotoRequest(BaseModel):
+    recognition_event_id: int | None = None
+    source_name: str | None = Field(default=None, max_length=200)
+    detected_name: str | None = Field(default=None, max_length=200)
+    matched: bool = False
+    accepted: bool = False
+    confidence: float = Field(default=0, ge=0, le=1)
+    warnings: list[str] = Field(default_factory=list)
+
+
+class ProductStockCountCreateRequest(BaseModel):
+    mobile_product_id: str | None = Field(default=None, max_length=80)
+    nombre_producto: str = Field(..., min_length=1, max_length=200)
+    cantidad_final: int = Field(..., ge=1, le=6)
+    confianza: float = Field(default=0, ge=0, le=1)
+    photos: list[ProductStockCountPhotoRequest] = Field(..., min_length=1, max_length=6)
+
+    @field_validator("nombre_producto")
+    @classmethod
+    def _strip_count_product_name(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("Campo obligatorio.")
+        return cleaned
+
+    @field_validator("mobile_product_id")
+    @classmethod
+    def _strip_mobile_product_id(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        cleaned = value.strip()
+        return cleaned or None
+
+
+class ProductStockCountPhotoResponse(BaseModel):
+    id: int
+    recognition_event_id: int | None = None
+    source_name: str | None = None
+    detected_name: str | None = None
+    matched: bool
+    accepted: bool
+    confidence: float
+    warnings: list[str] = Field(default_factory=list)
+    created_at: str
+
+
+class ProductStockCountResponse(BaseModel):
+    id: int
+    mobile_product_id: str | None = None
+    nombre_producto: str
+    cantidad_final: int
+    confianza: float
+    total_fotos: int
+    valid_fotos: int
+    source: str
+    created_at: str
+    photos: list[ProductStockCountPhotoResponse] = Field(default_factory=list)
