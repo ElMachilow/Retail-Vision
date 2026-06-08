@@ -25,6 +25,7 @@ const editFields = {
 
 let originalSnapshot = null;
 let currentId = null;
+let categorizationAbortController = null;
 
 function escapeHtml(value) {
   if (value === null || value === undefined) return "";
@@ -153,6 +154,40 @@ function readPayload() {
   };
 }
 
+function applyCategorization(item) {
+  if (!item) return;
+  if (item.marca && !editFields.marca.value) editFields.marca.value = item.marca;
+  if (item.tipo_producto && !editFields.tipo_producto.value)
+    editFields.tipo_producto.value = item.tipo_producto;
+  if (item.presentacion && !editFields.presentacion.value)
+    editFields.presentacion.value = item.presentacion;
+  if (item.contenido_neto && !editFields.contenido_neto.value)
+    editFields.contenido_neto.value = item.contenido_neto;
+  if (item.unidad_medida && !editFields.unidad_medida.value)
+    editFields.unidad_medida.value = item.unidad_medida;
+  if (item.categoria_sugerida && !editFields.categoria_sugerida.value)
+    editFields.categoria_sugerida.value = item.categoria_sugerida;
+}
+
+async function categorizeCurrentName() {
+  const name = editFields.nombre_producto.value.trim();
+  if (name.length < 3 || editFields.categoria_sugerida.value.trim()) return;
+  if (categorizationAbortController) categorizationAbortController.abort();
+  categorizationAbortController = new AbortController();
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/v1/productos/categorize`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre_producto: name }),
+      signal: categorizationAbortController.signal,
+    });
+    if (!response.ok) return;
+    applyCategorization(await response.json());
+  } catch (error) {
+    if (error.name !== "AbortError") console.warn("No se pudo categorizar", error);
+  }
+}
+
 function validatePayload(payload) {
   clearFieldErrors();
   let valid = true;
@@ -212,6 +247,7 @@ backdrop.addEventListener("click", (event) => {
 editForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (currentId === null) return;
+  await categorizeCurrentName();
   const payload = readPayload();
   if (!validatePayload(payload)) {
     editStatus.classList.add("is-error");
@@ -245,6 +281,10 @@ editForm.addEventListener("submit", async (event) => {
   } finally {
     saveButton.disabled = false;
   }
+});
+
+editFields.nombre_producto.addEventListener("blur", () => {
+  categorizeCurrentName();
 });
 
 document.addEventListener("keydown", (event) => {

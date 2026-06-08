@@ -3,6 +3,7 @@ from functools import lru_cache
 from app.core.config import get_settings
 from app.repositories.products import ProductRepository
 from app.repositories.recognitions import RecognitionRepository
+from app.services.categorizer import ProductCategorizer, build_categorizer
 from app.services.pipeline import ProductRecognitionPipeline, build_pipeline
 from app.services.suggestions import ProductSuggestionService, build_suggestion_service
 
@@ -27,6 +28,11 @@ def _cached_suggestion_service() -> ProductSuggestionService:
     return build_suggestion_service(_cached_repository())
 
 
+@lru_cache
+def _cached_categorizer() -> ProductCategorizer:
+    return build_categorizer()
+
+
 def get_product_pipeline() -> ProductRecognitionPipeline:
     return _cached_pipeline()
 
@@ -41,3 +47,7 @@ def get_recognition_repository() -> RecognitionRepository:
 
 def get_suggestion_service() -> ProductSuggestionService:
     return _cached_suggestion_service()
+
+
+def get_product_categorizer() -> ProductCategorizer:
+    return _cached_categorizer()

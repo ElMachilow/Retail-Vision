@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, File, Header, Query, Response, UploadFil
 from app.api.dependencies import (
     get_product_pipeline,
     get_product_repository,
+    get_product_categorizer,
     get_recognition_repository,
     get_suggestion_service,
 )
@@ -14,6 +15,8 @@ from app.repositories.products import ProductRecord, ProductRepository
 from app.repositories.recognitions import RecognitionEventRecord, RecognitionRepository
 from app.schemas.product import (
     ErrorResponse,
+    ProductCategorizeRequest,
+    ProductCategorizeResponse,
     ProductCreateRequest,
     ProductListResponse,
     ProductRecognitionResponse,
@@ -26,6 +29,7 @@ from app.schemas.product import (
     RecognitionReviewRequest,
     RecognitionStatsResponse,
 )
+from app.services.categorizer import ProductCategorizer
 from app.services.pipeline import ProductRecognitionPipeline
 from app.services.suggestions import ProductSuggestionService
 
@@ -49,7 +53,27 @@ def _to_response(record: ProductRecord) -> ProductResponse:
     )
 
 
-def _recognition_to_response(record: RecognitionEventRecord) -> RecognitionEventResponse:
+def _recognition_to_response(
+    record: RecognitionEventRecord,
+    categorizer: ProductCategorizer | None = None,
+) -> RecognitionEventResponse:
+    predicted_marca = record.predicted_marca
+    predicted_tipo_producto = record.predicted_tipo_producto
+    predicted_presentacion = record.predicted_presentacion
+    predicted_contenido_neto = record.predicted_contenido_neto
+    predicted_unidad_medida = record.predicted_unidad_medida
+    predicted_categoria_sugerida = record.predicted_categoria_sugerida
+    if categorizer and not (record.final_categoria_sugerida or predicted_categoria_sugerida):
+        name = record.final_nombre_producto or record.predicted_nombre_producto
+        if name:
+            categorized = categorizer.categorize(name, context_text=record.ocr_text)
+            predicted_marca = predicted_marca or categorized.marca
+            predicted_tipo_producto = predicted_tipo_producto or categorized.tipo_producto
+            predicted_presentacion = predicted_presentacion or categorized.presentacion
+            predicted_contenido_neto = predicted_contenido_neto or categorized.contenido_neto
+            predicted_unidad_medida = predicted_unidad_medida or categorized.unidad_medida
+            predicted_categoria_sugerida = categorized.categoria_sugerida
+
     return RecognitionEventResponse(
         id=record.id,
         trace_id=record.trace_id,
@@ -57,12 +81,12 @@ def _recognition_to_response(record: RecognitionEventRecord) -> RecognitionEvent
         image_url=f"/api/v1/admin/reconocimientos/{record.id}/image",
         status=record.status,
         predicted_nombre_producto=record.predicted_nombre_producto,
-        predicted_marca=record.predicted_marca,
-        predicted_tipo_producto=record.predicted_tipo_producto,
-        predicted_presentacion=record.predicted_presentacion,
-        predicted_contenido_neto=record.predicted_contenido_neto,
-        predicted_unidad_medida=record.predicted_unidad_medida,
-        predicted_categoria_sugerida=record.predicted_categoria_sugerida,
+        predicted_marca=predicted_marca,
+        predicted_tipo_producto=predicted_tipo_producto,
+        predicted_presentacion=predicted_presentacion,
+        predicted_contenido_neto=predicted_contenido_neto,
+        predicted_unidad_medida=predicted_unidad_medida,
+        predicted_categoria_sugerida=predicted_categoria_sugerida,
         final_nombre_producto=record.final_nombre_producto,
         final_marca=record.final_marca,
         final_tipo_producto=record.final_tipo_producto,
@@ -161,6 +185,7 @@ def list_recognitions(
     limit: int = Query(default=100, ge=1, le=500),
     offset: int = Query(default=0, ge=0),
     repository: RecognitionRepository = Depends(get_recognition_repository),
+    categorizer: ProductCategorizer = Depends(get_product_categorizer),
 ) -> RecognitionEventsResponse:
     records = repository.list(
         status=status,
@@ -170,7 +195,9 @@ def list_recognitions(
         limit=limit,
         offset=offset,
     )
-    return RecognitionEventsResponse(items=[_recognition_to_response(record) for record in records])
+    return RecognitionEventsResponse(
+        items=[_recognition_to_response(record, categorizer) for record in records]
+    )
 
 
 @router.get(
@@ -181,8 +208,9 @@ def list_recognitions(
 def get_recognition(
     event_id: int,
     repository: RecognitionRepository = Depends(get_recognition_repository),
+    categorizer: ProductCategorizer = Depends(get_product_categorizer),
 ) -> RecognitionEventResponse:
-    return _recognition_to_response(repository.get(event_id))
+    return _recognition_to_response(repository.get(event_id), categorizer)
 
 
 @router.delete(
@@ -221,11 +249,22 @@ def get_recognition_image(
 def review_recognition(
     event_id: int,
     payload: RecognitionReviewRequest,
+    categorizer: ProductCategorizer = Depends(get_product_categorizer),
     repository: RecognitionRepository = Depends(get_recognition_repository),
 ) -> RecognitionEventResponse:
     data = payload.model_dump()
+    existing = repository.get(event_id)
+    name = data.get("final_nombre_producto") or existing.predicted_nombre_producto
+    if name and not data.get("final_categoria_sugerida"):
+        categorized = categorizer.categorize(name, context_text=existing.ocr_text)
+        data["final_categoria_sugerida"] = categorized.categoria_sugerida
+        data["final_marca"] = data.get("final_marca") or categorized.marca
+        data["final_tipo_producto"] = data.get("final_tipo_producto") or categorized.tipo_producto
+        data["final_presentacion"] = data.get("final_presentacion") or categorized.presentacion
+        data["final_contenido_neto"] = data.get("final_contenido_neto") or categorized.contenido_neto
+        data["final_unidad_medida"] = data.get("final_unidad_medida") or categorized.unidad_medida
     data["use_for_training"] = 1 if payload.use_for_training else 0
-    return _recognition_to_response(repository.review(event_id, data))
+    return _recognition_to_response(repository.review(event_id, data), categorizer)
 
 
 @router.get(
@@ -261,6 +300,29 @@ def suggest_products(
             )
             for item in items
         ]
+    )
+
+
+@router.post(
+    "/productos/categorize",
+    response_model=ProductCategorizeResponse,
+    tags=["productos"],
+    summary="Sugiere categoria y metadatos de producto desde el nombre.",
+)
+def categorize_product(
+    payload: ProductCategorizeRequest,
+    categorizer: ProductCategorizer = Depends(get_product_categorizer),
+) -> ProductCategorizeResponse:
+    result = categorizer.categorize(payload.nombre_producto, context_text=payload.context)
+    return ProductCategorizeResponse(
+        nombre_producto=result.nombre_producto,
+        marca=result.marca,
+        tipo_producto=result.tipo_producto,
+        presentacion=result.presentacion,
+        contenido_neto=result.contenido_neto,
+        unidad_medida=result.unidad_medida,
+        categoria_sugerida=result.categoria_sugerida,
+        warnings=result.warnings or [],
     )
 
 
@@ -303,8 +365,10 @@ def get_product(
 def create_product(
     payload: ProductCreateRequest,
     repository: ProductRepository = Depends(get_product_repository),
+    categorizer: ProductCategorizer = Depends(get_product_categorizer),
 ) -> ProductResponse:
-    return _to_response(repository.create(payload.model_dump()))
+    data = categorizer.enrich_payload(payload.model_dump())
+    return _to_response(repository.create(data))
 
 
 @router.put(
@@ -321,5 +385,7 @@ def update_product(
     product_id: int,
     payload: ProductUpdateRequest,
     repository: ProductRepository = Depends(get_product_repository),
+    categorizer: ProductCategorizer = Depends(get_product_categorizer),
 ) -> ProductResponse:
-    return _to_response(repository.update(product_id, payload.model_dump()))
+    data = categorizer.enrich_payload(payload.model_dump())
+    return _to_response(repository.update(product_id, data))

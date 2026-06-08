@@ -52,6 +52,7 @@ let records = [];
 let selectedId = null;
 let searchDebounce = null;
 let selectedRecordIds = new Set();
+let categorizationAbortController = null;
 
 function escapeHtml(value) {
   if (value === null || value === undefined) return "";
@@ -232,6 +233,62 @@ function fillField(name, value) {
   else node.value = value || "";
 }
 
+function currentRecord() {
+  return records.find((record) => record.id === selectedId) || null;
+}
+
+function applyCategorization(item) {
+  if (!item) return;
+  if (item.marca && !fields.final_marca.value) fields.final_marca.value = item.marca;
+  if (item.tipo_producto && !fields.final_tipo_producto.value) {
+    fields.final_tipo_producto.value = item.tipo_producto;
+  }
+  if (item.presentacion && !fields.final_presentacion.value) {
+    fields.final_presentacion.value = item.presentacion;
+  }
+  if (item.contenido_neto && !fields.final_contenido_neto.value) {
+    fields.final_contenido_neto.value = item.contenido_neto;
+  }
+  if (item.unidad_medida && !fields.final_unidad_medida.value) {
+    fields.final_unidad_medida.value = item.unidad_medida;
+  }
+  if (item.categoria_sugerida && !fields.final_categoria_sugerida.value) {
+    fields.final_categoria_sugerida.value = item.categoria_sugerida;
+  }
+
+  const record = currentRecord();
+  if (record && item.categoria_sugerida && !categoryName(record)) {
+    record.predicted_categoria_sugerida = item.categoria_sugerida;
+    record.predicted_marca = record.predicted_marca || item.marca;
+    record.predicted_tipo_producto = record.predicted_tipo_producto || item.tipo_producto;
+    renderCategoryOptions(records);
+    renderTable(records);
+  }
+}
+
+async function categorizeCurrentReview() {
+  const name = fields.final_nombre_producto.value.trim();
+  if (name.length < 3 || fields.final_categoria_sugerida.value.trim()) return;
+  const record = currentRecord();
+  if (categorizationAbortController) categorizationAbortController.abort();
+  categorizationAbortController = new AbortController();
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/v1/productos/categorize`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre_producto: name,
+        context: (record?.ocr_text || "").slice(0, 2000),
+      }),
+      signal: categorizationAbortController.signal,
+    });
+    if (!response.ok) return;
+    applyCategorization(await response.json());
+  } catch (error) {
+    if (error.name !== "AbortError") console.warn("No se pudo categorizar", error);
+  }
+}
+
 function selectRecord(id) {
   const item = records.find((record) => record.id === id);
   if (!item) return;
@@ -258,6 +315,7 @@ function selectRecord(id) {
   fillField("failure_reason", item.failure_reason);
   fillField("review_notes", item.review_notes);
   fillField("use_for_training", item.use_for_training);
+  categorizeCurrentReview();
   reviewStatus.textContent = "";
   reviewStatus.classList.remove("is-error");
 }
@@ -285,6 +343,7 @@ async function submitReview(status) {
   reviewStatus.textContent = "Guardando revisión...";
   reviewStatus.classList.remove("is-error");
   try {
+    await categorizeCurrentReview();
     const data = await fetchJson(`${apiBaseUrl}/api/v1/admin/reconocimientos/${selectedId}/review`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -368,6 +427,10 @@ async function deleteSelectedRecords() {
 
 document.querySelectorAll("[data-action]").forEach((button) => {
   button.addEventListener("click", () => submitReview(button.dataset.action));
+});
+
+fields.final_nombre_producto.addEventListener("blur", () => {
+  categorizeCurrentReview();
 });
 
 selectAllRecords.addEventListener("change", () => {

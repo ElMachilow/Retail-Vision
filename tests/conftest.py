@@ -18,10 +18,12 @@ def isolated_sqlite(monkeypatch):
     dependencies_module._cached_repository.cache_clear()
     dependencies_module._cached_recognition_repository.cache_clear()
     dependencies_module._cached_suggestion_service.cache_clear()
+    dependencies_module._cached_categorizer.cache_clear()
     connection_module._initialized.clear()
     yield
     config_module.get_settings.cache_clear()
     dependencies_module._cached_repository.cache_clear()
     dependencies_module._cached_recognition_repository.cache_clear()
     dependencies_module._cached_suggestion_service.cache_clear()
+    dependencies_module._cached_categorizer.cache_clear()
     connection_module._initialized.clear()

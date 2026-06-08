@@ -70,6 +70,23 @@ class ProductSuggestionsResponse(BaseModel):
     items: list[ProductSuggestionItemSchema] = Field(default_factory=list)
 
 
+class ProductCategorizeRequest(BaseModel):
+    nombre_producto: str = Field(..., min_length=1, max_length=200)
+    context: str | None = Field(default=None, max_length=2000)
+
+    @field_validator("nombre_producto")
+    @classmethod
+    def _strip_name(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("Campo obligatorio.")
+        return cleaned
+
+
+class ProductCategorizeResponse(ProductSuggestion):
+    warnings: list[str] = Field(default_factory=list)
+
+
 class ProductWriteBase(BaseModel):
     nombre_producto: str = Field(..., min_length=1, max_length=200)
     marca: str | None = Field(default=None, max_length=120)
@@ -77,11 +94,11 @@ class ProductWriteBase(BaseModel):
     presentacion: str | None = Field(default=None, max_length=120)
     contenido_neto: str | None = Field(default=None, max_length=60)
     unidad_medida: str | None = Field(default=None, max_length=20)
-    categoria_sugerida: str = Field(..., min_length=1, max_length=120)
+    categoria_sugerida: str | None = Field(default=None, max_length=120)
     codigo_barras: str | None = Field(default=None, max_length=64)
     precio_venta: float = Field(..., ge=0)
 
-    @field_validator("nombre_producto", "categoria_sugerida")
+    @field_validator("nombre_producto")
     @classmethod
     def _strip_required(cls, value: str) -> str:
         cleaned = value.strip()
@@ -89,7 +106,7 @@ class ProductWriteBase(BaseModel):
             raise ValueError("Campo obligatorio.")
         return cleaned
 
-    @field_validator("codigo_barras")
+    @field_validator("categoria_sugerida", "codigo_barras")
     @classmethod
     def _strip_optional(cls, value: str | None) -> str | None:
         if value is None:

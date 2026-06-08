@@ -44,6 +44,7 @@ const traceFields = {
 let selectedFile = null;
 let suggestionAbortController = null;
 let suggestionDebounce = null;
+let categorizationAbortController = null;
 let latestOcrText = "";
 let latestSourceName = "";
 let latestProminentText = "";
@@ -248,6 +249,40 @@ function applySuggestion(item) {
   hideSuggestions();
 }
 
+function applyCategorization(item) {
+  if (!item) return;
+  if (item.marca && !editableFields.marca.value) editableFields.marca.value = item.marca;
+  if (item.tipo_producto && !editableFields.tipo_producto.value)
+    editableFields.tipo_producto.value = item.tipo_producto;
+  if (item.presentacion && !editableFields.presentacion.value)
+    editableFields.presentacion.value = item.presentacion;
+  if (item.contenido_neto && !editableFields.contenido_neto.value)
+    editableFields.contenido_neto.value = item.contenido_neto;
+  if (item.unidad_medida && !editableFields.unidad_medida.value)
+    editableFields.unidad_medida.value = item.unidad_medida;
+  if (item.categoria_sugerida && !editableFields.categoria_sugerida.value)
+    editableFields.categoria_sugerida.value = item.categoria_sugerida;
+}
+
+async function categorizeCurrentName() {
+  const name = editableFields.nombre_producto.value.trim();
+  if (name.length < 3 || editableFields.categoria_sugerida.value.trim()) return;
+  if (categorizationAbortController) categorizationAbortController.abort();
+  categorizationAbortController = new AbortController();
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/v1/productos/categorize`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre_producto: name }),
+      signal: categorizationAbortController.signal,
+    });
+    if (!response.ok) return;
+    applyCategorization(await response.json());
+  } catch (error) {
+    if (error.name !== "AbortError") console.warn("No se pudo categorizar", error);
+  }
+}
+
 async function fetchSuggestions(query) {
   if (suggestionAbortController) suggestionAbortController.abort();
   suggestionAbortController = new AbortController();
@@ -283,6 +318,7 @@ editableFields.nombre_producto.addEventListener("input", (event) => {
 });
 
 editableFields.nombre_producto.addEventListener("blur", () => {
+  categorizeCurrentName();
   setTimeout(hideSuggestions, 120);
 });
 
@@ -331,6 +367,7 @@ function validatePayload(payload) {
 
 async function saveProduct(event) {
   event.preventDefault();
+  await categorizeCurrentName();
   const payload = readPayload();
   if (!validatePayload(payload)) {
     saveStatus.textContent = "Revisa los campos obligatorios.";

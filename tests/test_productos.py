@@ -45,6 +45,54 @@ def test_create_rejects_missing_required_fields() -> None:
     assert response.status_code == 422
 
 
+def test_categorize_product_from_name() -> None:
+    client = _client()
+    response = client.post(
+        "/api/v1/productos/categorize",
+        json={"nombre_producto": "Detergente Ariel 1 kg"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["marca"] == "Ariel"
+    assert body["tipo_producto"] == "Detergente"
+    assert body["categoria_sugerida"] == "limpieza"
+
+
+def test_categorize_product_uses_ocr_context() -> None:
+    client = _client()
+    response = client.post(
+        "/api/v1/productos/categorize",
+        json={
+            "nombre_producto": "Aftatopic 10 ml",
+            "context": "AFTATOPIC SOLUCION Composicion Acidosalicilico Excipientes c.s.p. 10 ml",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["categoria_sugerida"] == "farmacia/otc"
+    assert body["tipo_producto"] == "Solucion"
+
+
+def test_create_infers_category_when_missing() -> None:
+    client = _client()
+    payload = _create_payload(
+        nombre_producto="Detergente Ariel 1 kg",
+        marca=None,
+        tipo_producto=None,
+        categoria_sugerida=None,
+        codigo_barras="7751234500099",
+    )
+    response = client.post("/api/v1/productos", json=payload)
+
+    assert response.status_code == 201, response.text
+    body = response.json()
+    assert body["marca"] == "Ariel"
+    assert body["tipo_producto"] == "Detergente"
+    assert body["categoria_sugerida"] == "limpieza"
+
+
 def test_create_rejects_negative_price() -> None:
     client = _client()
     response = client.post("/api/v1/productos", json=_create_payload(precio_venta=-1))
