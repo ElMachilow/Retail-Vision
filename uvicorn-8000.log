@@ -1,34 +1,605 @@
-INFO:     192.168.101.50:63087 - "GET /api/v1/health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63086 - "GET /api/v1/health HTTP/1.1" 200 OK
-INFO:     192.168.101.50:63230 - "GET /api/v1/health HTTP/1.1" 200 OK
-INFO:     192.168.101.4:38858 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     192.168.101.4:58588 - "GET /api/v1/health HTTP/1.1" 200 OK
-2026-06-08T17:35:17-0500 INFO app.services.pipeline trace_id=mobile-1780958117437 inicio procesamiento producto
-2026-06-08T17:35:17-0500 INFO app.services.pipeline trace_id=mobile-1780958117437 imagen decodificada
-2026-06-08T17:35:17-0500 INFO app.services.pipeline trace_id=mobile-1780958117437 calidad imagen laplacian=85.49 edge_density=0.0558 contrast=71.13 detail_score=192.61 blur_percentage=0.0
-2026-06-08T17:35:33-0500 INFO app.services.pipeline trace_id=mobile-1780958117437 deteccion yolo completada bbox=(11, 0, 3060, 4080) confidence=0.003924342337995768 fallback=False
-[2026/06/08 17:35:48] ppocr DEBUG: Namespace(help='==SUPPRESS==', use_gpu=False, use_xpu=False, use_npu=False, use_mlu=False, use_gcu=False, ir_optim=True, use_tensorrt=False, min_subgraph_size=15, precision='fp32', gpu_mem=500, gpu_id=0, image_dir=None, page_num=0, det_algorithm='DB', det_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\det\\en\\en_PP-OCRv3_det_infer', det_limit_side_len=960, det_limit_type='max', det_box_type='quad', det_db_thresh=0.3, det_db_box_thresh=0.6, det_db_unclip_ratio=1.5, max_batch_size=10, use_dilation=False, det_db_score_mode='fast', det_east_score_thresh=0.8, det_east_cover_thresh=0.1, det_east_nms_thresh=0.2, det_sast_score_thresh=0.5, det_sast_nms_thresh=0.2, det_pse_thresh=0, det_pse_box_thresh=0.85, det_pse_min_area=16, det_pse_scale=1, scales=[8, 16, 32], alpha=1.0, beta=1.0, fourier_degree=5, rec_algorithm='SVTR_LCNet', rec_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\rec\\latin\\latin_PP-OCRv3_rec_infer', rec_image_inverse=True, rec_image_shape='3, 48, 320', rec_batch_num=6, max_text_length=25, rec_char_dict_path='C:\\Users\\marcelo\\AppData\\Roaming\\Python\\Python311\\site-packages\\paddleocr\\ppocr\\utils\\dict\\latin_dict.txt', use_space_char=True, vis_font_path='./doc/fonts/simfang.ttf', drop_score=0.5, e2e_algorithm='PGNet', e2e_model_dir=None, e2e_limit_side_len=768, e2e_limit_type='max', e2e_pgnet_score_thresh=0.5, e2e_char_dict_path='./ppocr/utils/ic15_dict.txt', e2e_pgnet_valid_set='totaltext', e2e_pgnet_mode='fast', use_angle_cls=False, cls_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\cls\\ch_ppocr_mobile_v2.0_cls_infer', cls_image_shape='3, 48, 192', label_list=['0', '180'], cls_batch_num=6, cls_thresh=0.9, enable_mkldnn=False, cpu_threads=10, use_pdserving=False, warmup=False, sr_model_dir=None, sr_image_shape='3, 32, 128', sr_batch_num=1, draw_img_save_dir='./inference_results', save_crop_res=False, crop_res_save_dir='./output', use_mp=False, total_process_num=1, process_id=0, benchmark=False, save_log_path='./log_output/', show_log=True, use_onnx=False, onnx_providers=False, onnx_sess_options=False, return_word_box=False, output='./output', table_max_len=488, table_algorithm='TableAttn', table_model_dir=None, merge_no_span_structure=True, table_char_dict_path=None, formula_algorithm='LaTeXOCR', formula_model_dir=None, formula_char_dict_path=None, formula_batch_num=1, layout_model_dir=None, layout_dict_path=None, layout_score_threshold=0.5, layout_nms_threshold=0.5, kie_algorithm='LayoutXLM', ser_model_dir=None, re_model_dir=None, use_visual_backbone=True, ser_dict_path='../train_data/XFUND/class_list_xfun.txt', ocr_order_method=None, mode='structure', image_orientation=False, layout=True, table=True, formula=False, ocr=True, recovery=False, recovery_to_markdown=False, use_pdf2docx_api=False, invert=False, binarize=False, alphacolor=(255, 255, 255), lang='es', det=True, rec=True, type='ocr', savefile=False, ocr_version='PP-OCRv4', structure_version='PP-StructureV2', use_textline_orientation=True)
-[2026/06/08 17:35:50] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
-[2026/06/08 17:35:53] ppocr DEBUG: dt_boxes num : 27, elapsed : 2.2766754627227783
-[2026/06/08 17:36:00] ppocr DEBUG: rec_res num  : 27, elapsed : 7.631270885467529
-[2026/06/08 17:36:01] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
-[2026/06/08 17:36:03] ppocr DEBUG: dt_boxes num : 0, elapsed : 1.829509973526001
-[2026/06/08 17:36:03] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
-[2026/06/08 17:36:03] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
-[2026/06/08 17:36:03] ppocr DEBUG: dt_boxes num : 0, elapsed : 0.45909571647644043
-[2026/06/08 17:36:03] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
-[2026/06/08 17:36:04] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
-[2026/06/08 17:36:05] ppocr DEBUG: dt_boxes num : 8, elapsed : 1.346426248550415
-[2026/06/08 17:36:06] ppocr DEBUG: rec_res num  : 8, elapsed : 1.2521672248840332
-[2026/06/08 17:36:07] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
-[2026/06/08 17:36:10] ppocr DEBUG: dt_boxes num : 41, elapsed : 3.155998945236206
-[2026/06/08 17:36:17] ppocr DEBUG: rec_res num  : 41, elapsed : 7.456429719924927
-[2026/06/08 17:36:18] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
-[2026/06/08 17:36:20] ppocr DEBUG: dt_boxes num : 7, elapsed : 1.2263288497924805
-[2026/06/08 17:36:21] ppocr DEBUG: rec_res num  : 7, elapsed : 0.9651460647583008
-[2026/06/08 17:36:22] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
-[2026/06/08 17:36:23] ppocr DEBUG: dt_boxes num : 7, elapsed : 0.3729102611541748
-[2026/06/08 17:36:24] ppocr DEBUG: rec_res num  : 7, elapsed : 1.0590646266937256
-INFO:     192.168.101.4:58588 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
-INFO:     192.168.101.4:58588 - "GET /api/v1/productos/suggestions?q=Lote001+2ence+20+5+ml&limit=3&context=3C.Noalor%0Asaxcenar+otemperatura.no+mayor%0AMenenerke+celalconce+de+los%0Alen+anrecetamedica%0AANOSO%0AINNINOS+MENORESDE%0ANO+SERECOMIENDA+SU+USO%0AMwrinserto+od%2Funto%29%0Awetonienlo.on+cuso+desobredosis%0ABasyvfado.odministracin%0Aranpones.adversas+advortencios%2C%0Apcwuccnesy.incompolibilidados%0Aero+lol%0AInterecoones-contraindicacionos%2C%0AAgvan+tarmocologlcaindicacionos%0ACota++ml+%28cuchorndlla+dafarab%C3%A9%0ASml%0ADoi%0AFabricado+por.ArbofarmaS.AS%0A-%0AColomcia%0ASAC%0AMANTEN%0A5114572289%0ALOTE%3A%0A001%0AVENCE%0A2%0AATOPIC%0A3OC.No%0AMenaner+her+del+alconce+de+los%0Aswcenar+o+femperatura+no+mayor%0Aenn+ch+receto+medica.%0AANOSERR%0ANO+SEECOMIENDA+SU+USO%0Awrinserto+od%28unto%29%0AFotoneni+%C3%B6n+cuso+de+sobredosis%0AJasyvadoodministracin%0Arannonesodersas+advortencios%0AHemucnesIncompollbilidads%0Antereraionese.controindicacionos%0AAntmocolg.indcocons%0ACoba++ml+%28evchoradlio%29+do+larab%0ACONPOSICION%0Agator%0A.5ml%0A120m%0ASanimec%0ARUC20606089440%0AWeb+pag%0A%2B5112572289%0ARSPNE%0A1366%0ASTAALL%0AVENCE%3A%0A2028%0ASI%0AA%0AGingisona+B%0AGingisona%0ALOTE001-2ENCE-20%0ABocayCarganto%0AOPIC%0Aatorlo&source_name=7a9913cf-796f-455d-95e7-c279d2705e0a.jpeg HTTP/1.1" 200 OK
-INFO:     192.168.101.4:52330 - "DELETE /api/v1/admin/reconocimientos/53 HTTP/1.1" 204 No Content
+INFO:     192.168.101.4:42832 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     192.168.101.4:42832 - "GET /favicon.ico HTTP/1.1" 40INFO:     127.0.0.1:54912 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54912 - "GET /static/styles.css?v=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54911 - "GET /static/app.js?v=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54912 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54919 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54919 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54919 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /admin HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /static/styles.css?v=4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "GET /static/admin.js?v=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "POST /api/v1/productos/categorize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54948 - "GET /api/v1/admin/reconocimientos/56/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54949 - "GET /api/v1/admin/reconocimientos/55/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /api/v1/admin/reconocimientos/57/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/admin/reconocimientos/54/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54951 - "GET /api/v1/admin/reconocimientos/52/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "GET /api/v1/admin/reconocimientos/50/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/admin/reconocimientos/47/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /api/v1/admin/reconocimientos/51/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54948 - "GET /api/v1/admin/reconocimientos/48/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "GET /api/v1/admin/reconocimientos/46/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54951 - "GET /api/v1/admin/reconocimientos/45/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54949 - "GET /api/v1/admin/reconocimientos/49/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/admin/reconocimientos/44/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "GET /api/v1/admin/reconocimientos/40/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54948 - "GET /api/v1/admin/reconocimientos/42/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /api/v1/admin/reconocimientos/43/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54951 - "GET /api/v1/admin/reconocimientos/41/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/admin/reconocimientos/38/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54949 - "GET /api/v1/admin/reconocimientos/39/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /api/v1/admin/reconocimientos/33/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /api/v1/admin/reconocimientos/32/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54949 - "GET /api/v1/admin/reconocimientos/31/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54950 - "GET /api/v1/admin/reconocimientos/29/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54951 - "GET /api/v1/admin/reconocimientos/30/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /api/v1/admin/reconocimientos/28/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "GET /api/v1/admin/reconocimientos/37/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54948 - "GET /api/v1/admin/reconocimientos/36/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54949 - "GET /api/v1/admin/reconocimientos/27/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54968 - "POST /api/v1/productos/categorize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54969 - "POST /api/v1/productos/categorize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54970 - "POST /api/v1/productos/categorize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54972 - "POST /api/v1/productos/categorize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55053 - "GET /api/v1/health HTTP/1.1" 200 OK
+:16:24] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:16:25] ppocr DEBUG: dt_boxes num : 3, elapsed : 1.1116931438446045
+[2026/06/10 11:16:26] ppocr DEBUG: rec_res num  : 3, elapsed : 0.4671907424926758
+[2026/06/10 11:16:26] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:16:27] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.5211327075958252
+[2026/06/10 11:16:27] ppocr DEBUG: rec_res num  : 8, elapsed : 0.7524032592773438
+[2026/06/10 11:16:28] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:16:29] ppocr DEBUG: dt_boxes num : 9, elapsed : 0.8901252746582031
+[2026/06/10 11:16:29] ppocr DEBUG: rec_res num  : 9, elapsed : 0.6786096096038818
+[2026/06/10 11:16:29] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:16:30] ppocr DEBUG: dt_boxes num : 5, elapsed : 0.7070925235748291
+[2026/06/10 11:16:31] ppocr DEBUG: rec_res num  : 5, elapsed : 0.4551424980163574
+[2026/06/10 11:16:31] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:16:31] ppocr DEBUG: dt_boxes num : 7, elapsed : 0.15047764778137207
+[2026/06/10 11:16:32] ppocr DEBUG: rec_res num  : 7, elapsed : 0.5972723960876465
+[2026/06/10 11:16:32] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:16:33] ppocr DEBUG: dt_boxes num : 9, elapsed : 0.638939380645752
+[2026/06/10 11:16:34] ppocr DEBUG: rec_res num  : 9, elapsed : 0.7432277202606201
+[2026/06/10 11:16:34] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:16:35] ppocr DEBUG: dt_boxes num : 9, elapsed : 0.194535493850708
+[2026/06/10 11:16:35] ppocr DEBUG: rec_res num  : 9, elapsed : 0.7415139675140381
+INFO:     192.168.101.4:60422 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:60422 - "GET /api/v1/productos/suggestions?q=Cartavio+0+L&limit=3&context=RON%0ACARTAVIO.%0ABLACK%0ACARTAVIO%0ABARREL%0A3ANOS%0AS%0AANTENSO%0A1L140%25N0%0ABARRICAS%0A1L%2F40%25oL%0AB%0AAHUMADO%0A1L140%25v0L%0A1L1408N0%0AN%0A1&source_name=752456df-a9f1-4ecd-8e26-75e6a84b5e49.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:47428 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 11:17:10] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:17:10] ppocr DEBUG: dt_boxes num : 0, elapsed : 0.6190078258514404
+[2026/06/10 11:17:10] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
+[2026/06/10 11:17:11] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:17:11] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.771660327911377
+[2026/06/10 11:17:12] ppocr DEBUG: rec_res num  : 8, elapsed : 0.6563596725463867
+[2026/06/10 11:17:12] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:17:13] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.7714009284973145
+[2026/06/10 11:17:13] ppocr DEBUG: rec_res num  : 1, elapsed : 0.09873747825622559
+[2026/06/10 11:17:13] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:17:14] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.9564237594604492
+[2026/06/10 11:17:15] ppocr DEBUG: rec_res num  : 8, elapsed : 0.6868832111358643
+[2026/06/10 11:17:15] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:17:16] ppocr DEBUG: dt_boxes num : 10, elapsed : 0.5762021541595459
+[2026/06/10 11:17:17] ppocr DEBUG: rec_res num  : 10, elapsed : 1.000837802886963
+[2026/06/10 11:17:18] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:17:18] ppocr DEBUG: dt_boxes num : 12, elapsed : 0.25688719749450684
+[2026/06/10 11:17:19] ppocr DEBUG: rec_res num  : 12, elapsed : 0.9028973579406738
+[2026/06/10 11:17:19] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:17:20] ppocr DEBUG: dt_boxes num : 12, elapsed : 0.20781350135803223
+[2026/06/10 11:17:21] ppocr DEBUG: rec_res num  : 12, elapsed : 0.9057505130767822
+INFO:     192.168.101.4:47428 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:47428 - "GET /api/v1/productos/suggestions?q=Cartavio+140+%25&limit=3&context=SANOS%0AANEJADOEN%0ARON%0AB%0ABARRICAS%0AINTENSOY%0AAHUMADO%0A1L140%25vol%0ABLACK%0ABARREL%0A3ANOS%0A1L140%25vol.%0ACARTAVIO%0AANE%0AINTENSO%0AAHUMAD%0A1L1+40%25o&source_name=7d3bb486-c7fe-465b-bd05-67d89bc8281e.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:52324 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 11:18:01] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:18:02] ppocr DEBUG: dt_boxes num : 2, elapsed : 0.7212979793548584
+[2026/06/10 11:18:02] ppocr DEBUG: rec_res num  : 2, elapsed : 0.15309858322143555
+[2026/06/10 11:18:03] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:18:03] ppocr DEBUG: dt_boxes num : 10, elapsed : 0.5951986312866211
+[2026/06/10 11:18:04] ppocr DEBUG: rec_res num  : 10, elapsed : 0.7800455093383789
+[2026/06/10 11:18:04] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:18:05] ppocr DEBUG: dt_boxes num : 9, elapsed : 0.17606568336486816
+[2026/06/10 11:18:05] ppocr DEBUG: rec_res num  : 9, elapsed : 0.7234635353088379
+[2026/06/10 11:18:06] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:18:07] ppocr DEBUG: dt_boxes num : 10, elapsed : 0.8480429649353027
+[2026/06/10 11:18:07] ppocr DEBUG: rec_res num  : 10, elapsed : 0.7484679222106934
+[2026/06/10 11:18:08] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:18:08] ppocr DEBUG: dt_boxes num : 10, elapsed : 0.20706677436828613
+[2026/06/10 11:18:09] ppocr DEBUG: rec_res num  : 10, elapsed : 0.860722541809082
+[2026/06/10 11:18:10] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:18:10] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.30904722213745117
+[2026/06/10 11:18:11] ppocr DEBUG: rec_res num  : 8, elapsed : 0.6518423557281494
+[2026/06/10 11:18:11] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:18:12] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.21444416046142578
+[2026/06/10 11:18:12] ppocr DEBUG: rec_res num  : 8, elapsed : 0.6661906242370605
+INFO:     192.168.101.4:52324 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:52324 - "GET /api/v1/productos/suggestions?q=Cartavio&limit=3&context=RON%0ACARTAVIO%0ABLACK%0ABARREL%0A3ANOS%0ABARRICAS%0A1L140%25vol%0ACRON%0A1L40%25V0.%0AOSTADO%0AANEJADOEN%0AB%0AAHUMADO%0ACO%0A1L140%25vo0.&source_name=332f1607-3351-4cfa-8691-c55403a5c3ee.jpeg HTTP/1.1" 200 OK
+  INFO:     192.168.101.50:55088 - "POST /api/v1/productos/categorize HTTP/1.1" 200 OK
+INFO:     192.168.101.50:55090 - "POST /api/v1/productos/categorize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:47252 - "GET /api/v1/health HTTP/1.1" 200 OK
+2026-06-10T11:29:46-0500 INFO app.services.pipeline trace_id=mobile-1781108985691 inicio procesamiento producto
+2026-06-10T11:29:46-0500 INFO app.services.pipeline trace_id=mobile-1781108985691 imagen decodificada
+2026-06-10T11:29:46-0500 INFO app.services.pipeline trace_id=mobile-1781108985691 calidad imagen laplacian=13.82 edge_density=0.023 contrast=51.15 detail_score=75.43 blur_percentage=52.9
+2026-06-10T11:29:52-0500 INFO app.services.pipeline trace_id=mobile-1781108985691 deteccion yolo completada bbox=(3, 425, 3060, 4080) confidence=0.0033194164279848337 fallback=False
+[2026/06/10 11:29:57] ppocr DEBUG: Namespace(help='==SUPPRESS==', use_gpu=False, use_xpu=False, use_npu=False, use_mlu=False, use_gcu=False, ir_optim=True, use_tensorrt=False, min_subgraph_size=15, precision='fp32', gpu_mem=500, gpu_id=0, image_dir=None, page_num=0, det_algorithm='DB', det_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\det\\en\\en_PP-OCRv3_det_infer', det_limit_side_len=960, det_limit_type='max', det_box_type='quad', det_db_thresh=0.3, det_db_box_thresh=0.6, det_db_unclip_ratio=1.5, max_batch_size=10, use_dilation=False, det_db_score_mode='fast', det_east_score_thresh=0.8, det_east_cover_thresh=0.1, det_east_nms_thresh=0.2, det_sast_score_thresh=0.5, det_sast_nms_thresh=0.2, det_pse_thresh=0, det_pse_box_thresh=0.85, det_pse_min_area=16, det_pse_scale=1, scales=[8, 16, 32], alpha=1.0, beta=1.0, fourier_degree=5, rec_algorithm='SVTR_LCNet', rec_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\rec\\latin\\latin_PP-OCRv3_rec_infer', rec_image_inverse=True, rec_image_shape='3, 48, 320', rec_batch_num=6, max_text_length=25, rec_char_dict_path='C:\\Users\\marcelo\\AppData\\Roaming\\Python\\Python311\\site-packages\\paddleocr\\ppocr\\utils\\dict\\latin_dict.txt', use_space_char=True, vis_font_path='./doc/fonts/simfang.ttf', drop_score=0.5, e2e_algorithm='PGNet', e2e_model_dir=None, e2e_limit_side_len=768, e2e_limit_type='max', e2e_pgnet_score_thresh=0.5, e2e_char_dict_path='./ppocr/utils/ic15_dict.txt', e2e_pgnet_valid_set='totaltext', e2e_pgnet_mode='fast', use_angle_cls=False, cls_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\cls\\ch_ppocr_mobile_v2.0_cls_infer', cls_image_shape='3, 48, 192', label_list=['0', '180'], cls_batch_num=6, cls_thresh=0.9, enable_mkldnn=False, cpu_threads=10, use_pdserving=False, warmup=False, sr_model_dir=None, sr_image_shape='3, 32, 128', sr_batch_num=1, draw_img_save_dir='./inference_results', save_crop_res=False, crop_res_save_dir='./output', use_mp=False, total_process_num=1, process_id=0, benchmark=False, save_log_path='./log_output/', show_log=True, use_onnx=False, onnx_providers=False, onnx_sess_options=False, return_word_box=False, output='./output', table_max_len=488, table_algorithm='TableAttn', table_model_dir=None, merge_no_span_structure=True, table_char_dict_path=None, formula_algorithm='LaTeXOCR', formula_model_dir=None, formula_char_dict_path=None, formula_batch_num=1, layout_model_dir=None, layout_dict_path=None, layout_score_threshold=0.5, layout_nms_threshold=0.5, kie_algorithm='LayoutXLM', ser_model_dir=None, re_model_dir=None, use_visual_backbone=True, ser_dict_path='../train_data/XFUND/class_list_xfun.txt', ocr_order_method=None, mode='structure', image_orientation=False, layout=True, table=True, formula=False, ocr=True, recovery=False, recovery_to_markdown=False, use_pdf2docx_api=False, invert=False, binarize=False, alphacolor=(255, 255, 255), lang='es', det=True, rec=True, type='ocr', savefile=False, ocr_version='PP-OCRv4', structure_version='PP-StructureV2', use_textline_orientation=True)
+[2026/06/10 11:29:58] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:29:59] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.6008226871490479
+[2026/06/10 11:29:59] ppocr DEBUG: rec_res num  : 1, elapsed : 0.21304750442504883
+[2026/06/10 11:29:59] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:29:59] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.5479586124420166
+[2026/06/10 11:29:59] ppocr DEBUG: rec_res num  : 1, elapsed : 0.09541797637939453
+[2026/06/10 11:30:00] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:30:01] ppocr DEBUG: dt_boxes num : 9, elapsed : 0.8284485340118408
+[2026/06/10 11:30:02] ppocr DEBUG: rec_res num  : 9, elapsed : 0.8166501522064209
+[2026/06/10 11:30:02] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:30:02] ppocr DEBUG: dt_boxes num : 9, elapsed : 0.536123514175415
+[2026/06/10 11:30:03] ppocr DEBUG: rec_res num  : 9, elapsed : 0.8985805511474609
+[2026/06/10 11:30:03] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:30:04] ppocr DEBUG: dt_boxes num : 10, elapsed : 0.41785764694213867
+[2026/06/10 11:30:05] ppocr DEBUG: rec_res num  : 10, elapsed : 0.8491005897521973
+[2026/06/10 11:30:05] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:30:06] ppocr DEBUG: dt_boxes num : 11, elapsed : 0.5145258903503418
+[2026/06/10 11:30:07] ppocr DEBUG: rec_res num  : 11, elapsed : 0.9792191982269287
+[2026/06/10 11:30:07] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:30:08] ppocr DEBUG: dt_boxes num : 10, elapsed : 0.6436903476715088
+[2026/06/10 11:30:09] ppocr DEBUG: rec_res num  : 10, elapsed : 0.8250079154968262
+INFO:     192.168.101.4:47252 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:47252 - "GET /api/v1/productos/suggestions?q=Gingisona+Analg%C3%A9sico+15+ml&limit=3&context=a%0ABocay+Carganta%0AAntiinflamatorio%0AAnalg%C3%A9sico%0ABenoidamina%0AClorhiarato0.30%25%0ASolucionpara%0Aputverizadonbucal%0A15mL%0Ateva%0ABocayCargonta%0ABencidamina%0AClcrhirato0.30%0ASoluconpara%0AGingisona%0ABenodamina%0AClarhidrato0.30%25%0ASoluciin+para%0Aputverizacionbucal%0ABocayCarganta%0ABenaidamina%0AClorhidrato0.30%25%0ASplucionpara%0ABoca+y+Garganta&source_name=70e4ab61-58f3-4811-b6e7-3399ac456259.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:55452 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 11:33:13] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:33:14] ppocr DEBUG: dt_boxes num : 0, elapsed : 0.6845245361328125
+[2026/06/10 11:33:14] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
+[2026/06/10 11:33:14] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:33:15] ppocr DEBUG: dt_boxes num : 9, elapsed : 0.6371383666992188
+[2026/06/10 11:33:16] ppocr DEBUG: rec_res num  : 9, elapsed : 0.9039955139160156
+[2026/06/10 11:33:16] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:33:17] ppocr DEBUG: dt_boxes num : 12, elapsed : 0.9595448970794678
+[2026/06/10 11:33:18] ppocr DEBUG: rec_res num  : 12, elapsed : 1.3410940170288086
+[2026/06/10 11:33:19] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:33:19] ppocr DEBUG: dt_boxes num : 10, elapsed : 0.8183910846710205
+[2026/06/10 11:33:21] ppocr DEBUG: rec_res num  : 10, elapsed : 1.2303602695465088
+[2026/06/10 11:33:21] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:33:22] ppocr DEBUG: dt_boxes num : 12, elapsed : 0.534675121307373
+[2026/06/10 11:33:23] ppocr DEBUG: rec_res num  : 12, elapsed : 1.2364501953125
+[2026/06/10 11:33:23] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:33:24] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.6833610534667969
+[2026/06/10 11:33:25] ppocr DEBUG: rec_res num  : 8, elapsed : 0.8359837532043457
+[2026/06/10 11:33:25] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 11:33:26] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.1967630386352539
+[2026/06/10 11:33:26] ppocr DEBUG: rec_res num  : 8, elapsed : 0.7411861419677734
+INFO:     192.168.101.4:55452 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:55452 - "GET /api/v1/productos/suggestions?q=Furoato+De+Fluticasona&limit=3&context=0075143%0Agsk%0AAvamys%0AFuroato+de+Fluticasona%0AFluticasone+Furoate%0ASpray+nasal%2F+Nasal+spray%0A27%2C5+mcg%2F+dosis%2F+dose%0AVia+%2FAdministration+Nasal%0A120%0ASpray+nasat%2F+Nasal+spray%0A27%2C5mcg%2Fdosis%2Fdose%0ASuspensi%C3%B3n+en+spray+nasal%0ANasal+spray+suspension%0AVia%2FAdministration%3A+Nasal%0ADosis%2FDases%0A27%2C5+mcg+%2F+dosis%2F+dose%0AVia+%2F+Administration+Nasal%0AJSh%0ASuspensi%C3%B3n+en+spray+nasai%0AVia+%2FAdministration%3A+Nasal%0ADosis%2FDose%0ANasal+spray+suspensior&source_name=a50ede2d-cee3-4dee-b832-baf0188540db.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55250 - "GET /admin HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55250 - "GET /static/styles.css?v=4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /static/admin.js?v=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/v1/admin/reconocimientos/59/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55250 - "GET /api/v1/admin/reconocimientos/58/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55251 - "GET /api/v1/admin/reconocimientos/57/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55253 - "GET /api/v1/admin/reconocimientos/55/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /api/v1/admin/reconocimientos/56/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55254 - "GET /api/v1/admin/reconocimientos/54/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/v1/admin/reconocimientos/49/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55250 - "GET /api/v1/admin/reconocimientos/48/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55251 - "GET /api/v1/admin/reconocimientos/51/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /api/v1/admin/reconocimientos/47/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55253 - "GET /api/v1/admin/reconocimientos/50/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55254 - "GET /api/v1/admin/reconocimientos/52/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/v1/admin/reconocimientos/46/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55250 - "GET /api/v1/admin/reconocimientos/45/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55251 - "GET /api/v1/admin/reconocimientos/44/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /api/v1/admin/reconocimientos/43/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55253 - "GET /api/v1/admin/reconocimientos/42/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/v1/admin/reconocimientos/41/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55251 - "GET /api/v1/admin/reconocimientos/40/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55250 - "GET /api/v1/admin/reconocimientos/39/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55253 - "GET /api/v1/admin/reconocimientos/38/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /api/v1/admin/reconocimientos/37/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55254 - "GET /api/v1/admin/reconocimientos/36/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55251 - "GET /api/v1/admin/reconocimientos/33/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/v1/admin/reconocimientos/32/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55253 - "GET /api/v1/admin/reconocimientos/31/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55250 - "GET /api/v1/admin/reconocimientos/30/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55251 - "GET /api/v1/admin/reconocimientos/28/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55249 - "GET /api/v1/admin/reconocimientos/29/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55252 - "GET /api/v1/admin/reconocimientos/27/image HTTP/1.1" 200 OK
+ INFO:     127.0.0.1:55602 - "GET /api/v1/health HTTP/1.1" 200 OK
+ INFO:     192.168.101.4:60306 - "GET /api/v1/health HTTP/1.1" 200 OK
+2026-06-10T19:21:46-0500 INFO app.services.pipeline trace_id=mobile-1781137305759 inicio procesamiento producto
+2026-06-10T19:21:46-0500 INFO app.services.pipeline trace_id=mobile-1781137305759 imagen decodificada
+2026-06-10T19:21:46-0500 INFO app.services.pipeline trace_id=mobile-1781137305759 calidad imagen laplacian=16.27 edge_density=0.0172 contrast=57.85 detail_score=78.05 blur_percentage=51.2
+2026-06-10T19:22:01-0500 INFO app.services.pipeline trace_id=mobile-1781137305759 deteccion yolo completada bbox=(0, 126, 3049, 4080) confidence=0.004924615379422903 fallback=False
+[2026/06/10 19:22:13] ppocr DEBUG: Namespace(help='==SUPPRESS==', use_gpu=False, use_xpu=False, use_npu=False, use_mlu=False, use_gcu=False, ir_optim=True, use_tensorrt=False, min_subgraph_size=15, precision='fp32', gpu_mem=500, gpu_id=0, image_dir=None, page_num=0, det_algorithm='DB', det_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\det\\en\\en_PP-OCRv3_det_infer', det_limit_side_len=960, det_limit_type='max', det_box_type='quad', det_db_thresh=0.3, det_db_box_thresh=0.6, det_db_unclip_ratio=1.5, max_batch_size=10, use_dilation=False, det_db_score_mode='fast', det_east_score_thresh=0.8, det_east_cover_thresh=0.1, det_east_nms_thresh=0.2, det_sast_score_thresh=0.5, det_sast_nms_thresh=0.2, det_pse_thresh=0, det_pse_box_thresh=0.85, det_pse_min_area=16, det_pse_scale=1, scales=[8, 16, 32], alpha=1.0, beta=1.0, fourier_degree=5, rec_algorithm='SVTR_LCNet', rec_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\rec\\latin\\latin_PP-OCRv3_rec_infer', rec_image_inverse=True, rec_image_shape='3, 48, 320', rec_batch_num=6, max_text_length=25, rec_char_dict_path='C:\\Users\\marcelo\\AppData\\Roaming\\Python\\Python311\\site-packages\\paddleocr\\ppocr\\utils\\dict\\latin_dict.txt', use_space_char=True, vis_font_path='./doc/fonts/simfang.ttf', drop_score=0.5, e2e_algorithm='PGNet', e2e_model_dir=None, e2e_limit_side_len=768, e2e_limit_type='max', e2e_pgnet_score_thresh=0.5, e2e_char_dict_path='./ppocr/utils/ic15_dict.txt', e2e_pgnet_valid_set='totaltext', e2e_pgnet_mode='fast', use_angle_cls=False, cls_model_dir='C:\\Users\\marcelo/.paddleocr/whl\\cls\\ch_ppocr_mobile_v2.0_cls_infer', cls_image_shape='3, 48, 192', label_list=['0', '180'], cls_batch_num=6, cls_thresh=0.9, enable_mkldnn=False, cpu_threads=10, use_pdserving=False, warmup=False, sr_model_dir=None, sr_image_shape='3, 32, 128', sr_batch_num=1, draw_img_save_dir='./inference_results', save_crop_res=False, crop_res_save_dir='./output', use_mp=False, total_process_num=1, process_id=0, benchmark=False, save_log_path='./log_output/', show_log=True, use_onnx=False, onnx_providers=False, onnx_sess_options=False, return_word_box=False, output='./output', table_max_len=488, table_algorithm='TableAttn', table_model_dir=None, merge_no_span_structure=True, table_char_dict_path=None, formula_algorithm='LaTeXOCR', formula_model_dir=None, formula_char_dict_path=None, formula_batch_num=1, layout_model_dir=None, layout_dict_path=None, layout_score_threshold=0.5, layout_nms_threshold=0.5, kie_algorithm='LayoutXLM', ser_model_dir=None, re_model_dir=None, use_visual_backbone=True, ser_dict_path='../train_data/XFUND/class_list_xfun.txt', ocr_order_method=None, mode='structure', image_orientation=False, layout=True, table=True, formula=False, ocr=True, recovery=False, recovery_to_markdown=False, use_pdf2docx_api=False, invert=False, binarize=False, alphacolor=(255, 255, 255), lang='es', det=True, rec=True, type='ocr', savefile=False, ocr_version='PP-OCRv4', structure_version='PP-StructureV2', use_textline_orientation=True)
+[2026/06/10 19:22:15] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:22:16] ppocr DEBUG: dt_boxes num : 2, elapsed : 1.675431489944458
+[2026/06/10 19:22:17] ppocr DEBUG: rec_res num  : 2, elapsed : 0.5167758464813232
+[2026/06/10 19:22:17] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:22:18] ppocr DEBUG: dt_boxes num : 0, elapsed : 0.5694372653961182
+[2026/06/10 19:22:18] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
+[2026/06/10 19:22:18] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:22:19] ppocr DEBUG: dt_boxes num : 4, elapsed : 0.999439001083374
+[2026/06/10 19:22:19] ppocr DEBUG: rec_res num  : 4, elapsed : 0.5688250064849854
+[2026/06/10 19:22:20] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:22:21] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.9381048679351807
+[2026/06/10 19:22:21] ppocr DEBUG: rec_res num  : 1, elapsed : 0.19197988510131836
+[2026/06/10 19:22:21] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:22:21] ppocr DEBUG: dt_boxes num : 4, elapsed : 0.4743516445159912
+[2026/06/10 19:22:22] ppocr DEBUG: rec_res num  : 4, elapsed : 0.40158963203430176
+[2026/06/10 19:22:22] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:22:23] ppocr DEBUG: dt_boxes num : 4, elapsed : 0.723644495010376
+[2026/06/10 19:22:24] ppocr DEBUG: rec_res num  : 4, elapsed : 0.501793384552002
+[2026/06/10 19:22:24] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:22:24] ppocr DEBUG: dt_boxes num : 4, elapsed : 0.2293851375579834
+[2026/06/10 19:22:25] ppocr DEBUG: rec_res num  : 4, elapsed : 0.43125271797180176
+INFO:     192.168.101.4:60306 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:60306 - "GET /api/v1/productos/suggestions?q=Clotrival+Crema+20+g&limit=3&context=CLOTRIVAL%0AClotrimazol+1%25%0ACrema%0AContenido+neto+20+g%0ACL%0AClotrin%0AContenid&source_name=2a065831-cdc2-4333-a24e-0c131b25ade8.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:55658 - "PUT /api/v1/admin/reconocimientos/60/review HTTP/1.1" 200 OK
+INFO:     192.168.101.4:35678 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:24:00] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:24:00] ppocr DEBUG: dt_boxes num : 7, elapsed : 0.8248414993286133
+[2026/06/10 19:24:01] ppocr DEBUG: rec_res num  : 7, elapsed : 0.8536949157714844
+[2026/06/10 19:24:01] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:24:02] ppocr DEBUG: dt_boxes num : 0, elapsed : 0.7137279510498047
+[2026/06/10 19:24:02] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
+[2026/06/10 19:24:02] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:24:03] ppocr DEBUG: dt_boxes num : 0, elapsed : 0.7711477279663086
+[2026/06/10 19:24:03] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
+[2026/06/10 19:24:03] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:24:04] ppocr DEBUG: dt_boxes num : 0, elapsed : 0.7265675067901611
+[2026/06/10 19:24:04] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
+[2026/06/10 19:24:04] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:24:05] ppocr DEBUG: dt_boxes num : 21, elapsed : 0.5621223449707031
+[2026/06/10 19:24:07] ppocr DEBUG: rec_res num  : 21, elapsed : 2.751533031463623
+[2026/06/10 19:24:08] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:24:08] ppocr DEBUG: dt_boxes num : 24, elapsed : 0.31687116622924805
+[2026/06/10 19:24:11] ppocr DEBUG: rec_res num  : 24, elapsed : 2.6827480792999268
+INFO:     192.168.101.4:35678 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53925 - "GET /admin HTTP/1.1" 200 OK
+INFO:     192.168.101.4:35678 - "GET /api/v1/productos/suggestions?q=Clotrival+Clotr+Gaseou+Rinoval+Mometasona+Furoato+Gingisona+20+g&limit=3&context=CLOTRIVAL%0AClotrimazol+1%25%0ACrema%0AMKT%0AContenido+neto+20+g%0APHARMA%0A220mL%0ACLOTR%0AANTIACIDO%0AGASEOU%0ARinoval%0AMagaldrato+%2B+Sim%0AMOMETASONA+FUROATO%0A%28800+mg+%2B+60+mg%29%0A50+mcg%2Fdosis%0A120+dosia%0AGingisona+B%0ASuspensi%C3%B3n+Oral%0ASuspensi%C3%B3n+Nasal%0Apara+Nebulizaci%C3%B3n%0ABoca+y+Garganta%0AVia+oral%0ALS%0ASAVAL%0Atlinflamatoria%0AMK%0AGASEOVETMS%0AMagaldrato+%2B+Simeticona%0A%28800+mg+%2B+60+mg%29%2F10+mL%0A120+dosis%0Apara+Nebulizacion%0AViaoral%0AIS&source_name=64b08a0d-ace6-481c-ac66-4021169ea845.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53925 - "GET /static/styles.css?v=4 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53926 - "GET /static/admin.js?v=5 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:53926 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53926 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53926 - "GET /api/v1/admin/reconocimientos/61/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53925 - "GET /api/v1/admin/reconocimientos/60/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53930 - "GET /api/v1/admin/reconocimientos/58/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53932 - "GET /api/v1/admin/reconocimientos/56/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53931 - "GET /api/v1/admin/reconocimientos/57/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53929 - "GET /api/v1/admin/reconocimientos/59/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53925 - "GET /api/v1/admin/reconocimientos/54/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53926 - "GET /api/v1/admin/reconocimientos/55/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53929 - "GET /api/v1/admin/reconocimientos/49/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53931 - "GET /api/v1/admin/reconocimientos/50/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53932 - "GET /api/v1/admin/reconocimientos/51/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53926 - "GET /api/v1/admin/reconocimientos/47/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53925 - "GET /api/v1/admin/reconocimientos/48/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53930 - "GET /api/v1/admin/reconocimientos/52/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53931 - "GET /api/v1/admin/reconocimientos/46/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53929 - "GET /api/v1/admin/reconocimientos/45/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53925 - "GET /api/v1/admin/reconocimientos/42/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53926 - "GET /api/v1/admin/reconocimientos/43/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53932 - "GET /api/v1/admin/reconocimientos/44/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53931 - "GET /api/v1/admin/reconocimientos/40/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53930 - "GET /api/v1/admin/reconocimientos/41/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53931 - "GET /api/v1/admin/reconocimientos/33/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53926 - "GET /api/v1/admin/reconocimientos/38/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53929 - "GET /api/v1/admin/reconocimientos/39/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53932 - "GET /api/v1/admin/reconocimientos/37/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53930 - "GET /api/v1/admin/reconocimientos/32/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53931 - "GET /api/v1/admin/reconocimientos/27/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53929 - "GET /api/v1/admin/reconocimientos/31/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53926 - "GET /api/v1/admin/reconocimientos/28/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53930 - "GET /api/v1/admin/reconocimientos/29/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53932 - "GET /api/v1/admin/reconocimientos/30/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53925 - "GET /api/v1/admin/reconocimientos/36/image HTTP/1.1" 200 OK
+INFO:     192.168.101.4:46562 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     192.168.101.4:46562 - "POST /api/v1/inventory/product-stock-counts HTTP/1.1" 201 Created
+2026-06-10T19:25:31-0500 ERROR app.main trace_id=- error no controlado
+Traceback (most recent call last):
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\anyio\_backends\_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\UPC\2026\Servicio IA\Tesis-Vision\app\api\routes.py", line 472, in delete_recognition
+    repository.delete(event_id)
+  File "D:\UPC\2026\Servicio IA\Tesis-Vision\app\repositories\recognitions.py", line 280, in delete
+    cursor = conn.execute("DELETE FROM recognition_events WHERE id = ?", (event_id,))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: FOREIGN KEY constraint failed
+INFO:     127.0.0.1:53964 - "DELETE /api/v1/admin/reconocimientos/61 HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:53965 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53965 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53965 - "GET /api/v1/admin/reconocimientos?limit=200 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53965 - "GET /api/v1/admin/reconocimientos/61/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53966 - "GET /api/v1/admin/reconocimientos/60/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53979 - "GET /api/v1/admin/reconocimientos/57/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53978 - "GET /api/v1/admin/reconocimientos/58/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53980 - "GET /api/v1/admin/reconocimientos/56/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53977 - "GET /api/v1/admin/reconocimientos/59/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53978 - "GET /api/v1/admin/reconocimientos/52/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53979 - "GET /api/v1/admin/reconocimientos/51/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53980 - "GET /api/v1/admin/reconocimientos/54/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53966 - "GET /api/v1/admin/reconocimientos/55/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53965 - "GET /api/v1/admin/reconocimientos/50/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53977 - "GET /api/v1/admin/reconocimientos/49/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53966 - "GET /api/v1/admin/reconocimientos/48/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53979 - "GET /api/v1/admin/reconocimientos/47/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53978 - "GET /api/v1/admin/reconocimientos/46/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53965 - "GET /api/v1/admin/reconocimientos/45/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53980 - "GET /api/v1/admin/reconocimientos/44/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53977 - "GET /api/v1/admin/reconocimientos/43/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53978 - "GET /api/v1/admin/reconocimientos/42/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53966 - "GET /api/v1/admin/reconocimientos/41/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53980 - "GET /api/v1/admin/reconocimientos/40/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53965 - "GET /api/v1/admin/reconocimientos/39/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53979 - "GET /api/v1/admin/reconocimientos/38/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53977 - "GET /api/v1/admin/reconocimientos/37/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53980 - "GET /api/v1/admin/reconocimientos/36/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53965 - "GET /api/v1/admin/reconocimientos/32/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53979 - "GET /api/v1/admin/reconocimientos/30/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53978 - "GET /api/v1/admin/reconocimientos/31/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53966 - "GET /api/v1/admin/reconocimientos/33/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53977 - "GET /api/v1/admin/reconocimientos/29/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53965 - "GET /api/v1/admin/reconocimientos/27/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53980 - "GET /api/v1/admin/reconocimientos/28/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53982 - "DELETE /api/v1/admin/reconocimientos/57 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:53982 - "GET /api/v1/admin/reconocimientos/stats HTTP/1.1" 200 OK
+INFO:     192.168.101.4:55690 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:27:59] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:27:59] ppocr DEBUG: dt_boxes num : 16, elapsed : 0.5041384696960449
+[2026/06/10 19:28:01] ppocr DEBUG: rec_res num  : 16, elapsed : 1.5660367012023926
+[2026/06/10 19:28:01] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:02] ppocr DEBUG: dt_boxes num : 11, elapsed : 0.8946311473846436
+[2026/06/10 19:28:03] ppocr DEBUG: rec_res num  : 11, elapsed : 1.1721405982971191
+[2026/06/10 19:28:03] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:03] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.41242170333862305
+[2026/06/10 19:28:04] ppocr DEBUG: rec_res num  : 1, elapsed : 0.14090180397033691
+[2026/06/10 19:28:04] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:04] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.14585423469543457
+[2026/06/10 19:28:04] ppocr DEBUG: rec_res num  : 1, elapsed : 0.09730958938598633
+[2026/06/10 19:28:04] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:04] ppocr DEBUG: dt_boxes num : 21, elapsed : 0.3588101863861084
+[2026/06/10 19:28:07] ppocr DEBUG: rec_res num  : 21, elapsed : 2.068572521209717
+[2026/06/10 19:28:07] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:08] ppocr DEBUG: dt_boxes num : 27, elapsed : 0.9165103435516357
+[2026/06/10 19:28:10] ppocr DEBUG: rec_res num  : 27, elapsed : 2.5585808753967285
+INFO:     192.168.101.4:55690 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:55690 - "GET /api/v1/productos/suggestions?q=Rinoval+Mometasona+Furoato+Mometasonafuroato+Gaseovetms+Medifarma+20+g&limit=3&context=Rinoval%0AMOMETASONA+FUROATO%0A50+mcg%2Fdosis%0A120+dosis%0AGi%0ASuspensi%C3%B3n+Nasal%0Apara+Nebulizaci%C3%B3n%0ALS%0ASAVAL%0AAnl%0AAnc%0ABencic%0AClochl%0ASalyci%0Apylver%0A1smt%0AClotr%0ACrema%0AContei%0AFR%0AMa%0AMOMETASONAFUROATO%0A%2880%0AGingisona%0APHARMA%0AMKT%0ASt%0ABoca+y+Garganta%0AVi%0AAntiinflamatorio%0AAnalgesico%0ABencidamina%0AClorhlarato0.30%25%0ASolycianpare%0Apylverizaciaepucal%0Ateva%0AClotrimazol+1%25%0AContenido+neto+20+g%0AOHARMA%0AANTIACIDO%0AGASEOVETMS%0AMagaldrato+%2B+Simeticona%0A800+mg%2B+60+mg%2F10+mL%0ASuspensi%C3%B3n+Oral%0AVia+oral%0AAnalg%C3%A9sico%0Aorhldrato0.30%0AMedifarma%0Aism&source_name=a3c57a6d-d39a-4e25-b514-487b6578137f.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:55690 - "DELETE /api/v1/admin/reconocimientos/62 HTTP/1.1" 204 No Content
+INFO:     192.168.101.4:55218 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:28:32] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:33] ppocr DEBUG: dt_boxes num : 19, elapsed : 0.9552896022796631
+[2026/06/10 19:28:35] ppocr DEBUG: rec_res num  : 19, elapsed : 2.080720901489258
+[2026/06/10 19:28:35] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:36] ppocr DEBUG: dt_boxes num : 16, elapsed : 0.9356417655944824
+[2026/06/10 19:28:38] ppocr DEBUG: rec_res num  : 16, elapsed : 1.7970390319824219
+[2026/06/10 19:28:38] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:38] ppocr DEBUG: dt_boxes num : 0, elapsed : 0.3193540573120117
+[2026/06/10 19:28:38] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
+[2026/06/10 19:28:38] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:39] ppocr DEBUG: dt_boxes num : 16, elapsed : 0.8847141265869141
+[2026/06/10 19:28:41] ppocr DEBUG: rec_res num  : 16, elapsed : 1.8670196533203125
+[2026/06/10 19:28:41] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:42] ppocr DEBUG: dt_boxes num : 16, elapsed : 0.9670166969299316
+[2026/06/10 19:28:44] ppocr DEBUG: rec_res num  : 16, elapsed : 1.7213170528411865
+[2026/06/10 19:28:44] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:28:46] ppocr DEBUG: dt_boxes num : 22, elapsed : 1.006871223449707
+[2026/06/10 19:28:48] ppocr DEBUG: rec_res num  : 22, elapsed : 2.1271135807037354
+INFO:     192.168.101.4:55218 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:55218 - "GET /api/v1/productos/suggestions?q=Clotrival+Gaseovet+Ms+Rinoval+Mometasona+Furoato+Gaseovetms+Medifarma+20+g&limit=3&context=CLOTRIVAL%0AClotrimazol+1%25%0ACrema%0AContenido+neto+20+g%0AMKT.%0APHARMA%0A220.mL%0AANTIACIDO%0AGASEOVET%27MS%0ARinoval%0AMagaldrato+%2B+Simeticona%0AMOMETASONA+FUROATO%0A%28800+mg+%2B+60+mg%29%2F10+mL%0A50+mcg%2Fdosis%0A120+dosis%0ASuspensi%C3%B3n+Oral%0ASuspensi%C3%B3n+Nasal%0Apara+Nebulizaci%C3%B3n%0AVia+oral%0AGASEOVETMS%0Apara+Nebulizacion%0ALS%0ASAVAL%0AMedifarma%0A220+mL%0AGASEOVET.MS%0AGASEOVETOMS%0A%28800+mg+%2B+60+mg%2F10+mL%0AAKT%0APHARM%0A220mL%0A%28800+mg%2B60+mg%2F10+mL&source_name=fa57ede4-bbd8-4b13-8fca-581345a12f8c.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:52340 - "DELETE /api/v1/admin/reconocimientos/63 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:54843 - "GET /api/v1/admin/reconocimientos/59/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54848 - "GET /api/v1/admin/reconocimientos/55/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54845 - "GET /api/v1/admin/reconocimientos/56/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54846 - "GET /api/v1/admin/reconocimientos/60/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "GET /api/v1/admin/reconocimientos/61/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54848 - "GET /api/v1/admin/reconocimientos/50/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54843 - "GET /api/v1/admin/reconocimientos/52/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54845 - "GET /api/v1/admin/reconocimientos/51/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54847 - "GET /api/v1/admin/reconocimientos/58/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54846 - "GET /api/v1/admin/reconocimientos/54/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54848 - "GET /api/v1/admin/reconocimientos/49/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54845 - "GET /api/v1/admin/reconocimientos/47/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54847 - "GET /api/v1/admin/reconocimientos/48/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "GET /api/v1/admin/reconocimientos/44/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54846 - "GET /api/v1/admin/reconocimientos/45/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54843 - "GET /api/v1/admin/reconocimientos/46/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54845 - "GET /api/v1/admin/reconocimientos/42/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54848 - "GET /api/v1/admin/reconocimientos/43/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54848 - "GET /api/v1/admin/reconocimientos/40/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "GET /api/v1/admin/reconocimientos/41/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54845 - "GET /api/v1/admin/reconocimientos/39/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54846 - "GET /api/v1/admin/reconocimientos/37/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54847 - "GET /api/v1/admin/reconocimientos/36/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54843 - "GET /api/v1/admin/reconocimientos/38/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "GET /api/v1/admin/reconocimientos/32/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54846 - "GET /api/v1/admin/reconocimientos/33/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54844 - "GET /api/v1/admin/reconocimientos/27/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54848 - "GET /api/v1/admin/reconocimientos/30/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54845 - "GET /api/v1/admin/reconocimientos/31/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54847 - "GET /api/v1/admin/reconocimientos/29/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54843 - "GET /api/v1/admin/reconocimientos/28/image HTTP/1.1" 200 OK
+INFO:     192.168.101.4:47882 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:46:47] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:46:48] ppocr DEBUG: dt_boxes num : 3, elapsed : 0.8734464645385742
+[2026/06/10 19:46:49] ppocr DEBUG: rec_res num  : 3, elapsed : 0.5448629856109619
+[2026/06/10 19:46:49] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:46:50] ppocr DEBUG: dt_boxes num : 3, elapsed : 0.9034850597381592
+[2026/06/10 19:46:50] ppocr DEBUG: rec_res num  : 3, elapsed : 0.3183112144470215
+[2026/06/10 19:46:50] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:46:51] ppocr DEBUG: dt_boxes num : 5, elapsed : 1.073556661605835
+[2026/06/10 19:46:52] ppocr DEBUG: rec_res num  : 5, elapsed : 0.8198666572570801
+[2026/06/10 19:46:52] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:46:53] ppocr DEBUG: dt_boxes num : 1, elapsed : 1.019435167312622
+[2026/06/10 19:46:54] ppocr DEBUG: rec_res num  : 1, elapsed : 0.15873360633850098
+[2026/06/10 19:46:54] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:46:54] ppocr DEBUG: dt_boxes num : 4, elapsed : 0.8899006843566895
+[2026/06/10 19:46:55] ppocr DEBUG: rec_res num  : 4, elapsed : 0.7485988140106201
+[2026/06/10 19:46:56] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:46:56] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.6450612545013428
+[2026/06/10 19:46:57] ppocr DEBUG: rec_res num  : 8, elapsed : 1.0337083339691162
+INFO:     192.168.101.4:47882 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:48454 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:47:28] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:47:29] ppocr DEBUG: dt_boxes num : 4, elapsed : 0.8818554878234863
+[2026/06/10 19:47:30] ppocr DEBUG: rec_res num  : 4, elapsed : 0.6746020317077637
+[2026/06/10 19:47:30] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:47:31] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.8911333084106445
+[2026/06/10 19:47:31] ppocr DEBUG: rec_res num  : 1, elapsed : 0.16087055206298828
+[2026/06/10 19:47:31] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:47:32] ppocr DEBUG: dt_boxes num : 3, elapsed : 0.4206504821777344
+[2026/06/10 19:47:32] ppocr DEBUG: rec_res num  : 3, elapsed : 0.3962893486022949
+[2026/06/10 19:47:32] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:47:33] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.5550246238708496
+[2026/06/10 19:47:33] ppocr DEBUG: rec_res num  : 1, elapsed : 0.12153100967407227
+[2026/06/10 19:47:33] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:47:34] ppocr DEBUG: dt_boxes num : 4, elapsed : 0.9522576332092285
+[2026/06/10 19:47:35] ppocr DEBUG: rec_res num  : 4, elapsed : 0.6482799053192139
+[2026/06/10 19:47:35] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:47:36] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.737816572189331
+[2026/06/10 19:47:37] ppocr DEBUG: rec_res num  : 8, elapsed : 0.9118812084197998
+INFO:     192.168.101.4:48454 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:48454 - "GET /api/v1/productos/suggestions?q=Gaseovet+Ms+Gaseovet+Ms+Medifarma+220+ml&limit=3&context=ANTIACIDO%0AGASEOVET%27MS%0AMagaldrato+%2BSimeticona%0A220mL%0A20+mL%0AMS%0Arma%0Aa%0AMagaldrato%2BSimeticona%0A%28800+mg+%2B60+mg%2F10+mL%0AGASEOVET%22MS%0A800+mg%2B60+mg%2F10mL%0ASuspensi%C3%B3n+Oral%0AVia+oral%0AMedifarma&source_name=314020fb-c896-4248-b1cb-c3fd469ace00.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:44718 - "PUT /api/v1/admin/reconocimientos/65/review HTTP/1.1" 200 OK
+INFO:     192.168.101.4:46056 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:49:16] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:49:17] ppocr DEBUG: dt_boxes num : 6, elapsed : 1.0253019332885742
+[2026/06/10 19:49:18] ppocr DEBUG: rec_res num  : 6, elapsed : 0.9821925163269043
+[2026/06/10 19:49:18] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:49:19] ppocr DEBUG: dt_boxes num : 16, elapsed : 1.02555513381958
+[2026/06/10 19:49:21] ppocr DEBUG: rec_res num  : 16, elapsed : 1.9404573440551758
+[2026/06/10 19:49:21] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:49:22] ppocr DEBUG: dt_boxes num : 6, elapsed : 0.2904818058013916
+[2026/06/10 19:49:22] ppocr DEBUG: rec_res num  : 6, elapsed : 0.6861758232116699
+[2026/06/10 19:49:22] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:49:23] ppocr DEBUG: dt_boxes num : 6, elapsed : 1.0679409503936768
+[2026/06/10 19:49:24] ppocr DEBUG: rec_res num  : 6, elapsed : 0.7767260074615479
+[2026/06/10 19:49:25] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:49:25] ppocr DEBUG: dt_boxes num : 22, elapsed : 0.27419090270996094
+[2026/06/10 19:49:27] ppocr DEBUG: rec_res num  : 22, elapsed : 2.2472517490386963
+[2026/06/10 19:49:28] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:49:29] ppocr DEBUG: dt_boxes num : 26, elapsed : 0.8733742237091064
+[2026/06/10 19:49:31] ppocr DEBUG: rec_res num  : 26, elapsed : 2.6770901679992676
+INFO:     192.168.101.4:46056 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:46056 - "GET /api/v1/productos/suggestions?q=Clotrival+Andry+Dextrometorfa+Mometasona+Furoato+Dextrometorfano+Gingisona+20+g&limit=3&context=CLOTRIVAL%0AClotrimazol1%25%0ACrema%0AContenido+neto+20+g%0A20%0Anazol+1%25%0ARinoval%0AMOMETASONAFUROATO%0ADe%0A50+mcg%2Fdosis%0A120+dosis%0AGingisona%0ASuspension+Nasal%0Apara+Nebulizacion%0ABocay+Garganta%0AIS%0ASAVAL%0AAntilaflamatorto%0Aaalgesico%0AContenido+neto+2%0A120%0ASupresor+de+la+tos%0A120.mL%0AANDRY%0AAntiloflamatorio%0AClotrimazol+1%25%0AMKT%0ADextrometorfa%0A15+mg%2F5%0A120dosis%0AJar%0AViao%0ASuspensi%C3%B3n+Nasal%0ABoca+y+Garganta%0ASupresor+de+lat%0AAamatoro%0ATMKT%0AMOMETASONA+FUROATO%0ADextrometorfano%0A50+mcg%2Fdo%0A15+mg%2F5+mL%0AJarabe%0AGingisona+B%0Aensi%C3%B3n+Nasal%0AVia+oral%0ASusp%0Apara+Nebulizaci%C3%B3n%0A120mL%0AANDRO%0Aatorko&source_name=55a73c3d-139c-4049-b2ec-08dc9ae15eaa.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:54716 - "DELETE /api/v1/admin/reconocimientos/66 HTTP/1.1" 204 No Content
+INFO:     192.168.101.4:48398 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:49:58] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:49:59] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.8852732181549072
+[2026/06/10 19:50:01] ppocr DEBUG: rec_res num  : 8, elapsed : 1.7716975212097168
+[2026/06/10 19:50:01] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:50:01] ppocr DEBUG: dt_boxes num : 8, elapsed : 0.20003676414489746
+[2026/06/10 19:50:03] ppocr DEBUG: rec_res num  : 8, elapsed : 1.6058881282806396
+[2026/06/10 19:50:03] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:50:04] ppocr DEBUG: dt_boxes num : 0, elapsed : 1.0764265060424805
+[2026/06/10 19:50:04] ppocr DEBUG: rec_res num  : 0, elapsed : 0.0
+[2026/06/10 19:50:04] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:50:05] ppocr DEBUG: dt_boxes num : 31, elapsed : 0.9650619029998779
+[2026/06/10 19:50:09] ppocr DEBUG: rec_res num  : 31, elapsed : 3.694408893585205
+[2026/06/10 19:50:10] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:50:10] ppocr DEBUG: dt_boxes num : 28, elapsed : 0.9360661506652832
+[2026/06/10 19:50:14] ppocr DEBUG: rec_res num  : 28, elapsed : 3.518315553665161
+[2026/06/10 19:50:14] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:50:15] ppocr DEBUG: dt_boxes num : 27, elapsed : 0.727271318435669
+[2026/06/10 19:50:18] ppocr DEBUG: rec_res num  : 27, elapsed : 2.743425130844116
+[2026/06/10 19:50:19] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:50:19] ppocr DEBUG: dt_boxes num : 28, elapsed : 0.8307788372039795
+[2026/06/10 19:50:22] ppocr DEBUG: rec_res num  : 28, elapsed : 2.795718193054199
+INFO:     192.168.101.4:48398 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:48398 - "GET /api/v1/productos/suggestions?q=Clotrival+Dextrometorfano+Rinoval+Gaseovet+Ms+Mometasonafuroat+20+g&limit=3&context=CLOTRIVAL%0AClotrimazol+1%25%0ACrema%0AContenido+neto+20+g%0AMKT%0APHARMA%0ADextrometorfano%0AClotrimazol1%25%0ADextrometorfa%0A15mg%2F5ml%0A10dosi%0A220+mL%0AANTIACIDO%0ARinoval%0AGASEOVET%27MS%0AMOMETASONAFUROAT%0A50mcolaos%0AMagaldrato%2B+Simeticona%0A15+mg%2F5+mL%0A20dosb%0A800mg.%2B60mg%2F10ml%0AJarabe%0AMooral%0ASuspeneionNasa%0ApararNebulizacion%0ASuprosordo+latos%0ASuspension+Oral%0AUS%0AViaoral%0ASAVAL%0AMcaano%0ARHARMA%0AMOMETASONAFUROATE%0AMagaldrato.%2B.Simeticona%0A20oD%0A800mg%2B60+mg%2F10ml%0AonNas%0AYioeral%0Aprynasulizacion%0ASuprosordelatos%0AIS%0A120.l%0AARMA%0A220mL%0AGASEOVETMS%0A20dos%0A800mg%2B60mg%2F10ml%0AJorabo%0AYiaoral%0AVia+oral%0A20m%0ACrema.%0AARM%0ARinova%0AMOMETASONAFUROA%0AMagaldrato+%2B+Simeticona%0A2000%0AYiasral%0AANDRO%0AROSS&source_name=a37ab500-49c6-4ad0-9c54-179a496e16c5.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:54686 - "GET /api/v1/health HTTP/1.1" 200 OK
+INFO:     192.168.101.4:54686 - "POST /api/v1/inventory/product-stock-counts HTTP/1.1" 201 Created
+INFO:     192.168.101.4:52088 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:52:02] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:03] ppocr DEBUG: dt_boxes num : 5, elapsed : 0.7686483860015869
+[2026/06/10 19:52:03] ppocr DEBUG: rec_res num  : 5, elapsed : 0.5959477424621582
+[2026/06/10 19:52:04] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:05] ppocr DEBUG: dt_boxes num : 5, elapsed : 1.0157592296600342
+[2026/06/10 19:52:06] ppocr DEBUG: rec_res num  : 5, elapsed : 1.477609395980835
+[2026/06/10 19:52:07] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:08] ppocr DEBUG: dt_boxes num : 6, elapsed : 1.0929582118988037
+[2026/06/10 19:52:09] ppocr DEBUG: rec_res num  : 6, elapsed : 1.063871145248413
+[2026/06/10 19:52:09] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:10] ppocr DEBUG: dt_boxes num : 6, elapsed : 1.0355889797210693
+[2026/06/10 19:52:12] ppocr DEBUG: rec_res num  : 6, elapsed : 1.8379273414611816
+[2026/06/10 19:52:13] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:13] ppocr DEBUG: dt_boxes num : 6, elapsed : 0.7192673683166504
+[2026/06/10 19:52:15] ppocr DEBUG: rec_res num  : 6, elapsed : 1.7055847644805908
+[2026/06/10 19:52:16] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:17] ppocr DEBUG: dt_boxes num : 3, elapsed : 0.8209831714630127
+[2026/06/10 19:52:17] ppocr DEBUG: rec_res num  : 3, elapsed : 0.3524637222290039
+[2026/06/10 19:52:18] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:18] ppocr DEBUG: dt_boxes num : 3, elapsed : 0.2444441318511963
+[2026/06/10 19:52:18] ppocr DEBUG: rec_res num  : 3, elapsed : 0.29960107803344727
+INFO:     192.168.101.4:52088 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:52088 - "GET /api/v1/productos/suggestions?q=Mos+Lol+Soidcoon&limit=3&context=mos%0Aodwos%0AOL%0ALUE%0ALOL%0ASOIDCOON&source_name=4c283694-38fd-418e-a1bf-3a19bd4dbcb1.jpeg HTTP/1.1" 200 OK
+INFO:     192.168.101.4:53806 - "GET /api/v1/health HTTP/1.1" 200 OK
+[2026/06/10 19:52:31] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:31] ppocr DEBUG: dt_boxes num : 7, elapsed : 0.9321529865264893
+[2026/06/10 19:52:32] ppocr DEBUG: rec_res num  : 7, elapsed : 0.799701452255249
+[2026/06/10 19:52:33] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:33] ppocr DEBUG: dt_boxes num : 6, elapsed : 0.8216683864593506
+[2026/06/10 19:52:35] ppocr DEBUG: rec_res num  : 6, elapsed : 1.8027894496917725
+[2026/06/10 19:52:36] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:37] ppocr DEBUG: dt_boxes num : 3, elapsed : 1.0475621223449707
+[2026/06/10 19:52:37] ppocr DEBUG: rec_res num  : 3, elapsed : 0.3585536479949951
+[2026/06/10 19:52:37] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:38] ppocr DEBUG: dt_boxes num : 5, elapsed : 1.0476047992706299
+[2026/06/10 19:52:39] ppocr DEBUG: rec_res num  : 5, elapsed : 1.026538372039795
+[2026/06/10 19:52:40] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:40] ppocr DEBUG: dt_boxes num : 1, elapsed : 0.6360857486724854
+[2026/06/10 19:52:40] ppocr DEBUG: rec_res num  : 1, elapsed : 0.16737961769104004
+[2026/06/10 19:52:41] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:42] ppocr DEBUG: dt_boxes num : 4, elapsed : 1.034667730331421
+[2026/06/10 19:52:43] ppocr DEBUG: rec_res num  : 4, elapsed : 0.4932849407196045
+[2026/06/10 19:52:43] ppocr WARNING: Since the angle classifier is not initialized, it will not be used during the forward process
+[2026/06/10 19:52:44] ppocr DEBUG: dt_boxes num : 3, elapsed : 0.8392927646636963
+[2026/06/10 19:52:44] ppocr DEBUG: rec_res num  : 3, elapsed : 0.39964985847473145
+INFO:     192.168.101.4:53806 - "POST /api/v1/products/recognize HTTP/1.1" 200 OK
+INFO:     192.168.101.4:53806 - "GET /api/v1/productos/suggestions?q=7w+Ol+7wol&limit=3&context=7W+oL%0A7WOL&source_name=2f178720-b92f-4d93-99ca-d47c51c4e3c7.jpeg HTTP/1.1" 200 OK

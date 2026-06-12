@@ -15,6 +15,9 @@ from app.domain.catalog import (
 )
 
 
+DEFAULT_CATEGORY = "otros"
+
+
 @dataclass(frozen=True)
 class NormalizedProduct:
     nombre_producto: str | None
@@ -110,6 +113,8 @@ class ProductTextNormalizer:
         amount, unit = self._detect_content(clean_context)
         detected_category = self._detect_category(folded_context)
         category = self._category_from_context(product_type, brand, folded_context) or self._category_from_product_type(product_type) or detected_category or category_hint
+        if category is None:
+            category = DEFAULT_CATEGORY
         presentation = self._detect_presentation(clean_text, amount, unit)
         variant = self._detect_variant(folded_context, category)
         content = f"{amount} {unit}" if amount and unit else None
@@ -440,7 +445,7 @@ class ProductTextNormalizer:
     ) -> str | None:
         lines = [line.strip() for line in clean_text.splitlines() if line.strip()]
         meaningful = [line for line in lines if self._is_meaningful_line(line)]
-        prominent_line = self._clean_prominent_product_line(prominent_text, brand, product_type)
+        prominent_line = self._clean_prominent_product_line(prominent_text, brand, product_type, category)
         if prominent_line and self._should_prefer_prominent_line(prominent_line, brand, product_type, category):
             return self._compose_name_from_prominent_line(prominent_line, brand, product_type, content)[:120]
 
@@ -484,6 +489,7 @@ class ProductTextNormalizer:
         prominent_text: str | None,
         brand: str | None,
         product_type: str | None,
+        category: str | None,
     ) -> str | None:
         if not prominent_text:
             return None
@@ -497,7 +503,11 @@ class ProductTextNormalizer:
         folded_line = self._fold(line)
         if self._is_pharmacy_detail_line(folded_line):
             return None
-        if self._fold(line) in {self._fold(brand or ""), self._fold(product_type or "")}:
+        folded_brand = self._fold(brand or "")
+        folded_type = self._fold(product_type or "")
+        if self._fold(line) == folded_brand and category != "farmacia/otc":
+            return None
+        if self._fold(line) == folded_type:
             return None
         return line
 

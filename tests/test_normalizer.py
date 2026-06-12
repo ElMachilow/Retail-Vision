@@ -391,3 +391,23 @@ def test_normalizer_prefers_prominent_ocr_line_as_general_product_name_rule() ->
     assert result.nombre_producto == "Gaseovet Ms 220 ml"
     assert result.categoria_sugerida == "farmacia/otc"
     assert result.contenido_neto == "220 ml"
+
+
+def test_normalizer_detects_cartavio_ron_as_beverage() -> None:
+    text = (
+        "RON CARTAVIO BLACK BARREL 3ANOS BARRICAS\n"
+        "INTENSAMENTE TOSTADO\n"
+        "ANEJADO EN B AHUMADO"
+    )
+
+    result = ProductTextNormalizer().normalize(text, prominent_text="Cartavio")
+
+    assert result.marca == "Cartavio"
+    assert result.tipo_producto == "Ron"
+    assert result.categoria_sugerida == "bebidas"
+
+
+def test_normalizer_always_returns_category_for_unknown_product() -> None:
+    result = ProductTextNormalizer().normalize("Producto sin senales claras")
+
+    assert result.categoria_sugerida == "otros"

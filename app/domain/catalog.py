@@ -76,6 +76,7 @@ BRAND_ALIASES: tuple[BrandAlias, ...] = (
     BrandAlias("Pisco", ("pisco quebranta", "pisco italia", "pisco acholado", "pisco torontel"), "bebidas"),
     BrandAlias("Cuatro Gallos", ("cuatro gallos",), "bebidas"),
     BrandAlias("Tres Generaciones", ("tres generaciones",), "bebidas"),
+    BrandAlias("Cartavio", ("cartavio", "ron cartavio"), "bebidas"),
 
     # Snacks y golosinas
     BrandAlias("Field", ("field",), "snacks y golosinas"),
@@ -238,6 +239,8 @@ BRAND_ALIASES: tuple[BrandAlias, ...] = (
     BrandAlias("OFF!", ("off repelente", "repelente off"), "farmacia/otc"),
     BrandAlias("Himalaya", ("himalaya",), "farmacia/otc"),
     BrandAlias("Ashwagandha", ("ashwagandha", "ashwaganda"), "farmacia/otc"),
+    BrandAlias("Gingisona", ("gingisona",), "farmacia/otc"),
+    BrandAlias("Avamys", ("avamys",), "farmacia/otc"),
 )
 
 
@@ -296,8 +299,11 @@ CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
         "limon",
         "limón",
         "pisco",
+        "ron",
         "cerveza",
         "vino",
+        "whisky",
+        "vodka",
     ),
     "snacks y golosinas": (
         "galleta",
@@ -388,6 +394,9 @@ CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
         "furoato",
         "fluticasona",
         "mometasona",
+        "antiinflamatorio",
+        "bencidamina",
+        "spray nasal",
         "topico",
         "topica",
         "antigripal",
@@ -485,6 +494,7 @@ PRODUCT_TYPE_ALIASES: dict[str, tuple[str, ...]] = {
     "Bebida rehidratante": ("rehidratante", "bebida rehidratante", "hidratante deportiva"),
     "Energizante": ("energizante", "bebida energetica", "bebida energética"),
     "Pisco": ("pisco",),
+    "Ron": ("ron", "black barrel"),
     "Cerveza": ("cerveza", "lager", "pilsner"),
     "Leche": ("leche evaporada", "leche entera", "leche descremada", "leche uht"),
     "Yogurt": ("yogurt", "yogur", "yogurt griego", "griego"),
@@ -536,6 +546,7 @@ PRODUCT_TYPE_ALIASES: dict[str, tuple[str, ...]] = {
     "Cápsula": ("capsula", "cápsula", "capsulas", "cápsulas"),
     "Jarabe": ("jarabe",),
     "Solucion": ("solucion", "solucion topica", "solucion oral"),
+    "Spray nasal": ("spray nasal", "nasal spray", "suspension en spray nasal", "suspensión en spray nasal"),
     "Suplemento": ("suplemento", "multivitaminico", "multivitamínico", "vitamina", "vitaminas", "ashwagandha", "complemento"),
     "Antibiótico": ("antibiotico", "antibiótico", "amoxicilina", "azitromicina", "cefalexina"),
     "Analgésico": ("analgesico", "analgésico", "ibuprofeno", "paracetamol", "naproxeno", "diclofenaco"),
@@ -580,6 +591,7 @@ BRAND_DEFAULT_PRODUCT_TYPES: dict[str, str] = {
     "Monster": "Energizante",
     "Cuatro Gallos": "Pisco",
     "Tres Generaciones": "Pisco",
+    "Cartavio": "Ron",
     # Abarrotes
     "Primor": "Aceite",
     "Cocinero": "Aceite",
@@ -683,6 +695,8 @@ BRAND_DEFAULT_PRODUCT_TYPES: dict[str, str] = {
     "Supradyn": "Suplemento",
     "Sunvit": "Suplemento",
     "Ashwagandha": "Suplemento",
+    "Gingisona": "Solucion",
+    "Avamys": "Spray nasal",
     "Repel": "Repelente",
     "OFF!": "Repelente",
     "Himalaya": "Suplemento",
@@ -722,6 +736,7 @@ PRODUCT_TYPE_CATEGORIES: dict[str, str] = {
     "Bebida rehidratante": "bebidas",
     "Energizante": "bebidas",
     "Pisco": "bebidas",
+    "Ron": "bebidas",
     "Cerveza": "bebidas",
     "Leche": "lacteos",
     "Yogurt": "lacteos",
@@ -772,6 +787,7 @@ PRODUCT_TYPE_CATEGORIES: dict[str, str] = {
     "Cápsula": "farmacia/otc",
     "Jarabe": "farmacia/otc",
     "Solucion": "farmacia/otc",
+    "Spray nasal": "farmacia/otc",
     "Suplemento": "farmacia/otc",
     "Antibiótico": "farmacia/otc",
     "Analgésico": "farmacia/otc",

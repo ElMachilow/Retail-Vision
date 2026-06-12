@@ -91,6 +91,45 @@ class FakeProminentOcr:
         )
 
 
+class FakeCartavioProminentOcr:
+    def extract(self, image: np.ndarray) -> OcrResult:
+        lines = [
+            OcrTextLine("RON", 0.94, bbox_area=6_500),
+            OcrTextLine("CARTAVIO", 0.96, bbox_area=24_000),
+            OcrTextLine("INTENSAMENTE TOSTADO", 0.89, bbox_area=3_000),
+            OcrTextLine("BLACK BARREL", 0.95, bbox_area=18_000),
+            OcrTextLine("3 ANOS", 0.92, bbox_area=7_000),
+            OcrTextLine("1L | 40% vol", 0.88, bbox_area=2_000),
+        ]
+        return OcrResult(engine="fake-ocr", text="\n".join(line.text for line in lines), average_confidence=0.92, lines=lines)
+
+
+class FakeGingisonaProminentOcr:
+    def extract(self, image: np.ndarray) -> OcrResult:
+        lines = [
+            OcrTextLine("Gingisona", 0.96, bbox_area=22_000),
+            OcrTextLine("Boca y Garganta", 0.91, bbox_area=9_000),
+            OcrTextLine("Antiinflamatorio Analgesico", 0.90, bbox_area=14_000),
+            OcrTextLine("Bencidamina Clorhidrato 0.30%", 0.88, bbox_area=5_000),
+            OcrTextLine("Solucion para pulverizacion bucal", 0.86, bbox_area=4_000),
+            OcrTextLine("15 mL", 0.89, bbox_area=2_000),
+        ]
+        return OcrResult(engine="fake-ocr", text="\n".join(line.text for line in lines), average_confidence=0.90, lines=lines)
+
+
+class FakeAvamysProminentOcr:
+    def extract(self, image: np.ndarray) -> OcrResult:
+        lines = [
+            OcrTextLine("0075143", 0.90, bbox_area=5_000),
+            OcrTextLine("Avamys", 0.96, bbox_area=18_000),
+            OcrTextLine("Furoato de Fluticasona", 0.92, bbox_area=12_000),
+            OcrTextLine("Spray nasal / Nasal spray", 0.90, bbox_area=7_000),
+            OcrTextLine("27,5 mcg / dosis / dose", 0.88, bbox_area=5_000),
+            OcrTextLine("120", 0.86, bbox_area=6_000),
+        ]
+        return OcrResult(engine="fake-ocr", text="\n".join(line.text for line in lines), average_confidence=0.90, lines=lines)
+
+
 def _jpeg_bytes() -> bytes:
     image = np.full((240, 360, 3), 255, dtype=np.uint8)
     cv2.rectangle(image, (35, 35), (325, 205), (20, 120, 20), -1)
@@ -350,6 +389,78 @@ def test_recognize_product_uses_largest_ocr_text_as_required_name_candidate() ->
     body = response.json()
     assert body["ocr"]["prominent_text"] == "GASEOVET MS"
     assert body["producto"]["nombre_producto"] == "Gaseovet Ms 220 ml"
+
+
+def test_recognize_product_builds_name_from_multiple_large_ocr_lines() -> None:
+    app = create_app()
+    fake_pipeline = ProductRecognitionPipeline(
+        settings=Settings(),
+        detector=FakeDetector(),
+        ocr=FakeCartavioProminentOcr(),
+        normalizer=ProductTextNormalizer(),
+    )
+    app.dependency_overrides[get_product_pipeline] = lambda: fake_pipeline
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/v1/products/recognize",
+        files={"image": ("cartavio.jpg", _jpeg_bytes(), "image/jpeg")},
+        headers={"X-Trace-ID": "test-cartavio-prominent"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["ocr"]["prominent_text"] == "RON CARTAVIO BLACK BARREL 3 ANOS"
+    assert body["producto"]["nombre_producto"].startswith("Ron Cartavio Black Barrel")
+    assert body["producto"]["categoria_sugerida"] == "bebidas"
+
+
+def test_recognize_product_prefers_prominent_pharmacy_brand_name() -> None:
+    app = create_app()
+    fake_pipeline = ProductRecognitionPipeline(
+        settings=Settings(),
+        detector=FakeDetector(),
+        ocr=FakeGingisonaProminentOcr(),
+        normalizer=ProductTextNormalizer(),
+    )
+    app.dependency_overrides[get_product_pipeline] = lambda: fake_pipeline
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/v1/products/recognize",
+        files={"image": ("gingisona.jpg", _jpeg_bytes(), "image/jpeg")},
+        headers={"X-Trace-ID": "test-gingisona-prominent"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["ocr"]["prominent_text"].startswith("Gingisona")
+    assert body["producto"]["nombre_producto"].startswith("Gingisona")
+    assert body["producto"]["categoria_sugerida"] == "farmacia/otc"
+
+
+def test_recognize_product_keeps_brand_only_prominent_name_for_pharmacy() -> None:
+    app = create_app()
+    fake_pipeline = ProductRecognitionPipeline(
+        settings=Settings(),
+        detector=FakeDetector(),
+        ocr=FakeAvamysProminentOcr(),
+        normalizer=ProductTextNormalizer(),
+    )
+    app.dependency_overrides[get_product_pipeline] = lambda: fake_pipeline
+    client = TestClient(app)
+
+    response = client.post(
+        "/api/v1/products/recognize",
+        files={"image": ("avamys.jpg", _jpeg_bytes(), "image/jpeg")},
+        headers={"X-Trace-ID": "test-avamys-prominent"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["ocr"]["prominent_text"].startswith("Avamys")
+    assert body["producto"]["nombre_producto"].startswith("Avamys")
+    assert body["producto"]["categoria_sugerida"] == "farmacia/otc"
 
 
 def test_delete_recognition_removes_admin_event() -> None:

@@ -242,10 +242,26 @@ class ProductRecognitionPipeline:
             alpha_chars = len([char for char in text if char.isalpha()])
             if area <= 0:
                 area = float(alpha_chars)
-            candidates.append((area, -index, text))
+            candidates.append((area, index, text))
         if not candidates:
             return None
-        return max(candidates)[2]
+
+        max_area = max(area for area, _, _ in candidates)
+        if max_area <= 0:
+            return max(candidates)[2]
+
+        selected: list[tuple[float, int, str]] = []
+        for area, index, text in candidates:
+            ratio = area / max_area
+            if ratio >= 0.35 or (ratio >= 0.20 and self._looks_like_prominent_support_line(text)):
+                selected.append((area, index, text))
+
+        if not selected:
+            selected = [max(candidates)]
+
+        # Keep the visual reading order, but only for the dominant product-facing text.
+        selected = sorted(selected, key=lambda item: item[1])[:5]
+        return " ".join(text for _, _, text in selected)
 
     def _looks_like_product_name_candidate(self, text: str) -> bool:
         if len(text) < 3:
@@ -258,6 +274,13 @@ class ProductRecognitionPipeline:
         if re.search(r"\b(via|oral|laboratorio|laboratorios|contenido|neto)\b", folded):
             return False
         return bool(re.search(r"[a-z]", folded))
+
+    def _looks_like_prominent_support_line(self, text: str) -> bool:
+        folded = self.normalizer._fold(text)
+        tokens = re.findall(r"[a-z0-9]+", folded)
+        if 1 <= len(tokens) <= 3 and text.upper() == text:
+            return True
+        return False
 
     def _expand_bbox(
         self,

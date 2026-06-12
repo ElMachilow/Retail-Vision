@@ -1,4 +1,111 @@
-INFO:     Started server process [668]
+INFO:     Will watch for changes in these directories: ['D:\\UPC\\2026\\Servicio IA\\Tesis-Vision']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [2672] using WatchFiles
+INFO:     Started server process [9692]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+WARNING:  WatchFiles detected changes in 'app\domain\catalog.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [9692]
+WARNING:  WatchFiles detected changes in 'tests\test_normalizer.py', 'app\services\normalizer.py'. Reloading...
+Exception ignored in: <function BaseEventLoop.__del__ at 0x000001C30D37A7A0>
+Traceback (most recent call last):
+  File "C:\Program Files\Python311\Lib\asyncio\base_events.py", line 695, in __del__
+    self.close()
+  File "C:\Program Files\Python311\Lib\asyncio\selector_events.py", line 91, in close
+    self._close_self_pipe()
+  File "C:\Program Files\Python311\Lib\asyncio\selector_events.py", line 98, in _close_self_pipe
+    self._remove_reader(self._ssock.fileno())
+                        ^^^^^^^^^^^
+AttributeError: '_WindowsSelectorEventLoop' object has no attribute '_ssock'
+C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\uvicorn\_subprocess.py:84: RuntimeWarning: coroutine 'Server.serve' was never awaited
+  pass
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+INFO:     Started server process [20204]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app\services\pipeline.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [20204]
+WARNING:  WatchFiles detected changes in 'app\domain\catalog.py', 'app\services\normalizer.py', 'tests\test_api.py', 'app\services\pipeline.py'. Reloading...
+INFO:     Started server process [20952]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [20952]
+INFO:     Started server process [25232]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\uvicorn\protocols\http\httptools_impl.py", line 421, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\uvicorn\middleware\proxy_headers.py", line 56, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\applications.py", line 1159, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\fastapi\routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\anyio\_backends\_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\marcelo\AppData\Roaming\Python\Python311\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\UPC\2026\Servicio IA\Tesis-Vision\app\api\routes.py", line 472, in delete_recognition
+    repository.delete(event_id)
+  File "D:\UPC\2026\Servicio IA\Tesis-Vision\app\repositories\recognitions.py", line 280, in delete
+    cursor = conn.execute("DELETE FROM recognition_events WHERE id = ?", (event_id,))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: FOREIGN KEY constraint failed
