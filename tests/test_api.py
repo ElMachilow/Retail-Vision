@@ -140,6 +140,15 @@ def _jpeg_bytes() -> bytes:
     return encoded.tobytes()
 
 
+def _login_admin(client: TestClient) -> None:
+    response = client.post(
+        "/login",
+        data={"username": "admin", "password": "admin123", "next": "/admin"},
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+
+
 def _blurry_jpeg_bytes() -> bytes:
     image = cv2.imdecode(np.frombuffer(_jpeg_bytes(), dtype=np.uint8), cv2.IMREAD_COLOR)
     small = cv2.resize(image, (12, 8), interpolation=cv2.INTER_AREA)
@@ -212,9 +221,31 @@ def test_inventory_screen_is_served() -> None:
     assert "static/inventario.js" in response.text
 
 
-def test_admin_screen_is_served() -> None:
+def test_admin_screen_requires_login() -> None:
     app = create_app()
     client = TestClient(app)
+
+    response = client.get("/admin", follow_redirects=False)
+
+    assert response.status_code == 303
+    assert response.headers["location"] == "/login"
+
+
+def test_docs_require_login() -> None:
+    app = create_app()
+    client = TestClient(app)
+
+    response = client.get("/docs", follow_redirects=False)
+
+    assert response.status_code == 303
+    assert response.headers["location"] == "/login"
+    assert client.get("/openapi.json", follow_redirects=False).status_code == 303
+
+
+def test_admin_screen_is_served_after_login() -> None:
+    app = create_app()
+    client = TestClient(app)
+    _login_admin(client)
 
     response = client.get("/admin")
 
@@ -241,6 +272,7 @@ def test_recognize_product_creates_pending_review_event() -> None:
     )
     assert response.status_code == 200
 
+    _login_admin(client)
     events = client.get("/api/v1/admin/reconocimientos").json()["items"]
     assert len(events) == 1
     assert events[0]["trace_id"] == "test-review-1"
@@ -480,6 +512,7 @@ def test_delete_recognition_removes_admin_event() -> None:
         headers={"X-Trace-ID": "test-delete-1"},
     )
     assert response.status_code == 200
+    _login_admin(client)
     event = client.get("/api/v1/admin/reconocimientos").json()["items"][0]
     settings = get_settings()
     with sqlite3.connect(settings.sqlite_path) as conn:

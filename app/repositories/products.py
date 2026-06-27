@@ -109,7 +109,7 @@ class ProductRepository:
                 )
                 conn.commit()
                 product_id = cursor.lastrowid
-        except sqlite3.IntegrityError as exc:
+        except Exception as exc:
             if "codigo_barras" in str(exc):
                 raise DuplicateBarcodeError("El código de barras ya está registrado.") from exc
             raise
@@ -138,7 +138,7 @@ class ProductRepository:
                     values,
                 )
                 conn.commit()
-        except sqlite3.IntegrityError as exc:
+        except Exception as exc:
             if "codigo_barras" in str(exc):
                 raise DuplicateBarcodeError("El código de barras ya está registrado.") from exc
             raise

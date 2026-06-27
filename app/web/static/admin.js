@@ -93,9 +93,16 @@ function categoryName(item) {
 
 async function fetchJson(url, options) {
   const response = await fetch(url, options);
+  redirectIfUnauthorized(response);
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.message || "No se pudo completar la operación.");
   return data;
+}
+
+function redirectIfUnauthorized(response) {
+  if (response.status === 401) {
+    window.location.href = "/login";
+  }
 }
 
 async function loadStats() {
@@ -373,6 +380,7 @@ async function deleteRecord(id) {
     const response = await fetch(`${apiBaseUrl}/api/v1/admin/reconocimientos/${id}`, {
       method: "DELETE",
     });
+    redirectIfUnauthorized(response);
     if (!response.ok) {
       const data = await response.json().catch(() => ({}));
       throw new Error(data.message || "No se pudo eliminar el reconocimiento.");
@@ -405,6 +413,7 @@ async function deleteSelectedRecords() {
       const response = await fetch(`${apiBaseUrl}/api/v1/admin/reconocimientos/${id}`, {
         method: "DELETE",
       });
+      redirectIfUnauthorized(response);
       if (!response.ok) failed.push(id);
     }
     selectedRecordIds.clear();

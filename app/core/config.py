@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     cors_allow_origins: str = "*"
     expose_internal_errors: bool = False
     max_image_mb: int = Field(default=10, ge=1, le=50)
+    admin_username: str = "admin"
+    admin_password: str = "admin123"
+    admin_session_secret: str = "change-this-admin-session-secret"
+    admin_session_max_age_seconds: int = Field(default=8 * 60 * 60, ge=300, le=7 * 24 * 60 * 60)
 
     yolo_model_path: str = "yolov8n.pt"
     yolo_confidence_threshold: float = Field(default=0.25, ge=0.0, le=1.0)
@@ -31,7 +35,14 @@ class Settings(BaseSettings):
     persist_debug_images: bool = False
     debug_image_dir: Path = Path("runtime/debug")
 
+    db_backend: str = "sqlite"
     sqlite_path: Path = Path("runtime/products.db")
+    mysql_host: str = "127.0.0.1"
+    mysql_port: int = Field(default=3306, ge=1, le=65535)
+    mysql_user: str = "root"
+    mysql_password: str = ""
+    mysql_database: str = "retail_vision"
+    mysql_charset: str = "utf8mb4"
     recognition_image_dir: Path = Path("runtime/recognition-images")
 
 

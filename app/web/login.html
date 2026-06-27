@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VisionAI Admin | Login</title>
+    <link rel="stylesheet" href="static/styles.css?v=5" />
+  </head>
+  <body class="login-body">
+    <main class="login-shell">
+      <section class="login-panel" aria-labelledby="login-title">
+        <div class="login-brand">
+          <strong>VisionAI Admin</strong>
+          <span>Acceso administrativo</span>
+        </div>
+        <form class="login-form" method="post" action="/login">
+          <h1 id="login-title">Iniciar sesion</h1>
+          <input name="next" type="hidden" value="/admin" />
+          <label>
+            Usuario
+            <input name="username" type="text" autocomplete="username" required autofocus />
+          </label>
+          <label>
+            Contrasena
+            <input name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <button class="primary-button" type="submit">Entrar</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

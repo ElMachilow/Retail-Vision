@@ -7,3 +7,4 @@ opencv-python-headless>=4.10.0.84
 ultralytics>=8.2.0
 paddleocr>=2.8.0,<3.0.0
 paddlepaddle>=2.6.0,<3.0.0
+pymysql>=1.1.1,<2.0.0

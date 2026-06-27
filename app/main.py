@@ -3,13 +3,21 @@ from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.openapi.utils import get_openapi
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.api.routes import router as api_router
 from app.core.config import get_settings
 from app.core.exceptions import AppError
 from app.core.logging import configure_logging
+from app.core.security import (
+    ADMIN_SESSION_COOKIE,
+    create_admin_session_cookie,
+    is_admin_request,
+    verify_admin_credentials,
+)
 from app.db.connection import init_db
 from app.schemas.product import ErrorResponse
 
@@ -31,6 +39,9 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title=settings.app_name,
         version="0.1.0",
+        docs_url=None,
+        redoc_url=None,
+        openapi_url=None,
         description=(
             "MVP para registrar productos retail peruanos desde imágenes, "
             "usando YOLO para detectar la región relevante y PaddleOCR para extraer texto."
@@ -57,12 +68,68 @@ def create_app() -> FastAPI:
     async def inventory_screen() -> FileResponse:
         return FileResponse(WEB_DIR / "inventario.html")
 
+    @app.get("/login", include_in_schema=False)
+    async def login_screen() -> FileResponse:
+        return FileResponse(WEB_DIR / "login.html")
+
+    @app.post("/login", include_in_schema=False)
+    async def login(request: Request) -> RedirectResponse:
+        form = await request.form()
+        username = str(form.get("username", ""))
+        password = str(form.get("password", ""))
+        next_url = _safe_next_url(str(form.get("next", "/admin")))
+        if not verify_admin_credentials(username, password, settings):
+            return RedirectResponse("/login", status_code=303)
+
+        response = RedirectResponse(next_url, status_code=303)
+        response.set_cookie(
+            ADMIN_SESSION_COOKIE,
+            create_admin_session_cookie(settings),
+            max_age=settings.admin_session_max_age_seconds,
+            httponly=True,
+            samesite="lax",
+        )
+        return response
+
+    @app.get("/logout", include_in_schema=False)
+    async def logout() -> RedirectResponse:
+        response = RedirectResponse("/login", status_code=303)
+        response.delete_cookie(ADMIN_SESSION_COOKIE)
+        return response
+
     @app.get("/admin", include_in_schema=False)
-    async def admin_screen() -> FileResponse:
+    async def admin_screen(request: Request):
+        if not is_admin_request(request, settings):
+            return RedirectResponse("/login", status_code=303)
         return FileResponse(WEB_DIR / "admin.html")
+
+    @app.get("/docs", include_in_schema=False)
+    async def swagger_docs(request: Request):
+        if not is_admin_request(request, settings):
+            return RedirectResponse("/login", status_code=303)
+        return get_swagger_ui_html(openapi_url="/openapi.json", title=f"{settings.app_name} - Docs")
+
+    @app.get("/openapi.json", include_in_schema=False)
+    async def openapi_schema(request: Request):
+        if not is_admin_request(request, settings):
+            return RedirectResponse("/login", status_code=303)
+        return JSONResponse(
+            get_openapi(
+                title=settings.app_name,
+                version="0.1.0",
+                description=app.description,
+                routes=app.routes,
+            )
+        )
 
     register_exception_handlers(app)
     return app
+
+
+def _safe_next_url(value: str) -> str:
+    if not value.startswith("/") or value.startswith("//"):
+        return "/admin"
+    return value
 
 
 def register_exception_handlers(app: FastAPI) -> None:

@@ -767,6 +767,72 @@ dd {
   outline: none;
 }
 
+.login-body {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  background: #eef2f7;
+  color: #06172f;
+}
+
+.login-shell {
+  width: min(100% - 32px, 420px);
+}
+
+.login-panel {
+  display: grid;
+  gap: 24px;
+  padding: 30px;
+  border: 1px solid #c5ceda;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(6, 23, 47, 0.12);
+}
+
+.login-brand {
+  display: grid;
+  gap: 5px;
+}
+
+.login-brand strong {
+  color: #002a66;
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.login-brand span {
+  color: #37506d;
+  font-size: 14px;
+}
+
+.login-form {
+  display: grid;
+  gap: 16px;
+}
+
+.login-form h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.login-form label {
+  display: grid;
+  gap: 8px;
+  color: #15345c;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.login-form input {
+  min-height: 44px;
+  border: 1px solid #b8c6d8;
+  border-radius: 8px;
+  padding: 0 12px;
+  font: inherit;
+  text-transform: none;
+}
+
 .admin-body {
   display: grid;
   grid-template-columns: 250px minmax(0, 1fr);
@@ -861,6 +927,17 @@ dd {
 .admin-user strong {
   display: block;
   font-size: 15px;
+}
+
+.admin-logout {
+  color: #37506d;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.admin-logout:hover {
+  color: #0b438f;
+  text-decoration: underline;
 }
 
 .admin-main {

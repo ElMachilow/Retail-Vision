@@ -12,6 +12,7 @@ from app.api.dependencies import (
 )
 from app.core.config import Settings, get_settings
 from app.core.exceptions import InvalidImageError
+from app.core.security import require_admin
 from app.repositories.inventory import (
     InventoryItemRecord,
     InventoryRepository,
@@ -409,6 +410,7 @@ async def recognize_product(
     "/admin/reconocimientos/stats",
     response_model=RecognitionStatsResponse,
     tags=["admin"],
+    dependencies=[Depends(require_admin)],
     summary="Métricas de revisión de reconocimientos.",
 )
 def recognition_stats(
@@ -421,6 +423,7 @@ def recognition_stats(
     "/admin/reconocimientos",
     response_model=RecognitionEventsResponse,
     tags=["admin"],
+    dependencies=[Depends(require_admin)],
     summary="Lista reconocimientos capturados para revisión asistida.",
 )
 def list_recognitions(
@@ -450,6 +453,7 @@ def list_recognitions(
     "/admin/reconocimientos/{event_id}",
     response_model=RecognitionEventResponse,
     tags=["admin"],
+    dependencies=[Depends(require_admin)],
 )
 def get_recognition(
     event_id: int,
@@ -463,6 +467,7 @@ def get_recognition(
     "/admin/reconocimientos/{event_id}",
     status_code=204,
     tags=["admin"],
+    dependencies=[Depends(require_admin)],
     summary="Elimina un reconocimiento capturado del panel de administración.",
 )
 def delete_recognition(
@@ -477,6 +482,7 @@ def delete_recognition(
     "/admin/reconocimientos/{event_id}/image",
     tags=["admin"],
     include_in_schema=False,
+    dependencies=[Depends(require_admin)],
 )
 def get_recognition_image(
     event_id: int,
@@ -490,6 +496,7 @@ def get_recognition_image(
     "/admin/reconocimientos/{event_id}/review",
     response_model=RecognitionEventResponse,
     tags=["admin"],
+    dependencies=[Depends(require_admin)],
     summary="Guarda validación, corrección o rechazo de un reconocimiento.",
 )
 def review_recognition(
