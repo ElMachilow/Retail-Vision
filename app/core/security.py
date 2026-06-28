@@ -11,6 +11,7 @@ from fastapi import HTTPException, Request, status
 from app.core.config import Settings, get_settings
 
 SESSION_COOKIE = "visionai_user_session"
+ADMIN_SESSION_COOKIE = SESSION_COOKIE
 
 
 def hash_password(password: str) -> tuple[str, str]:
@@ -45,6 +46,14 @@ def create_session_cookie(user_id: int, username: str, role: str, settings: Sett
     encoded_payload = _urlsafe_b64encode(payload_bytes)
     signature = _sign(encoded_payload, settings.admin_session_secret)
     return f"{encoded_payload}.{signature}"
+
+
+def create_admin_session_cookie(settings: Settings) -> str:
+    return create_session_cookie(user_id=0, username=settings.admin_username, role="admin", settings=settings)
+
+
+def verify_admin_credentials(username: str, password: str, settings: Settings) -> bool:
+    return username == settings.admin_username and password == settings.admin_password
 
 
 def decode_session_cookie(value: str, secret: str) -> dict[str, Any] | None:

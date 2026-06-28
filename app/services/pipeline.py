@@ -71,7 +71,7 @@ class ProductRecognitionPipeline:
             source_name=source_name,
             prominent_text=prominent_text,
         )
-        if detection.fields and self._needs_full_image_ocr(normalized):
+        if detection.fields and self._needs_full_image_ocr(normalized, ocr_result):
             full_ocr_result = self._extract_full_image_ocr(image, trace_id)
             ocr_result = self._merge_ocr_results(ocr_result, full_ocr_result)
             prominent_text = self._prominent_ocr_text(ocr_result)
@@ -143,7 +143,12 @@ class ProductRecognitionPipeline:
         ocr_image = prepare_for_ocr(cropped)
         if self.settings.persist_debug_images:
             save_debug_image(ocr_image, self.settings.debug_image_dir, f"{trace_id}_roi.jpg")
-        return self.ocr.extract(ocr_image)
+        ocr_result = self.ocr.extract(ocr_image)
+        if not ocr_result.lines and not detection.used_full_image_fallback:
+            full_ocr_result = self._extract_full_image_ocr(image, trace_id)
+            if full_ocr_result.lines:
+                return self._merge_ocr_results(ocr_result, full_ocr_result)
+        return ocr_result
 
     def _extract_field_aware_ocr(
         self,
@@ -208,12 +213,13 @@ class ProductRecognitionPipeline:
             save_debug_image(ocr_image, self.settings.debug_image_dir, f"{trace_id}_full.jpg")
         return self.ocr.extract(ocr_image)
 
-    def _needs_full_image_ocr(self, normalized) -> bool:
+    def _needs_full_image_ocr(self, normalized, ocr_result: OcrResult) -> bool:
         return (
             normalized.nombre_producto is None
             or normalized.marca is None
             or normalized.tipo_producto is None
             or normalized.categoria_sugerida is None
+            or len(ocr_result.lines) < 2
         )
 
     def _merge_ocr_results(self, primary: OcrResult, secondary: OcrResult) -> OcrResult:

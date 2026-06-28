@@ -106,6 +106,7 @@ def prepare_for_ocr(image: np.ndarray, target_max_side: int = 800) -> np.ndarray
     """Preprocess package crops for OCR while preserving text color cues."""
 
     image = trim_plain_background(image)
+    image = deskew_image(image)
     height, width = image.shape[:2]
     max_side = max(height, width)
     if max_side < target_max_side:
@@ -122,6 +123,33 @@ def prepare_for_ocr(image: np.ndarray, target_max_side: int = 800) -> np.ndarray
     blurred = cv2.GaussianBlur(enhanced, (0, 0), sigmaX=1.0)
     sharpened = cv2.addWeighted(enhanced, 1.45, blurred, -0.45, 0)
     return sharpened
+
+
+def deskew_image(image: np.ndarray) -> np.ndarray:
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    edges = cv2.Canny(blurred, 50, 150)
+    coords = np.column_stack(np.where(edges > 0))
+    if coords.size < 10:
+        return image
+
+    rect = cv2.minAreaRect(coords)
+    angle = rect[-1]
+    if angle < -45:
+        angle += 90
+    if abs(angle) < 1.0:
+        return image
+
+    center = (image.shape[1] // 2, image.shape[0] // 2)
+    M = cv2.getRotationMatrix2D(center, angle, 1.0)
+    rotated = cv2.warpAffine(
+        image,
+        M,
+        (image.shape[1], image.shape[0]),
+        flags=cv2.INTER_CUBIC,
+        borderMode=cv2.BORDER_REPLICATE,
+    )
+    return rotated
 
 
 def trim_plain_background(image: np.ndarray) -> np.ndarray:

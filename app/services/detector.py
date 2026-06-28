@@ -199,14 +199,19 @@ class YoloRegionDetector:
         x_min, y_min, _, _ = field.bbox
         return priority, y_min, x_min
 
+    def _box_area(self, box) -> float:
+        xyxy = box.xyxy[0].detach().cpu().numpy()
+        width = max(0.0, float(xyxy[2] - xyxy[0]))
+        height = max(0.0, float(xyxy[3] - xyxy[1]))
+        return width * height
+
     def _select_best_box(self, boxes):
         scored = []
         for box in boxes:
-            xyxy = box.xyxy[0].detach().cpu().numpy()
-            width = max(1.0, float(xyxy[2] - xyxy[0]))
-            height = max(1.0, float(xyxy[3] - xyxy[1]))
+            area = self._box_area(box)
             confidence = float(box.conf[0].detach().cpu().item()) if box.conf is not None else 0.0
-            scored.append((width * height * confidence, box))
+            score = area * (confidence ** 1.25)
+            scored.append((score, box))
         return max(scored, key=lambda item: item[0])[1]
 
     def _fallback_or_fail(self, image: np.ndarray) -> RegionDetection:

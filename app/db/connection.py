@@ -413,6 +413,21 @@ def init_mysql_db(settings: Settings) -> str:
     return settings.mysql_database
 
 
+def _mysql_raw_connection(settings: Settings):
+    import pymysql
+
+    return pymysql.connect(
+        host=settings.mysql_host,
+        port=settings.mysql_port,
+        user=settings.mysql_user,
+        password=settings.mysql_password,
+        database=settings.mysql_database,
+        charset=settings.mysql_charset,
+        cursorclass=pymysql.cursors.DictCursor,
+        autocommit=False,
+    )
+
+
 def _apply_sqlite_lightweight_migrations(conn: sqlite3.Connection) -> None:
     columns = {
         row[1]
@@ -424,15 +439,6 @@ def _apply_sqlite_lightweight_migrations(conn: sqlite3.Connection) -> None:
         conn.execute("ALTER TABLE recognition_events ADD COLUMN reviewed_by_user_id INTEGER")
     if "reviewed_by_username" not in columns:
         conn.execute("ALTER TABLE recognition_events ADD COLUMN reviewed_by_username TEXT")
-        host=settings.mysql_host,
-        port=settings.mysql_port,
-        user=settings.mysql_user,
-        password=settings.mysql_password,
-        database=settings.mysql_database,
-        charset=settings.mysql_charset,
-        cursorclass=pymysql.cursors.DictCursor,
-        autocommit=False,
-    )
 
 
 def get_connection(settings: Settings | None = None):
