@@ -16,7 +16,6 @@ RUN pip install --upgrade pip \
 
 COPY app ./app
 COPY models ./models
-COPY .env.example ./.env.example
 
 EXPOSE 8000
 
