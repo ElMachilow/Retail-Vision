@@ -15,6 +15,7 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt
 
 COPY app ./app
+COPY models ./models
 COPY .env.example ./.env.example
 
 EXPOSE 8000
