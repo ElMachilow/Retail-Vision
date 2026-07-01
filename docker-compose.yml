@@ -1,4 +1,18 @@
 services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   api:
     build: .
     ports:
@@ -7,11 +21,22 @@ services:
       - .env
     environment:
       APP_ENV: docker
+      DB_BACKEND: mysql
+      MYSQL_HOST: mysql
       YOLO_MODEL_PATH: ${YOLO_MODEL_PATH:-models/roboflow_productos.pt}
       YOLO_DEVICE: ${YOLO_DEVICE:-cpu}
       YOLO_CONFIDENCE_THRESHOLD: ${YOLO_CONFIDENCE_THRESHOLD:-0.001}
       OCR_ENGINE: ${OCR_ENGINE:-paddle}
+    cpus: ${DOCKER_API_CPUS:-2}
+    mem_limit: ${DOCKER_API_MEMORY:-6g}
     volumes:
       - ./runtime:/app/runtime
       - ./models:/app/models
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
 
